@@ -17,15 +17,3 @@ This repo starts intentionally small. It exists to keep design rules and tokens 
 ## Product Repos
 
 Each product repo should keep a tiny local `DESIGN.md` entrypoint that points here and names the relevant product overlay. Product repos can have adapters and implementation details, but design rules should be promoted back to this repo.
-
-Local checkout layout:
-
-```txt
-Development/
-  kilo-design/
-  kilo-cloud/
-  kilo-landing/
-  kilocode/
-```
-
-When this repo is published, product entrypoints can point at the GitHub URL or use a `.kilo/design` submodule.
