@@ -1,6 +1,7 @@
 "use client";
 
-import { Tokens, isMeta, isColor, TypeRole } from "@/lib/tokens";
+import { useState } from "react";
+import { ColorBucket, Tokens, isMeta, isColor, TypeRole } from "@/lib/tokens";
 import s from "./gallery.module.css";
 
 /** Translucent status styling derived from a hue family (e.g. "blue"),
@@ -14,35 +15,99 @@ function statusStyle(hue: string, fillPct = 20, borderPct = 45): React.CSSProper
   };
 }
 
-function Swatch({ name, value }: { name: string; value: string }) {
+function Swatch({
+  bucket,
+  tokenName,
+  label,
+  value,
+  onChange,
+}: {
+  bucket: ColorBucket;
+  tokenName: string;
+  label: string;
+  value: string;
+  onChange: (bucket: ColorBucket, name: string, value: string) => void;
+}) {
+  const base6 = value.match(/^#([0-9a-fA-F]{6})/);
+  const pickerValue = base6 ? `#${base6[1]}` : "#000000";
+  const fieldLabel = `${bucket}.${tokenName}`;
+
   return (
     <div className={s.swatch}>
-      <div className={s.chip} style={{ background: value }} />
+      <div className={s.chip} style={{ background: value }}>
+        <input
+          className={s.swatchPicker}
+          type="color"
+          aria-label={`Pick ${fieldLabel}`}
+          value={pickerValue}
+          onChange={(e) => onChange(bucket, tokenName, e.target.value)}
+        />
+        <span className={s.chipCue}>Edit</span>
+      </div>
       <div className={s.swatchMeta}>
-        <div className={s.swatchName}>{name}</div>
-        <div className={s.swatchVal}>{value}</div>
+        <div className={s.swatchName}>{label}</div>
+        <input
+          className={s.swatchVal}
+          aria-label={`Set ${fieldLabel}`}
+          value={value}
+          spellCheck={false}
+          onChange={(e) => onChange(bucket, tokenName, e.target.value)}
+        />
       </div>
     </div>
   );
 }
 
-export function Gallery({ tokens }: { tokens: Tokens }) {
+function PreviewSwitch() {
+  const [enabled, setEnabled] = useState(true);
+
+  return (
+    <button
+      type="button"
+      className={`${s.switch} ${enabled ? s.switchOn : ""}`}
+      role="switch"
+      aria-checked={enabled}
+      onClick={() => setEnabled((value) => !value)}
+    >
+      <span className={s.track} />
+      {enabled ? "Enabled" : "Disabled"}
+    </button>
+  );
+}
+
+export function Gallery({
+  tokens,
+  onColorChange,
+}: {
+  tokens: Tokens;
+  onColorChange: (bucket: ColorBucket, name: string, value: string) => void;
+}) {
   const { color, shadow, radius, spacing, typography, statusDomain } = tokens;
 
-  const colorSwatches = (bucket: keyof typeof color, prefix = "") =>
+  const colorSwatches = (bucket: ColorBucket, prefix = "") =>
     Object.entries(color[bucket] as Record<string, string>)
       .filter(([k, v]) => !isMeta(k) && isColor(v))
-      .map(([k, v]) => <Swatch key={`${bucket}-${k}`} name={`${prefix}${k}`} value={v} />);
+      .map(([k, v]) => (
+        <Swatch
+          key={`${bucket}-${k}`}
+          bucket={bucket}
+          tokenName={k}
+          label={`${prefix}${k}`}
+          value={v}
+          onChange={onColorChange}
+        />
+      ));
 
   const typeRoles = Object.entries(typography).filter(
     ([k, v]) => !isMeta(k) && typeof v !== "string",
   ) as [string, TypeRole][];
 
   return (
-    <div className={s.surface} data-theme="kilo-dark" id="gallery-root">
+    <div className={s.surface}>
       {/* ---------------- FOUNDATIONS ---------------- */}
       <section className={s.sec}>
         <h2 className={s.secTitle}>Foundations</h2>
+        <p className={s.lede}>Color chips are live controls: click a chip to open the picker or edit the hex value inline.</p>
 
         <h3 className={s.sub}>Brand</h3>
         <div className={s.swatchRow}>{colorSwatches("brand")}</div>
@@ -155,10 +220,7 @@ export function Gallery({ tokens }: { tokens: Tokens }) {
         <div className={s.cluster}>
           <input className={s.input} placeholder="Search repositories…" />
           <input className={`${s.input} ${s.inputFocus}`} defaultValue="Focused (ring = brand)" />
-          <label className={s.switch}>
-            <input type="checkbox" defaultChecked />
-            <span className={s.track} /> Enabled
-          </label>
+          <PreviewSwitch />
         </div>
 
         <h3 className={s.sub}>Tabs</h3>

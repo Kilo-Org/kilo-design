@@ -5,8 +5,8 @@
   "description": "Visual playground for tailoring the canonical Kilo Design tokens.json. Local dev tool; not published.",
   "scripts": {
     "dev": "next dev -p 8731",
-    "build": "next build",
-    "start": "next start -p 8731",
+    "build": "NEXT_DIST_DIR=.next-build next build",
+    "start": "NEXT_DIST_DIR=.next-build next start -p 8731",
     "lint": "next lint"
   },
   "dependencies": {

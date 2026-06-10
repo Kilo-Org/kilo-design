@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Tokens } from "@/lib/tokens";
 import j from "./json-preview.module.css";
 
@@ -57,26 +57,53 @@ export function JsonPreview({
   tokens,
   dirty,
   collapsed,
-  onToggle,
+  onCopy,
 }: {
   tokens: Tokens;
   dirty: boolean;
   collapsed: boolean;
-  onToggle: () => void;
+  onCopy: () => void;
 }) {
   const json = useMemo(() => JSON.stringify(tokens, null, 2), [tokens]);
   const highlighted = useMemo(() => highlight(json), [json]);
+  const [copied, setCopied] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+
+  const handleCopy = () => {
+    onCopy();
+    setCopied(true);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setCopied(false), 1600);
+  };
 
   return (
-    <aside className={`${j.panel} ${collapsed ? j.collapsed : ""}`}>
-      <button className={j.toggle} onClick={onToggle} title={collapsed ? "Show tokens.json" : "Hide tokens.json"}>
-        {collapsed ? "‹" : "›"}
-        <span className={j.toggleLabel}>tokens.json</span>
-      </button>
+    <aside className={`${j.panel} ${collapsed ? j.collapsed : ""}`} aria-hidden={collapsed}>
       {!collapsed && (
         <div className={j.inner}>
           <div className={j.header}>
-            <span className={j.title}>tokens.json {dirty && <span className={j.dirtyDot}>● live</span>}</span>
+            <span className={j.title}>tokens.json {dirty && <span className={j.dirtyDot}>Live changes</span>}</span>
+            <button
+              className={`${j.copyBtn} ${copied ? j.copied : ""}`}
+              type="button"
+              onClick={handleCopy}
+            >
+              {copied ? (
+                <>
+                  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 8.5l3 3 6-6.5" /></svg>
+                  Copied
+                </>
+              ) : (
+                <>
+                  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                    <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
+                    <path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5" />
+                  </svg>
+                  Copy JSON
+                </>
+              )}
+            </button>
           </div>
           <pre className={j.code}><code>{highlighted}</code></pre>
         </div>

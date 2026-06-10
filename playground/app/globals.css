@@ -1,23 +1,21 @@
-/* Playground chrome — intentionally NOT themed by the design tokens.
-   The themed surface lives in gallery.module.css under [data-theme="kilo-dark"]. */
+/* Playground shell. Live token variables are applied to the app root so the
+   editor chrome and preview surface are driven by the same tokens.json state. */
 
 :root {
   color-scheme: dark;
-  --chrome-bg: #0b0b0b;
-  --chrome-panel: #0e0e0e;
-  --chrome-line: #ffffff14;
-  --chrome-text: #e7e7e7;
-  --chrome-dim: #8a8a8a;
-  --neon: #edff00;
-  --neon-ink: #1f1f1f;
 }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; }
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
 body {
   font-family: var(--font-inter), system-ui, sans-serif;
-  background: var(--chrome-bg);
-  color: var(--chrome-text);
+  background: #121212;
+  color: #fafafa;
+  min-height: 100dvh;
 }
 code, .mono { font-family: var(--font-roboto-mono), ui-monospace, monospace; }
 button { font-family: inherit; }

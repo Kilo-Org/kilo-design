@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "sw
 const robotoMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-roboto-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Kilo Design — Token Playground",
+  title: "Token Playground",
   description: "Tailor the canonical Kilo Design tokens.json live.",
 };
 
