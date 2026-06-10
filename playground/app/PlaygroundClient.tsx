@@ -212,7 +212,7 @@ export function PlaygroundClient({ initialTokens }: { initialTokens: Tokens }) {
         {!railCollapsed && <Controls tokens={tokens} onChange={change} />}
       </aside>
 
-      <main className={p.galleryWrap}>
+      <main className={p.galleryWrap} data-gallery-scroll>
         <Gallery tokens={tokens} onColorChange={updateColor} />
       </main>
 

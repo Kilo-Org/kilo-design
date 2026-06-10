@@ -7,7 +7,7 @@ A small local Next.js tool for editing and previewing the canonical Kilo Design 
 - Reads the source of truth from `../tokens.json` at startup.
 - Applies token values live as CSS variables to the entire playground UI.
 - Lets you edit color tokens directly from the swatches in the preview.
-- Keeps non-color controls, such as shadows, radius, spacing, typography, and status-domain mappings, in the left control rail.
+- Keeps non-color controls, such as radius, spacing, typography, and status-domain mappings, in the left control rail.
 - Shows the current JSON output in the right rail.
 - Can copy, download, reset, reload, or write changes back to `tokens.json` during local development.
 
@@ -40,7 +40,7 @@ pnpm lint    # Next lint command
 The playground starts with the current contents of `../tokens.json`.
 
 - Color tokens: edit from the preview swatches. Click a chip for the native color picker, or edit the hex value inline.
-- Layout and type tokens: use the left control rail for radius, spacing, typography, shadow, and status-domain values.
+- Layout and type tokens: use the left control rail for radius, spacing, typography, and status-domain values.
 - JSON preview: use the right rail to inspect and copy the serialized token output.
 - Side rails: use the two sidebar buttons in the header to collapse or expand the controls and JSON preview.
 

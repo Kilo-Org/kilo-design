@@ -8,8 +8,38 @@
   font-family: var(--font-inter), system-ui, sans-serif;
   font-size: var(--type-body-size, 0.875rem);
   line-height: var(--type-body-leading, 1.5);
-  padding: 24px 32px 96px;
+  padding: 0 32px 96px;
 }
+
+/* Sticky section nav (scrollspy). Chrome-ish, but tinted to the themed surface. */
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; gap: 4px 18px; align-items: center;
+  margin: 0 -32px 24px; padding: 8px 32px;
+  background: color-mix(in srgb, var(--surface-background, #121212) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-default, #ffffff1a);
+}
+.navGroup { display: flex; align-items: center; gap: 4px; }
+.navGroupLabel {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--foreground-subtle, #7a7a7a); margin-right: 4px;
+}
+.navTab {
+  font: inherit; font-size: 11.5px; font-weight: 500; line-height: 1;
+  padding: 5px 9px; border-radius: var(--radius-full, 9999px);
+  border: 1px solid transparent; background: transparent;
+  color: var(--foreground-muted, #a3a3a3); cursor: pointer;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.navTab:hover { color: var(--foreground-default, #fafafa); background: var(--surface-raised, #2b2b2b); }
+.navTabActive {
+  color: var(--brand-foreground, #1f1f1f); background: var(--brand-primary, #edff00);
+}
+.navTabActive:hover { color: var(--brand-foreground, #1f1f1f); background: var(--brand-primary, #edff00); }
+
+/* Section anchors clear the sticky nav when jumped to. */
+.anchor { scroll-margin-top: 56px; }
 
 .sec { max-width: 880px; margin: 0 auto 40px; }
 .secTitle {
@@ -28,7 +58,7 @@
 /* swatches */
 .swatchRow { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
 .swatch {
-  width: 96px; border-radius: var(--radius-md, 8px);
+  width: 112px; border-radius: var(--radius-md, 8px);
   border: 1px solid var(--border-default, #ffffff1a); overflow: hidden;
   background: var(--surface-raised, #2b2b2b);
   transition: border-color .12s, transform .12s;
@@ -49,9 +79,12 @@
 }
 .swatch:hover .chipCue, .swatch:focus-within .chipCue { opacity: 1; }
 .swatchMeta { padding: 6px 8px; }
-.swatchName { font-size: 11px; font-weight: 500; color: var(--foreground-default, #fafafa); }
+.swatchName {
+  font-size: 11px; font-weight: 500; color: var(--foreground-default, #fafafa);
+  line-height: 1.3; overflow-wrap: anywhere; word-break: break-word;
+}
 .swatchVal {
-  display: block; width: 100%; margin-top: 2px; padding: 1px 0;
+  display: block; width: 100%; min-width: 0; margin-top: 2px; padding: 1px 0;
   border: 0; border-radius: var(--radius-sm, 6px); outline: none;
   background: transparent; color: var(--foreground-subtle, #7a7a7a);
   font-family: var(--font-roboto-mono); font-size: 10px;
@@ -68,13 +101,6 @@
 .spaceBox { background: var(--brand-primaryDim, #b8c800); border-radius: 4px; }
 .radiusBox { width: 56px; height: 56px; background: var(--surface-muted, #3d3d3d); border: 1px solid var(--border-strong, #ffffff2e); }
 .scaleName { font-family: var(--font-roboto-mono); font-size: 10px; color: var(--foreground-subtle, #7a7a7a); margin-top: 5px; }
-
-.shadowRow { display: flex; flex-wrap: wrap; gap: 22px; }
-.shadowCard {
-  width: 100px; height: 64px; border-radius: var(--radius-md, 8px);
-  background: var(--surface-raised, #2b2b2b); display: grid; place-items: end center;
-}
-.shadowName { font-family: var(--font-roboto-mono); font-size: 10px; color: var(--foreground-subtle, #7a7a7a); padding-bottom: 6px; }
 
 .typeSpecimen > div { margin-bottom: 12px; color: var(--foreground-default, #fafafa); }
 .tname { font-family: var(--font-roboto-mono); font-size: 10px; color: var(--foreground-subtle, #7a7a7a); display: block; }
@@ -112,7 +138,7 @@
   border-radius: var(--radius-lg, 10px); padding: 14px 16px; min-width: 240px;
 }
 .cardInset { background: var(--surface-overlay, #333); margin-top: 12px; min-width: 0; }
-.popover { background: var(--surface-overlay, #333); box-shadow: var(--shadow-overlay, 0 16px 48px #00000099); }
+.popover { background: var(--surface-overlay, #333); box-shadow: 0 16px 48px #00000099; }
 .cardTitle { font-weight: 600; margin-bottom: 4px; }
 .cardMeta { color: var(--foreground-muted, #a3a3a3); font-size: 0.8125rem; }
 

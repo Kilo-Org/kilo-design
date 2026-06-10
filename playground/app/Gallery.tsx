@@ -1,8 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ColorBucket, Tokens, isMeta, isColor, TypeRole } from "@/lib/tokens";
 import s from "./gallery.module.css";
+
+/** A complete hex color: #rgb, #rgba, #rrggbb, or #rrggbbaa. */
+const isHex = (v: string) => /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(v.trim());
+
+/** Navigable sections, grouped. `id` is the DOM anchor + scrollspy key. */
+const NAV: { group: string; items: { id: string; label: string }[] }[] = [
+  {
+    group: "Foundations",
+    items: [
+      { id: "brand", label: "Brand" },
+      { id: "status", label: "Status" },
+      { id: "surface", label: "Surface" },
+      { id: "foreground", label: "Foreground" },
+      { id: "border", label: "Border" },
+      { id: "radius", label: "Radius" },
+      { id: "spacing", label: "Spacing" },
+      { id: "type", label: "Type scale" },
+    ],
+  },
+  {
+    group: "Components",
+    items: [
+      { id: "buttons", label: "Buttons" },
+      { id: "badges", label: "Badges" },
+      { id: "cards", label: "Cards" },
+      { id: "inputs", label: "Inputs" },
+      { id: "tabs", label: "Tabs" },
+      { id: "alerts", label: "Alerts" },
+      { id: "code", label: "Code & diff" },
+      { id: "chat", label: "Chat" },
+    ],
+  },
+];
+
+const ALL_IDS = NAV.flatMap((g) => g.items.map((i) => i.id));
+
+/** Sticky section nav with scrollspy highlighting. */
+function GalleryNav({ active, onJump }: { active: string; onJump: (id: string) => void }) {
+  return (
+    <nav className={s.nav} aria-label="Gallery sections">
+      {NAV.map((group) => (
+        <div key={group.group} className={s.navGroup}>
+          <span className={s.navGroupLabel}>{group.group}</span>
+          {group.items.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`${s.navTab} ${active === item.id ? s.navTabActive : ""}`}
+              aria-current={active === item.id ? "true" : undefined}
+              onClick={() => onJump(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      ))}
+    </nav>
+  );
+}
 
 /** Translucent status styling derived from a hue family (e.g. "blue"),
  *  reading the live --status-* vars so it updates as tokens change. */
@@ -32,6 +91,26 @@ function Swatch({
   const pickerValue = base6 ? `#${base6[1]}` : "#000000";
   const fieldLabel = `${bucket}.${tokenName}`;
 
+  // Local draft so typing a hex is smooth; only commit a *valid* hex upstream.
+  const [draft, setDraft] = useState(value);
+  // Re-sync when the canonical value changes from elsewhere (picker, reset, reload).
+  useEffect(() => { setDraft(value); }, [value]);
+
+  const commit = () => {
+    const next = draft.trim();
+    if (isHex(next)) {
+      if (next !== value) onChange(bucket, tokenName, next);
+    } else {
+      setDraft(value); // revert invalid input
+    }
+  };
+
+  const onText = (raw: string) => {
+    setDraft(raw);
+    // Live-apply only once it's a complete, valid hex; partial input stays local.
+    if (isHex(raw.trim())) onChange(bucket, tokenName, raw.trim());
+  };
+
   return (
     <div className={s.swatch}>
       <div className={s.chip} style={{ background: value }}>
@@ -45,13 +124,19 @@ function Swatch({
         <span className={s.chipCue}>Edit</span>
       </div>
       <div className={s.swatchMeta}>
-        <div className={s.swatchName}>{label}</div>
+        <div className={s.swatchName} title={label}>{label}</div>
         <input
           className={s.swatchVal}
           aria-label={`Set ${fieldLabel}`}
-          value={value}
+          value={draft}
           spellCheck={false}
-          onChange={(e) => onChange(bucket, tokenName, e.target.value)}
+          autoComplete="off"
+          onChange={(e) => onText(e.target.value)}
+          onBlur={commit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+            if (e.key === "Escape") { setDraft(value); (e.target as HTMLInputElement).blur(); }
+          }}
         />
       </div>
     </div>
@@ -82,7 +167,40 @@ export function Gallery({
   tokens: Tokens;
   onColorChange: (bucket: ColorBucket, name: string, value: string) => void;
 }) {
-  const { color, shadow, radius, spacing, typography, statusDomain } = tokens;
+  const { color, radius, spacing, typography, statusDomain } = tokens;
+
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState<string>(ALL_IDS[0]);
+
+  // Scrollspy: highlight the section nearest the top of the scroll viewport.
+  useEffect(() => {
+    const root = surfaceRef.current?.closest<HTMLElement>("[data-gallery-scroll]") ?? null;
+    const anchors = ALL_IDS
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (!anchors.length) return;
+
+    const visible = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) visible.set(e.target.id, e.intersectionRatio);
+          else visible.delete(e.target.id);
+        }
+        // Pick the topmost visible anchor (first in document order).
+        const topmost = ALL_IDS.find((id) => visible.has(id));
+        if (topmost) setActive(topmost);
+      },
+      { root, rootMargin: "-56px 0px -65% 0px", threshold: [0, 1] },
+    );
+    anchors.forEach((a) => observer.observe(a));
+    return () => observer.disconnect();
+  }, []);
+
+  const jump = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setActive(id);
+  };
 
   const colorSwatches = (bucket: ColorBucket, prefix = "") =>
     Object.entries(color[bucket] as Record<string, string>)
@@ -103,28 +221,30 @@ export function Gallery({
   ) as [string, TypeRole][];
 
   return (
-    <div className={s.surface}>
+    <div className={s.surface} ref={surfaceRef}>
+      <GalleryNav active={active} onJump={jump} />
+
       {/* ---------------- FOUNDATIONS ---------------- */}
       <section className={s.sec}>
         <h2 className={s.secTitle}>Foundations</h2>
         <p className={s.lede}>Color chips are live controls: click a chip to open the picker or edit the hex value inline.</p>
 
-        <h3 className={s.sub}>Brand</h3>
+        <h3 id="brand" className={`${s.sub} ${s.anchor}`}>Brand</h3>
         <div className={s.swatchRow}>{colorSwatches("brand")}</div>
 
-        <h3 className={s.sub}>Status hues</h3>
+        <h3 id="status" className={`${s.sub} ${s.anchor}`}>Status hues</h3>
         <div className={s.swatchRow}>{colorSwatches("status")}</div>
 
-        <h3 className={s.sub}>Surface</h3>
+        <h3 id="surface" className={`${s.sub} ${s.anchor}`}>Surface</h3>
         <div className={s.swatchRow}>{colorSwatches("surface", "surface.")}</div>
 
-        <h3 className={s.sub}>Foreground</h3>
+        <h3 id="foreground" className={`${s.sub} ${s.anchor}`}>Foreground</h3>
         <div className={s.swatchRow}>{colorSwatches("foreground", "fg.")}</div>
 
-        <h3 className={s.sub}>Border</h3>
+        <h3 id="border" className={`${s.sub} ${s.anchor}`}>Border</h3>
         <div className={s.swatchRow}>{colorSwatches("border", "border.")}</div>
 
-        <h3 className={s.sub}>Radius</h3>
+        <h3 id="radius" className={`${s.sub} ${s.anchor}`}>Radius</h3>
         <div className={s.scaleRow}>
           {Object.entries(radius).filter(([k]) => !isMeta(k)).map(([k, v]) => (
             <div key={k} className={s.scaleItem}>
@@ -134,7 +254,7 @@ export function Gallery({
           ))}
         </div>
 
-        <h3 className={s.sub}>Spacing</h3>
+        <h3 id="spacing" className={`${s.sub} ${s.anchor}`}>Spacing</h3>
         <div className={s.scaleRow}>
           {Object.entries(spacing).filter(([k]) => !isMeta(k)).map(([k, v]) => (
             <div key={k} className={s.scaleItem}>
@@ -144,16 +264,7 @@ export function Gallery({
           ))}
         </div>
 
-        <h3 className={s.sub}>Shadow</h3>
-        <div className={s.shadowRow}>
-          {Object.entries(shadow).filter(([k]) => !isMeta(k)).map(([k, v]) => (
-            <div key={k} className={s.shadowCard} style={{ boxShadow: v }}>
-              <div className={s.shadowName}>{k}</div>
-            </div>
-          ))}
-        </div>
-
-        <h3 className={s.sub}>Type scale</h3>
+        <h3 id="type" className={`${s.sub} ${s.anchor}`}>Type scale</h3>
         <div className={s.typeSpecimen}>
           {typeRoles.map(([role, def]) => (
             <div
@@ -179,7 +290,7 @@ export function Gallery({
       <section className={s.sec}>
         <h2 className={s.secTitle}>Components in context</h2>
 
-        <h3 className={s.sub}>Buttons <span className={s.hint}>— one primary (neon) per surface</span></h3>
+        <h3 id="buttons" className={`${s.sub} ${s.anchor}`}>Buttons <span className={s.hint}>— one primary (neon) per surface</span></h3>
         <div className={s.cluster}>
           <button className={`${s.btn} ${s.btnPrimary}`}>Run agent</button>
           <button className={`${s.btn} ${s.btnSecondary}`}>Cancel</button>
@@ -189,7 +300,7 @@ export function Gallery({
           <button className={`${s.btn} ${s.btnPrimary}`} disabled>Disabled</button>
         </div>
 
-        <h3 className={s.sub}>Status badges <span className={s.hint}>— derived from statusDomain map</span></h3>
+        <h3 id="badges" className={`${s.sub} ${s.anchor}`}>Status badges <span className={s.hint}>— derived from statusDomain map</span></h3>
         <div className={s.cluster}>
           {Object.entries(statusDomain)
             .filter(([k]) => !isMeta(k))
@@ -200,7 +311,7 @@ export function Gallery({
             ))}
         </div>
 
-        <h3 className={s.sub}>Cards &amp; elevation</h3>
+        <h3 id="cards" className={`${s.sub} ${s.anchor}`}>Cards &amp; elevation</h3>
         <div className={s.cluster}>
           <div className={s.card}>
             <div className={s.cardTitle}>Project</div>
@@ -212,18 +323,18 @@ export function Gallery({
           </div>
           <div className={`${s.card} ${s.popover}`}>
             <div className={s.cardTitle}>Popover / overlay</div>
-            <div className={s.cardMeta}>Floating chrome uses the overlay surface + shadow.</div>
+            <div className={s.cardMeta}>Floating chrome uses the overlay surface.</div>
           </div>
         </div>
 
-        <h3 className={s.sub}>Inputs &amp; focus ring</h3>
+        <h3 id="inputs" className={`${s.sub} ${s.anchor}`}>Inputs &amp; focus ring</h3>
         <div className={s.cluster}>
           <input className={s.input} placeholder="Search repositories…" />
           <input className={`${s.input} ${s.inputFocus}`} defaultValue="Focused (ring = brand)" />
           <PreviewSwitch />
         </div>
 
-        <h3 className={s.sub}>Tabs</h3>
+        <h3 id="tabs" className={`${s.sub} ${s.anchor}`}>Tabs</h3>
         <div className={s.tabs}>
           <button className={`${s.tab} ${s.tabActive}`}>Overview</button>
           <button className={s.tab}>Logs</button>
@@ -231,12 +342,12 @@ export function Gallery({
           <button className={s.tab}>Settings</button>
         </div>
 
-        <h3 className={s.sub}>Alerts</h3>
+        <h3 id="alerts" className={`${s.sub} ${s.anchor}`}>Alerts</h3>
         <div className={s.alert} style={statusStyle("green", 14, 35)}>Agent finished. 3 files changed.</div>
         <div className={s.alert} style={statusStyle("yellow", 14, 35)}>Token budget at 80%.</div>
         <div className={s.alert} style={statusStyle("red", 14, 35)}>Build failed: type error in tokens.ts.</div>
 
-        <h3 className={s.sub}>Code &amp; diff <span className={s.hint}>— AI coding context</span></h3>
+        <h3 id="code" className={`${s.sub} ${s.anchor}`}>Code &amp; diff <span className={s.hint}>— AI coding context</span></h3>
         <pre className={s.code}><span className={s.cKey}>const</span> <span className={s.cVar}>primary</span> = <span className={s.cStr}>&quot;#EDFF00&quot;</span>; <span className={s.cCom}>// brand === primary</span></pre>
         <pre className={s.diff}>
           <span className={s.dAdd}>+  --primary: oklch(0.93 0.23 119);</span>
@@ -249,7 +360,7 @@ export function Gallery({
           <span><span className={s.tOk}>✓</span> tokens.ts        <span className={s.tDim}>(hex/rgba)</span></span>
         </pre>
 
-        <h3 className={s.sub}>Chat</h3>
+        <h3 id="chat" className={`${s.sub} ${s.anchor}`}>Chat</h3>
         <div className={s.chat}>
           <div className={`${s.bubble} ${s.bubbleUser}`}>Migrate the primary color to the brand yellow.</div>
           <div className={`${s.bubble} ${s.bubbleAssistant}`}>

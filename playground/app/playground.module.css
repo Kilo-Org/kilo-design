@@ -192,7 +192,7 @@
   border-radius: var(--radius-lg, 10px);
   border: 1px solid var(--border-strong, #ffffff2e);
   background: var(--surface-overlay, #333333);
-  box-shadow: var(--shadow-overlay, 0 16px 48px #00000099);
+  box-shadow: 0 16px 48px #00000099;
   animation: confirmIn .16s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .confirmTitle {
@@ -242,7 +242,7 @@
     position: fixed; top: var(--topbar-h); left: 0; bottom: 0;
     width: min(86vw, 340px); z-index: var(--z-drawer);
     border-right: 1px solid var(--border-strong, #ffffff2e);
-    box-shadow: var(--shadow-overlay, 0 16px 48px #00000099);
+    box-shadow: 0 16px 48px #00000099;
     transform: translateX(0);
     transition: transform .2s cubic-bezier(0.22, 1, 0.36, 1);
   }

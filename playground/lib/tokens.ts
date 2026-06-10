@@ -21,7 +21,6 @@ export interface Tokens {
     foreground: Record<string, string>;
     border: Record<string, string>;
   };
-  shadow: Record<string, string>;
   statusDomain: Record<string, string>;
   typography: Record<string, TypeRole | string>;
   radius: Record<string, string>;
@@ -38,7 +37,7 @@ export const isDimension = (v: unknown): v is string =>
   typeof v === "string" && /^-?\d*\.?\d+(px|rem|em)$/.test(v.trim());
 
 /** Flatten the token tree into a flat map of CSS custom properties.
- *  e.g. color.brand.primary -> "--brand-primary"; shadow.md -> "--shadow-md";
+ *  e.g. color.brand.primary -> "--brand-primary";
  *  radius.md -> "--radius-md"; typography.body.fontFamily -> "--type-body-family". */
 export function flattenToCssVars(t: Tokens): Record<string, string> {
   const out: Record<string, string> = {};
@@ -48,10 +47,6 @@ export function flattenToCssVars(t: Tokens): Record<string, string> {
       if (isMeta(name)) continue;
       out[`--${bucket}-${name}`] = val;
     }
-  }
-  for (const [name, val] of Object.entries(t.shadow)) {
-    if (isMeta(name)) continue;
-    out[`--shadow-${name}`] = val;
   }
   for (const [name, val] of Object.entries(t.radius)) {
     if (isMeta(name)) continue;

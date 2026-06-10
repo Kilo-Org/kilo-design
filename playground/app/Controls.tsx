@@ -7,9 +7,9 @@ import c from "./controls.module.css";
 type Setter = (value: string | number) => void;
 type Getter = () => string | number;
 type Entry = [string, unknown];
-type GroupId = "shadow" | "statusDomain" | "radius" | "spacing" | "typography";
+type GroupId = "statusDomain" | "radius" | "spacing" | "typography";
 
-const GROUP_IDS: GroupId[] = ["shadow", "statusDomain", "radius", "spacing", "typography"];
+const GROUP_IDS: GroupId[] = ["statusDomain", "radius", "spacing", "typography"];
 const INITIAL_OPEN_STATE = Object.fromEntries(GROUP_IDS.map((id) => [id, true])) as Record<GroupId, boolean>;
 
 function DimControl({ label, get, set }: { label: string; get: () => string; set: (v: string) => void }) {
@@ -150,23 +150,6 @@ export function Controls({ tokens, onChange }: { tokens: Tokens; onChange: (next
 
   const groups: ReactNode[] = [];
 
-  const shadowRows = pick(Object.entries(tokens.shadow), "shadow", (k) => k);
-  if (shadowRows.length) {
-    groups.push(
-      <Group key="shadow" title="shadow" note={tokens.shadow.$comment} {...groupProps("shadow")}>
-        {shadowRows.map(([name]) => (
-          <TextControl
-            key={name}
-            label={name}
-            wide
-            get={() => tokens.shadow[name]}
-            set={(v) => update((d) => { d.shadow[name] = String(v); })}
-          />
-        ))}
-      </Group>,
-    );
-  }
-
   const statusRows = pick(Object.entries(tokens.statusDomain), "statusDomain", (k) => k);
   if (statusRows.length) {
     groups.push(
@@ -287,7 +270,7 @@ export function Controls({ tokens, onChange }: { tokens: Tokens; onChange: (next
       ) : (
         <div className={c.empty}>
           <p className={c.emptyTitle}>No tokens match &ldquo;{filter.trim()}&rdquo;</p>
-          <p className={c.emptyHint}>Try a token name like <code>radius</code>, <code>spacing</code>, or <code>shadow</code>.</p>
+          <p className={c.emptyHint}>Try a token name like <code>radius</code>, <code>spacing</code>, or <code>primary</code>.</p>
           <button className={c.emptyClear} type="button" onClick={() => setFilter("")}>Clear filter</button>
         </div>
       )}
