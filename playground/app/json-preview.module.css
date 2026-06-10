@@ -1,0 +1,55 @@
+/* Right slide-out JSON preview — playground chrome, not themed by tokens. */
+
+.panel {
+  grid-area: json;
+  position: relative;
+  background: #0a0a0a;
+  border-left: 1px solid var(--chrome-line);
+  width: 380px;
+  transition: width .18s ease;
+  overflow: hidden;
+}
+.collapsed { width: 30px; }
+
+.toggle {
+  position: absolute; top: 8px; left: 0;
+  display: flex; align-items: center; gap: 6px;
+  height: 28px; padding: 0 8px;
+  background: #151515; color: #cfcfcf;
+  border: 1px solid #ffffff1f; border-left: none;
+  border-radius: 0 6px 6px 0; cursor: pointer;
+  font-size: 12px; z-index: 2;
+}
+.toggle:hover { background: #1f1f1f; }
+.collapsed .toggleLabel {
+  writing-mode: vertical-rl; margin-top: 6px; font-size: 11px;
+  letter-spacing: 0.04em; color: #8a8a8a;
+}
+.collapsed .toggle {
+  top: 8px; height: auto; flex-direction: column; padding: 8px 6px; gap: 4px;
+}
+
+.inner { display: flex; flex-direction: column; height: 100%; padding-top: 0; }
+.header {
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 10px 14px 8px 44px; border-bottom: 1px solid #ffffff0f;
+}
+.title { font-size: 12px; font-weight: 600; color: #cfcfcf; display: flex; gap: 8px; align-items: center; }
+.dirtyDot { font-size: 10px; font-weight: 500; color: var(--neon); }
+
+.code {
+  margin: 0; padding: 12px 14px; overflow: auto; flex: 1;
+  font-family: var(--font-roboto-mono), ui-monospace, monospace;
+  font-size: 11.5px; line-height: 1.55; color: #d4d4d4;
+  white-space: pre; tab-size: 2;
+}
+
+/* token colors */
+.key { color: #9cdcfe; }
+.str { color: #ce9178; }
+.num { color: #b5cea8; }
+.lit { color: #569cd6; }
+.punct { color: #808080; }
+
+.colorVal { display: inline-flex; align-items: center; gap: 5px; }
+.dot { width: 9px; height: 9px; border-radius: 2px; border: 1px solid #ffffff33; display: inline-block; vertical-align: middle; }

@@ -1,0 +1,35 @@
+/* Control rail — playground chrome, not themed by tokens. */
+
+.group { border-bottom: 1px solid #ffffff0f; }
+.summary {
+  cursor: pointer; list-style: none;
+  padding: 10px 16px; font-size: 12px; font-weight: 600;
+  color: #cfcfcf; letter-spacing: 0.02em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.summary::-webkit-details-marker { display: none; }
+.summary::before { content: "▸"; color: #666; font-size: 10px; transition: transform .12s; }
+.group[open] > .summary::before { transform: rotate(90deg); }
+.body { padding: 4px 16px 14px; }
+.note { font-size: 10.5px; color: #6a6a6a; line-height: 1.4; margin: 0 0 8px; }
+
+.ctrl { display: flex; align-items: center; gap: 8px; padding: 4px 0; flex-wrap: wrap; }
+.label { flex: 1; min-width: 70px; font-size: 12px; color: #b5b5b5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ctrl input[type="color"] {
+  width: 26px; height: 26px; padding: 0; border: 1px solid #ffffff1f;
+  border-radius: 5px; background: none; cursor: pointer; flex: none;
+}
+.text {
+  width: 96px; font-family: var(--font-roboto-mono), monospace; font-size: 11px; color: #ddd;
+  background: #161616; border: 1px solid #ffffff1f; border-radius: 5px; padding: 4px 6px;
+}
+.wide { width: 150px; }
+.ctrl input[type="range"] { width: 110px; accent-color: #edff00; flex: none; }
+.ctrl input[type="number"] { width: 70px; }
+
+.oklch { flex-basis: 100%; font-family: var(--font-roboto-mono), monospace; font-size: 10px; color: #6f6f6f; }
+.warn { color: #fb923c; }
+
+.typeBlock { border-left: 2px solid #ffffff14; padding-left: 10px; margin: 6px 0 12px; }
+.typeRole { font-size: 11px; font-weight: 600; color: #cfcfcf; margin-bottom: 2px; text-transform: lowercase; }
