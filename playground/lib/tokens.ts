@@ -8,6 +8,7 @@ export interface TypeRole {
   fontWeight: number;
   lineHeight: number;
   letterSpacing?: string;
+  textTransform?: string;
 }
 
 export interface Tokens {
@@ -65,6 +66,7 @@ export function flattenToCssVars(t: Tokens): Record<string, string> {
     out[`--type-${role}-weight`] = String(def.fontWeight);
     out[`--type-${role}-leading`] = String(def.lineHeight);
     if (def.letterSpacing) out[`--type-${role}-tracking`] = def.letterSpacing;
+    if (def.textTransform) out[`--type-${role}-transform`] = def.textTransform;
   }
   return out;
 }

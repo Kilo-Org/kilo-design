@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Tokens, isMeta, TypeRole } from "@/lib/tokens";
 import s from "./gallery.module.css";
 
 /** Top-level tabs. Each renders an independent panel (no long scroll). */
 const TABS = [
   { id: "foundations", label: "Foundations" },
+  { id: "surfaces", label: "Surfaces" },
   { id: "buttons", label: "Buttons & badges" },
   { id: "forms", label: "Forms & inputs" },
   { id: "cards", label: "Cards & alerts" },
@@ -48,6 +49,16 @@ function statusStyle(hue: string, fillPct = 20, borderPct = 45): React.CSSProper
   };
 }
 
+/** A grouped section: heading + content inside a raised card on the darker pane. */
+function Section({ title, children }: { title: ReactNode; children: ReactNode }) {
+  return (
+    <div className={s.sectionCard}>
+      <h3 className={s.sub}>{title}</h3>
+      {children}
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Foundations                                                         */
 /* ------------------------------------------------------------------ */
@@ -63,46 +74,56 @@ function FoundationsPanel({ tokens }: { tokens: Tokens }) {
       <h2 className={s.secTitle}>Foundations</h2>
       <p className={s.lede}>Color swatches live in the left sidebar; these are the non-color scales.</p>
 
-      <h3 className={s.sub}>Radius</h3>
-      <div className={s.scaleRow}>
-        {Object.entries(radius).filter(([k]) => !isMeta(k)).map(([k, v]) => (
-          <div key={k} className={s.scaleItem}>
-            <div className={s.radiusBox} style={{ borderRadius: v }} />
-            <div className={s.scaleName}>{k} · {v}</div>
-          </div>
-        ))}
-      </div>
+      <Section title="Radius">
+        <div className={s.scaleRow}>
+          {Object.entries(radius).filter(([k]) => !isMeta(k)).map(([k, v]) => (
+            <div key={k} className={s.scaleItem}>
+              <div className={s.radiusBox} style={{ borderRadius: v }} />
+              <div className={s.scaleName}>{k} · {v}</div>
+            </div>
+          ))}
+        </div>
+      </Section>
 
-      <h3 className={s.sub}>Spacing</h3>
-      <div className={s.scaleRow}>
-        {Object.entries(spacing).filter(([k]) => !isMeta(k)).map(([k, v]) => (
-          <div key={k} className={s.scaleItem}>
-            <div className={s.spaceBox} style={{ width: v, height: v }} />
-            <div className={s.scaleName}>{k.replace("_", ".")} · {v}</div>
-          </div>
-        ))}
-      </div>
+      <Section title="Spacing">
+        <div className={s.scaleRow}>
+          {Object.entries(spacing).filter(([k]) => !isMeta(k)).map(([k, v]) => (
+            <div key={k} className={s.scaleItem}>
+              <div className={s.spaceBox} style={{ width: v, height: v }} />
+              <div className={s.scaleName}>{k.replace("_", ".")} · {v}</div>
+            </div>
+          ))}
+        </div>
+      </Section>
 
-      <h3 className={s.sub}>Type scale</h3>
-      <div className={s.typeSpecimen}>
+      <Section title="Type scale">
+        <div className={s.typeScale}>
         {typeRoles.map(([role, def]) => (
-          <div
-            key={role}
-            style={{
-              fontFamily: `${def.fontFamily}, sans-serif`,
-              fontSize: def.fontSize,
-              fontWeight: def.fontWeight,
-              lineHeight: def.lineHeight,
-              letterSpacing: def.letterSpacing,
-            }}
-          >
-            <span className={s.tname}>
-              {role} · {def.fontFamily} {def.fontSize}/{def.fontWeight}
-            </span>
-            The quick brown fox jumps
+          <div key={role} className={s.typeRow}>
+            <div className={s.typeMeta}>
+              <span className={s.typeRoleName}>{role}</span>
+              <span className={s.typeSpecs}>
+                {def.fontSize} · {def.fontWeight}
+                {def.lineHeight ? ` · ${def.lineHeight}` : ""}
+              </span>
+            </div>
+            <div
+              className={s.typeSample}
+              style={{
+                fontFamily: `${def.fontFamily}, sans-serif`,
+                fontSize: def.fontSize,
+                fontWeight: def.fontWeight,
+                lineHeight: def.lineHeight,
+                letterSpacing: def.letterSpacing,
+                textTransform: def.textTransform as React.CSSProperties["textTransform"],
+              }}
+            >
+              The quick brown fox jumps over the lazy dog
+            </div>
           </div>
         ))}
-      </div>
+        </div>
+      </Section>
     </section>
   );
 }
@@ -118,41 +139,37 @@ function ButtonsPanel({ tokens }: { tokens: Tokens }) {
       <h2 className={s.secTitle}>Buttons &amp; badges</h2>
       <p className={s.lede}>One primary (brand) action per surface; everything else recedes.</p>
 
-      <h3 className={s.sub}>Buttons</h3>
-      <div className={s.cluster}>
-        <button className={`${s.btn} ${s.btnPrimary}`}>Run agent</button>
-        <button className={`${s.btn} ${s.btnSecondary}`}>Cancel</button>
-        <button className={`${s.btn} ${s.btnOutline}`}>Settings</button>
-        <button className={`${s.btn} ${s.btnGhost}`}>Dismiss</button>
-        <button className={`${s.btn} ${s.btnDestructive}`}>Delete</button>
-        <button className={`${s.btn} ${s.btnPrimary}`} disabled>Disabled</button>
-      </div>
+      <Section title="Buttons">
+        <div className={s.cluster}>
+          <button className={`${s.btn} ${s.btnPrimary}`}>Run agent</button>
+          <button className={`${s.btn} ${s.btnSecondary}`}>Cancel</button>
+          <button className={`${s.btn} ${s.btnOutline}`}>Settings</button>
+          <button className={`${s.btn} ${s.btnGhost}`}>Dismiss</button>
+          <button className={`${s.btn} ${s.btnDestructive}`}>Delete</button>
+          <button className={`${s.btn} ${s.btnPrimary}`} disabled>Disabled</button>
+        </div>
+      </Section>
 
-      <h3 className={s.sub}>Button sizes</h3>
-      <div className={s.cluster}>
-        <button className={`${s.btn} ${s.btnSm} ${s.btnPrimary}`}>Small</button>
-        <button className={`${s.btn} ${s.btnPrimary}`}>Default</button>
-        <button className={`${s.btn} ${s.btnLg} ${s.btnPrimary}`}>Large</button>
-      </div>
+      <Section title={<>Status badges <span className={s.hint}>— derived from statusDomain map</span></>}>
+        <div className={s.cluster}>
+          {Object.entries(statusDomain)
+            .filter(([k]) => !isMeta(k))
+            .map(([domain, hue]) => (
+              <span key={domain} className={s.badge} style={statusStyle(hue)}>
+                {domain}
+              </span>
+            ))}
+        </div>
+      </Section>
 
-      <h3 className={s.sub}>Status badges <span className={s.hint}>— derived from statusDomain map</span></h3>
-      <div className={s.cluster}>
-        {Object.entries(statusDomain)
-          .filter(([k]) => !isMeta(k))
-          .map(([domain, hue]) => (
-            <span key={domain} className={s.badge} style={statusStyle(hue)}>
-              {domain}
-            </span>
-          ))}
-      </div>
-
-      <h3 className={s.sub}>Pills &amp; counts</h3>
-      <div className={s.cluster}>
-        <span className={s.pill} style={statusStyle("green", 12, 30)}>● Connected</span>
-        <span className={s.pill} style={statusStyle("yellow", 12, 30)}>● Pending</span>
-        <span className={s.pill} style={statusStyle("red", 12, 30)}>● Failed</span>
-        <span className={s.countPill}>+128 <span className={s.countDim}>/ −34</span></span>
-      </div>
+      <Section title="Pills & counts">
+        <div className={s.cluster}>
+          <span className={s.pill} style={statusStyle("green", 12, 30)}>● Connected</span>
+          <span className={s.pill} style={statusStyle("yellow", 12, 30)}>● Pending</span>
+          <span className={s.pill} style={statusStyle("red", 12, 30)}>● Failed</span>
+          <span className={s.countPill}>+128 <span className={s.countDim}>/ −34</span></span>
+        </div>
+      </Section>
     </section>
   );
 }
@@ -228,7 +245,7 @@ function FormsPanel() {
             <label className={s.fieldLabel}>Generated token</label>
             <div className={s.inputGroup}>
               <input className={`${s.formInput} ${s.mono}`} readOnly value="kc_live_8f3a…d21b" />
-              <button className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}>Copy</button>
+              <button className={`${s.btn} ${s.btnOutline}`}>Copy</button>
             </div>
           </div>
 
@@ -329,43 +346,47 @@ function CardsPanel() {
       <h2 className={s.secTitle}>Cards &amp; alerts</h2>
       <p className={s.lede}>Hierarchy from surface value, not hue.</p>
 
-      <h3 className={s.sub}>Surface ladder</h3>
-      <div className={s.cluster}>
-        <div className={s.card}>
-          <div className={s.cardTitle}>Project</div>
-          <div className={s.cardMeta}>background → raised → overlay</div>
-          <div className={`${s.card} ${s.cardInset}`}>
-            <div className={s.cardTitle}>Nested surface</div>
-            <div className={s.cardMeta}>Value, not hue, creates hierarchy.</div>
+      <Section title="Surface ladder">
+        <div className={s.cluster}>
+          <div className={s.card}>
+            <div className={s.cardTitle}>Project</div>
+            <div className={s.cardMeta}>background → raised → overlay</div>
+            <div className={`${s.card} ${s.cardInset}`}>
+              <div className={s.cardTitle}>Nested surface</div>
+              <div className={s.cardMeta}>Value, not hue, creates hierarchy.</div>
+            </div>
+          </div>
+          <div className={`${s.card} ${s.popover}`}>
+            <div className={s.cardTitle}>Popover / overlay</div>
+            <div className={s.cardMeta}>Floating chrome uses the overlay surface.</div>
           </div>
         </div>
-        <div className={`${s.card} ${s.popover}`}>
-          <div className={s.cardTitle}>Popover / overlay</div>
-          <div className={s.cardMeta}>Floating chrome uses the overlay surface.</div>
+      </Section>
+
+      <Section title="Stat tiles">
+        <div className={s.statRow}>
+          <div className={s.statTile}><div className={s.statValue}>1,284</div><div className={s.statLabel}>Runs this week</div></div>
+          <div className={s.statTile}><div className={s.statValue} style={{ color: "var(--status-green400)" }}>98.2%</div><div className={s.statLabel}>Success rate</div></div>
+          <div className={s.statTile}><div className={s.statValue}>3.4s</div><div className={s.statLabel}>Median latency</div></div>
         </div>
-      </div>
+      </Section>
 
-      <h3 className={s.sub}>Stat tiles</h3>
-      <div className={s.statRow}>
-        <div className={s.statTile}><div className={s.statValue}>1,284</div><div className={s.statLabel}>Runs this week</div></div>
-        <div className={s.statTile}><div className={s.statValue} style={{ color: "var(--status-green400)" }}>98.2%</div><div className={s.statLabel}>Success rate</div></div>
-        <div className={s.statTile}><div className={s.statValue}>3.4s</div><div className={s.statLabel}>Median latency</div></div>
-      </div>
+      <Section title="Alerts">
+        <div className={s.alert} style={statusStyle("green", 14, 35)}>Agent finished. 3 files changed.</div>
+        <div className={s.alert} style={statusStyle("yellow", 14, 35)}>Token budget at 80%.</div>
+        <div className={s.alert} style={statusStyle("red", 14, 35)}>Build failed: type error in tokens.ts.</div>
+      </Section>
 
-      <h3 className={s.sub}>Alerts</h3>
-      <div className={s.alert} style={statusStyle("green", 14, 35)}>Agent finished. 3 files changed.</div>
-      <div className={s.alert} style={statusStyle("yellow", 14, 35)}>Token budget at 80%.</div>
-      <div className={s.alert} style={statusStyle("red", 14, 35)}>Build failed: type error in tokens.ts.</div>
-
-      <h3 className={s.sub}>Empty state</h3>
-      <div className={s.empty}>
-        <div className={s.emptyIcon} aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>
+      <Section title="Empty state">
+        <div className={s.empty}>
+          <div className={s.emptyIcon} aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>
+          </div>
+          <div className={s.emptyTitle}>No triggers yet</div>
+          <div className={s.emptyMeta}>Create your first trigger to run agents on a schedule.</div>
+          <button className={`${s.btn} ${s.btnPrimary}`}>New trigger</button>
         </div>
-        <div className={s.emptyTitle}>No triggers yet</div>
-        <div className={s.emptyMeta}>Create your first trigger to run agents on a schedule.</div>
-        <button className={`${s.btn} ${s.btnPrimary}`}>New trigger</button>
-      </div>
+      </Section>
     </section>
   );
 }
@@ -564,10 +585,76 @@ function ChatPanel({ tokens }: { tokens: Tokens }) {
             <span className={s.promptHint}>@ file</span>
             <span className={s.promptHint}>/ command</span>
             <span className={s.promptSpacer} />
-            <button className={`${s.btn} ${s.btnSm} ${s.btnPrimary}`}>Send</button>
+            <button className={`${s.btn} ${s.btnPrimary}`}>Send</button>
           </div>
         </div>
       </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Surface specimen — live tokens, exercises the full ladder           */
+/* ------------------------------------------------------------------ */
+
+const SURFACE_STEPS: { token: string; label: string }[] = [
+  { token: "inset", label: "inset" },
+  { token: "background", label: "background" },
+  { token: "raised", label: "raised" },
+  { token: "overlay", label: "overlay" },
+  { token: "hover", label: "hover" },
+  { token: "selected", label: "selected" },
+];
+
+/** A mini app UI driven by the live --surface-* tokens, so it exercises and
+ *  reflects every surface token as they're edited in the sidebar. */
+function SurfaceSpecimen({ surface }: { surface: Record<string, string> }) {
+  return (
+    <>
+      <div className={s.ramp}>
+        {SURFACE_STEPS.filter(({ token }) => surface[token]).map(({ token, label }) => (
+          <div key={token} className={s.rampItem}>
+            <div className={s.rampChip} style={{ background: `var(--surface-${token})` }} />
+            <div className={s.rampLabel}>{label}</div>
+            <div className={s.rampHex}>{surface[token]}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className={s.abApp}>
+        <div className={s.abTopbar}>
+          <span className={s.abDot} /> <span className={s.abTopTitle}>Project console</span>
+        </div>
+        <div className={s.abBody}>
+          <aside className={s.abSidebar}>
+            <div className={s.abNavRow}>Overview</div>
+            <div className={`${s.abNavRow} ${s.abNavSelected}`}>Agents</div>
+            <div className={s.abNavRow}>Logs</div>
+            <div className={s.abNavRow}>Settings</div>
+          </aside>
+          <main className={s.abMain}>
+            <div className={s.abCard}>
+              <div className={s.abCardTitle}>Trigger</div>
+              <div className={s.abInput}>nightly-regression</div>
+              <div className={s.abNested}>
+                <div className={s.abNestedTitle}>Nested panel</div>
+                <div className={s.abRowHover}>Hover row</div>
+              </div>
+              <pre className={s.abInset}>$ kilo build tokens</pre>
+            </div>
+          </main>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function SurfacesPanel({ tokens }: { tokens: Tokens }) {
+  return (
+    <section className={s.sec}>
+      <h2 className={s.secTitle}>Surfaces</h2>
+      <p className={s.lede}>The surface value ladder, shown on a mini app shell. Edit the surface tokens in the sidebar to see it respond.</p>
+      <SurfaceSpecimen surface={tokens.color.surface} />
     </section>
   );
 }
@@ -584,6 +671,7 @@ export function Gallery({ tokens }: { tokens: Tokens }) {
       <GalleryTabs active={tab} onSelect={setTab} />
       <div className={s.panel} role="tabpanel">
         {tab === "foundations" && <FoundationsPanel tokens={tokens} />}
+        {tab === "surfaces" && <SurfacesPanel tokens={tokens} />}
         {tab === "buttons" && <ButtonsPanel tokens={tokens} />}
         {tab === "forms" && <FormsPanel />}
         {tab === "cards" && <CardsPanel />}

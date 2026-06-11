@@ -158,31 +158,7 @@ export function PlaygroundClient({ initialTokens }: { initialTokens: Tokens }) {
     >
       <header className={p.topbar}>
         <div className={p.brandCluster}>
-          <div className={p.brandTile}>K</div>
           <h1 className={p.title}>Token Playground</h1>
-        </div>
-
-        <div className={p.paneToggles} role="group" aria-label="Panels">
-          <button
-            type="button"
-            className={`${p.iconBtn} ${!railCollapsed ? p.activeIconBtn : ""}`}
-            onClick={() => setRailCollapsed((v) => !v)}
-            aria-pressed={!railCollapsed}
-            aria-label={railCollapsed ? "Show controls panel" : "Hide controls panel"}
-            title={`${railCollapsed ? "Show" : "Hide"} controls — toggle both panels with ⌘.`}
-          >
-            <SidebarIcon side="left" />
-          </button>
-          <button
-            type="button"
-            className={`${p.iconBtn} ${!jsonCollapsed ? p.activeIconBtn : ""}`}
-            onClick={() => setJsonCollapsed((v) => !v)}
-            aria-pressed={!jsonCollapsed}
-            aria-label={jsonCollapsed ? "Show tokens JSON panel" : "Hide tokens JSON panel"}
-            title={jsonCollapsed ? "Show tokens JSON" : "Hide tokens JSON"}
-          >
-            <SidebarIcon side="right" />
-          </button>
         </div>
 
         <div className={p.spacer} />
@@ -247,18 +223,5 @@ export function PlaygroundClient({ initialTokens }: { initialTokens: Tokens }) {
         </>
       )}
     </div>
-  );
-}
-
-function SidebarIcon({ side }: { side: "left" | "right" }) {
-  const panelX = side === "left" ? 4 : 14;
-  const lineX = side === "left" ? 11 : 13;
-
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-      <rect x="3.5" y="4.5" width="13" height="11" rx="2" />
-      <path d={`M${lineX} 5v10`} />
-      <path d={`M${panelX} 7.5h4M${panelX} 10h4M${panelX} 12.5h4`} />
-    </svg>
   );
 }

@@ -79,7 +79,7 @@ export function JsonPreview({
   };
 
   return (
-    <aside className={`${j.panel} ${collapsed ? j.collapsed : ""}`} aria-hidden={collapsed}>
+    <aside className={j.panel} aria-hidden={collapsed}>
       {!collapsed && (
         <div className={j.inner}>
           <div className={j.header}>

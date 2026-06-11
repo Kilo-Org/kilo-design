@@ -4,16 +4,15 @@
   grid-area: json;
   min-height: 0;
   position: relative;
-  background: var(--surface-background, #121212);
-  border-left: 1px solid var(--border-default, #ffffff1a);
+  background: var(--surface-background, #151515);
   overflow: hidden;
 }
-.collapsed { border-left: none; }
 
 .inner { display: flex; flex-direction: column; height: 100%; padding-top: 0; }
 .header {
   display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-2, 8px);
-  padding: 10px var(--spacing-4, 16px) var(--spacing-2, 8px);
+  min-height: 49px;
+  padding: 0 var(--spacing-4, 16px);
   border-bottom: 1px solid var(--border-default, #ffffff1a);
 }
 .title {
@@ -31,13 +30,13 @@
   flex: none; display: inline-flex; align-items: center; gap: var(--spacing-1_5, 6px);
   font-size: var(--type-label-size, 0.75rem); font-weight: var(--type-label-weight, 500);
   padding: var(--spacing-1_5, 6px) var(--spacing-3, 12px);
-  border-radius: var(--radius-sm, 6px); cursor: pointer;
+  border-radius: var(--radius-sm, 4px); cursor: pointer;
   border: 1px solid var(--border-default, #ffffff1a);
-  background: var(--surface-raised, #2b2b2b); color: var(--foreground-default, #fafafa);
+  background: var(--surface-overlay, #333333); color: var(--foreground-default, #fafafa);
   transition: background .12s ease, border-color .12s ease, color .12s ease;
 }
 .copyBtn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.copyBtn:hover { background: var(--surface-muted, #3d3d3d); border-color: var(--border-strong, #ffffff2e); }
+.copyBtn:hover { background: var(--surface-hover, #3A3A3A); border-color: var(--border-strong, #ffffff2e); }
 .copyBtn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--brand-primaryRing, #f7f58659); }
 .copied {
   color: var(--status-green400, #4ade80);
@@ -48,6 +47,7 @@
 .code {
   margin: 0; padding: var(--spacing-3, 12px) var(--spacing-4, 16px);
   overflow-x: hidden; overflow-y: auto; flex: 1;
+  background: var(--surface-inset, #101010);
   font-family: var(--type-code-family, "Roboto Mono"), var(--font-roboto-mono), ui-monospace, monospace;
   font-size: var(--type-label-size, 0.75rem); line-height: var(--type-code-leading, 1.5); color: var(--foreground-default, #fafafa);
   white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; tab-size: 2;
