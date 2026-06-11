@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { ColorBucket, Tokens, flattenToCssVars } from "@/lib/tokens";
+import { Tokens, flattenToCssVars } from "@/lib/tokens";
 import { Controls } from "./Controls";
 import { Gallery } from "./Gallery";
 import { JsonPreview } from "./JsonPreview";
@@ -37,16 +37,6 @@ export function PlaygroundClient({ initialTokens }: { initialTokens: Tokens }) {
   }, []);
 
   const change = (next: Tokens) => { setTokens(next); setDirty(true); setStatus(null); };
-
-  const update = (mutate: (draft: Tokens) => void) => {
-    const next = structuredClone(tokens);
-    mutate(next);
-    change(next);
-  };
-
-  const updateColor = (bucket: ColorBucket, name: string, value: string) => {
-    update((draft) => { (draft.color[bucket] as Record<string, string>)[name] = value; });
-  };
 
   const serialize = () => JSON.stringify(tokens, null, 2) + "\n";
 
@@ -115,6 +105,21 @@ export function PlaygroundClient({ initialTokens }: { initialTokens: Tokens }) {
     return () => clearTimeout(t);
   }, [status]);
 
+  // Cmd+. (mac) / Ctrl+. toggles both side panels together.
+  // If either is open, collapse both; otherwise open both — keeps them in sync.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "." && (e.metaKey || e.ctrlKey) && !e.shiftKey && !e.altKey) {
+        e.preventDefault();
+        const collapse = !railCollapsed || !jsonCollapsed;
+        setRailCollapsed(collapse);
+        setJsonCollapsed(collapse);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [railCollapsed, jsonCollapsed]);
+
   // Move focus into the reload confirmation and restore the standing state on Escape.
   useEffect(() => {
     if (!confirmingReload) return;
@@ -164,7 +169,7 @@ export function PlaygroundClient({ initialTokens }: { initialTokens: Tokens }) {
             onClick={() => setRailCollapsed((v) => !v)}
             aria-pressed={!railCollapsed}
             aria-label={railCollapsed ? "Show controls panel" : "Hide controls panel"}
-            title={railCollapsed ? "Show controls" : "Hide controls"}
+            title={`${railCollapsed ? "Show" : "Hide"} controls — toggle both panels with ⌘.`}
           >
             <SidebarIcon side="left" />
           </button>
@@ -213,7 +218,7 @@ export function PlaygroundClient({ initialTokens }: { initialTokens: Tokens }) {
       </aside>
 
       <main className={p.galleryWrap} data-gallery-scroll>
-        <Gallery tokens={tokens} onColorChange={updateColor} />
+        <Gallery tokens={tokens} />
       </main>
 
       <JsonPreview tokens={tokens} dirty={dirty} collapsed={jsonCollapsed} onCopy={copy} />

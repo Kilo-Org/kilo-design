@@ -1,63 +1,37 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { ColorBucket, Tokens, isMeta, isColor, TypeRole } from "@/lib/tokens";
+import { useState } from "react";
+import { Tokens, isMeta, TypeRole } from "@/lib/tokens";
 import s from "./gallery.module.css";
 
-/** A complete hex color: #rgb, #rgba, #rrggbb, or #rrggbbaa. */
-const isHex = (v: string) => /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(v.trim());
+/** Top-level tabs. Each renders an independent panel (no long scroll). */
+const TABS = [
+  { id: "foundations", label: "Foundations" },
+  { id: "buttons", label: "Buttons & badges" },
+  { id: "forms", label: "Forms & inputs" },
+  { id: "cards", label: "Cards & alerts" },
+  { id: "editor", label: "Mini editor" },
+  { id: "diff", label: "Diff" },
+  { id: "chat", label: "Chat & tools" },
+] as const;
 
-/** Navigable sections, grouped. `id` is the DOM anchor + scrollspy key. */
-const NAV: { group: string; items: { id: string; label: string }[] }[] = [
-  {
-    group: "Foundations",
-    items: [
-      { id: "brand", label: "Brand" },
-      { id: "status", label: "Status" },
-      { id: "surface", label: "Surface" },
-      { id: "foreground", label: "Foreground" },
-      { id: "border", label: "Border" },
-      { id: "radius", label: "Radius" },
-      { id: "spacing", label: "Spacing" },
-      { id: "type", label: "Type scale" },
-    ],
-  },
-  {
-    group: "Components",
-    items: [
-      { id: "buttons", label: "Buttons" },
-      { id: "badges", label: "Badges" },
-      { id: "cards", label: "Cards" },
-      { id: "inputs", label: "Inputs" },
-      { id: "tabs", label: "Tabs" },
-      { id: "alerts", label: "Alerts" },
-      { id: "code", label: "Code & diff" },
-      { id: "chat", label: "Chat" },
-    ],
-  },
-];
+type TabId = (typeof TABS)[number]["id"];
 
-const ALL_IDS = NAV.flatMap((g) => g.items.map((i) => i.id));
-
-/** Sticky section nav with scrollspy highlighting. */
-function GalleryNav({ active, onJump }: { active: string; onJump: (id: string) => void }) {
+/** Tab bar that swaps panels instead of scrolling to anchors. */
+function GalleryTabs({ active, onSelect }: { active: TabId; onSelect: (id: TabId) => void }) {
   return (
-    <nav className={s.nav} aria-label="Gallery sections">
-      {NAV.map((group) => (
-        <div key={group.group} className={s.navGroup}>
-          <span className={s.navGroupLabel}>{group.group}</span>
-          {group.items.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`${s.navTab} ${active === item.id ? s.navTabActive : ""}`}
-              aria-current={active === item.id ? "true" : undefined}
-              onClick={() => onJump(item.id)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+    <nav className={s.nav} aria-label="Gallery sections" role="tablist">
+      {TABS.map((tab) => (
+        <button
+          key={tab.id}
+          type="button"
+          role="tab"
+          aria-selected={active === tab.id}
+          className={`${s.navTab} ${active === tab.id ? s.navTabActive : ""}`}
+          onClick={() => onSelect(tab.id)}
+        >
+          {tab.label}
+        </button>
       ))}
     </nav>
   );
@@ -74,302 +48,549 @@ function statusStyle(hue: string, fillPct = 20, borderPct = 45): React.CSSProper
   };
 }
 
-function Swatch({
-  bucket,
-  tokenName,
-  label,
-  value,
-  onChange,
-}: {
-  bucket: ColorBucket;
-  tokenName: string;
-  label: string;
-  value: string;
-  onChange: (bucket: ColorBucket, name: string, value: string) => void;
-}) {
-  const base6 = value.match(/^#([0-9a-fA-F]{6})/);
-  const pickerValue = base6 ? `#${base6[1]}` : "#000000";
-  const fieldLabel = `${bucket}.${tokenName}`;
+/* ------------------------------------------------------------------ */
+/* Foundations                                                         */
+/* ------------------------------------------------------------------ */
 
-  // Local draft so typing a hex is smooth; only commit a *valid* hex upstream.
-  const [draft, setDraft] = useState(value);
-  // Re-sync when the canonical value changes from elsewhere (picker, reset, reload).
-  useEffect(() => { setDraft(value); }, [value]);
-
-  const commit = () => {
-    const next = draft.trim();
-    if (isHex(next)) {
-      if (next !== value) onChange(bucket, tokenName, next);
-    } else {
-      setDraft(value); // revert invalid input
-    }
-  };
-
-  const onText = (raw: string) => {
-    setDraft(raw);
-    // Live-apply only once it's a complete, valid hex; partial input stays local.
-    if (isHex(raw.trim())) onChange(bucket, tokenName, raw.trim());
-  };
-
-  return (
-    <div className={s.swatch}>
-      <div className={s.chip} style={{ background: value }}>
-        <input
-          className={s.swatchPicker}
-          type="color"
-          aria-label={`Pick ${fieldLabel}`}
-          value={pickerValue}
-          onChange={(e) => onChange(bucket, tokenName, e.target.value)}
-        />
-        <span className={s.chipCue}>Edit</span>
-      </div>
-      <div className={s.swatchMeta}>
-        <div className={s.swatchName} title={label}>{label}</div>
-        <input
-          className={s.swatchVal}
-          aria-label={`Set ${fieldLabel}`}
-          value={draft}
-          spellCheck={false}
-          autoComplete="off"
-          onChange={(e) => onText(e.target.value)}
-          onBlur={commit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") (e.target as HTMLInputElement).blur();
-            if (e.key === "Escape") { setDraft(value); (e.target as HTMLInputElement).blur(); }
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function PreviewSwitch() {
-  const [enabled, setEnabled] = useState(true);
-
-  return (
-    <button
-      type="button"
-      className={`${s.switch} ${enabled ? s.switchOn : ""}`}
-      role="switch"
-      aria-checked={enabled}
-      onClick={() => setEnabled((value) => !value)}
-    >
-      <span className={s.track} />
-      {enabled ? "Enabled" : "Disabled"}
-    </button>
-  );
-}
-
-export function Gallery({
-  tokens,
-  onColorChange,
-}: {
-  tokens: Tokens;
-  onColorChange: (bucket: ColorBucket, name: string, value: string) => void;
-}) {
-  const { color, radius, spacing, typography, statusDomain } = tokens;
-
-  const surfaceRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState<string>(ALL_IDS[0]);
-
-  // Scrollspy: highlight the section nearest the top of the scroll viewport.
-  useEffect(() => {
-    const root = surfaceRef.current?.closest<HTMLElement>("[data-gallery-scroll]") ?? null;
-    const anchors = ALL_IDS
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (!anchors.length) return;
-
-    const visible = new Map<string, number>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) visible.set(e.target.id, e.intersectionRatio);
-          else visible.delete(e.target.id);
-        }
-        // Pick the topmost visible anchor (first in document order).
-        const topmost = ALL_IDS.find((id) => visible.has(id));
-        if (topmost) setActive(topmost);
-      },
-      { root, rootMargin: "-56px 0px -65% 0px", threshold: [0, 1] },
-    );
-    anchors.forEach((a) => observer.observe(a));
-    return () => observer.disconnect();
-  }, []);
-
-  const jump = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setActive(id);
-  };
-
-  const colorSwatches = (bucket: ColorBucket, prefix = "") =>
-    Object.entries(color[bucket] as Record<string, string>)
-      .filter(([k, v]) => !isMeta(k) && isColor(v))
-      .map(([k, v]) => (
-        <Swatch
-          key={`${bucket}-${k}`}
-          bucket={bucket}
-          tokenName={k}
-          label={`${prefix}${k}`}
-          value={v}
-          onChange={onColorChange}
-        />
-      ));
-
+function FoundationsPanel({ tokens }: { tokens: Tokens }) {
+  const { radius, spacing, typography } = tokens;
   const typeRoles = Object.entries(typography).filter(
     ([k, v]) => !isMeta(k) && typeof v !== "string",
   ) as [string, TypeRole][];
 
   return (
-    <div className={s.surface} ref={surfaceRef}>
-      <GalleryNav active={active} onJump={jump} />
+    <section className={s.sec}>
+      <h2 className={s.secTitle}>Foundations</h2>
+      <p className={s.lede}>Color swatches live in the left sidebar; these are the non-color scales.</p>
 
-      {/* ---------------- FOUNDATIONS ---------------- */}
-      <section className={s.sec}>
-        <h2 className={s.secTitle}>Foundations</h2>
-        <p className={s.lede}>Color chips are live controls: click a chip to open the picker or edit the hex value inline.</p>
+      <h3 className={s.sub}>Radius</h3>
+      <div className={s.scaleRow}>
+        {Object.entries(radius).filter(([k]) => !isMeta(k)).map(([k, v]) => (
+          <div key={k} className={s.scaleItem}>
+            <div className={s.radiusBox} style={{ borderRadius: v }} />
+            <div className={s.scaleName}>{k} · {v}</div>
+          </div>
+        ))}
+      </div>
 
-        <h3 id="brand" className={`${s.sub} ${s.anchor}`}>Brand</h3>
-        <div className={s.swatchRow}>{colorSwatches("brand")}</div>
+      <h3 className={s.sub}>Spacing</h3>
+      <div className={s.scaleRow}>
+        {Object.entries(spacing).filter(([k]) => !isMeta(k)).map(([k, v]) => (
+          <div key={k} className={s.scaleItem}>
+            <div className={s.spaceBox} style={{ width: v, height: v }} />
+            <div className={s.scaleName}>{k.replace("_", ".")} · {v}</div>
+          </div>
+        ))}
+      </div>
 
-        <h3 id="status" className={`${s.sub} ${s.anchor}`}>Status hues</h3>
-        <div className={s.swatchRow}>{colorSwatches("status")}</div>
+      <h3 className={s.sub}>Type scale</h3>
+      <div className={s.typeSpecimen}>
+        {typeRoles.map(([role, def]) => (
+          <div
+            key={role}
+            style={{
+              fontFamily: `${def.fontFamily}, sans-serif`,
+              fontSize: def.fontSize,
+              fontWeight: def.fontWeight,
+              lineHeight: def.lineHeight,
+              letterSpacing: def.letterSpacing,
+            }}
+          >
+            <span className={s.tname}>
+              {role} · {def.fontFamily} {def.fontSize}/{def.fontWeight}
+            </span>
+            The quick brown fox jumps
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
-        <h3 id="surface" className={`${s.sub} ${s.anchor}`}>Surface</h3>
-        <div className={s.swatchRow}>{colorSwatches("surface", "surface.")}</div>
+/* ------------------------------------------------------------------ */
+/* Buttons & badges                                                    */
+/* ------------------------------------------------------------------ */
 
-        <h3 id="foreground" className={`${s.sub} ${s.anchor}`}>Foreground</h3>
-        <div className={s.swatchRow}>{colorSwatches("foreground", "fg.")}</div>
+function ButtonsPanel({ tokens }: { tokens: Tokens }) {
+  const { statusDomain } = tokens;
+  return (
+    <section className={s.sec}>
+      <h2 className={s.secTitle}>Buttons &amp; badges</h2>
+      <p className={s.lede}>One primary (brand) action per surface; everything else recedes.</p>
 
-        <h3 id="border" className={`${s.sub} ${s.anchor}`}>Border</h3>
-        <div className={s.swatchRow}>{colorSwatches("border", "border.")}</div>
+      <h3 className={s.sub}>Buttons</h3>
+      <div className={s.cluster}>
+        <button className={`${s.btn} ${s.btnPrimary}`}>Run agent</button>
+        <button className={`${s.btn} ${s.btnSecondary}`}>Cancel</button>
+        <button className={`${s.btn} ${s.btnOutline}`}>Settings</button>
+        <button className={`${s.btn} ${s.btnGhost}`}>Dismiss</button>
+        <button className={`${s.btn} ${s.btnDestructive}`}>Delete</button>
+        <button className={`${s.btn} ${s.btnPrimary}`} disabled>Disabled</button>
+      </div>
 
-        <h3 id="radius" className={`${s.sub} ${s.anchor}`}>Radius</h3>
-        <div className={s.scaleRow}>
-          {Object.entries(radius).filter(([k]) => !isMeta(k)).map(([k, v]) => (
-            <div key={k} className={s.scaleItem}>
-              <div className={s.radiusBox} style={{ borderRadius: v }} />
-              <div className={s.scaleName}>{k} · {v}</div>
-            </div>
+      <h3 className={s.sub}>Button sizes</h3>
+      <div className={s.cluster}>
+        <button className={`${s.btn} ${s.btnSm} ${s.btnPrimary}`}>Small</button>
+        <button className={`${s.btn} ${s.btnPrimary}`}>Default</button>
+        <button className={`${s.btn} ${s.btnLg} ${s.btnPrimary}`}>Large</button>
+      </div>
+
+      <h3 className={s.sub}>Status badges <span className={s.hint}>— derived from statusDomain map</span></h3>
+      <div className={s.cluster}>
+        {Object.entries(statusDomain)
+          .filter(([k]) => !isMeta(k))
+          .map(([domain, hue]) => (
+            <span key={domain} className={s.badge} style={statusStyle(hue)}>
+              {domain}
+            </span>
           ))}
+      </div>
+
+      <h3 className={s.sub}>Pills &amp; counts</h3>
+      <div className={s.cluster}>
+        <span className={s.pill} style={statusStyle("green", 12, 30)}>● Connected</span>
+        <span className={s.pill} style={statusStyle("yellow", 12, 30)}>● Pending</span>
+        <span className={s.pill} style={statusStyle("red", 12, 30)}>● Failed</span>
+        <span className={s.countPill}>+128 <span className={s.countDim}>/ −34</span></span>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Forms & inputs                                                      */
+/* ------------------------------------------------------------------ */
+
+function Toggle({ defaultOn = false }: { defaultOn?: boolean }) {
+  const [on, setOn] = useState(defaultOn);
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      className={`${s.toggle} ${on ? s.toggleOn : ""}`}
+      onClick={() => setOn((v) => !v)}
+    >
+      <span className={s.toggleThumb} />
+    </button>
+  );
+}
+
+function FormsPanel() {
+  const [tab, setTab] = useState("account");
+  return (
+    <section className={s.sec}>
+      <h2 className={s.secTitle}>Forms &amp; inputs</h2>
+      <p className={s.lede}>A realistic settings form — tweak tokens and watch every control respond.</p>
+
+      <div className={s.formCard}>
+        <div className={s.formHeader}>
+          <div>
+            <div className={s.formTitle}>Trigger configuration</div>
+            <div className={s.formSubtitle}>Define when and how this agent runs.</div>
+          </div>
+          <span className={s.badge} style={statusStyle("blue", 14, 35)}>Beta</span>
         </div>
 
-        <h3 id="spacing" className={`${s.sub} ${s.anchor}`}>Spacing</h3>
-        <div className={s.scaleRow}>
-          {Object.entries(spacing).filter(([k]) => !isMeta(k)).map(([k, v]) => (
-            <div key={k} className={s.scaleItem}>
-              <div className={s.spaceBox} style={{ width: v, height: v }} />
-              <div className={s.scaleName}>{k.replace("_", ".")} · {v}</div>
-            </div>
-          ))}
-        </div>
-
-        <h3 id="type" className={`${s.sub} ${s.anchor}`}>Type scale</h3>
-        <div className={s.typeSpecimen}>
-          {typeRoles.map(([role, def]) => (
-            <div
-              key={role}
-              style={{
-                fontFamily: `${def.fontFamily}, sans-serif`,
-                fontSize: def.fontSize,
-                fontWeight: def.fontWeight,
-                lineHeight: def.lineHeight,
-                letterSpacing: def.letterSpacing,
-              }}
+        <div className={s.formTabs} role="tablist">
+          {["account", "rules", "advanced"].map((t) => (
+            <button
+              key={t}
+              role="tab"
+              aria-selected={tab === t}
+              className={`${s.formTab} ${tab === t ? s.formTabActive : ""}`}
+              onClick={() => setTab(t)}
             >
-              <span className={s.tname}>
-                {role} · {def.fontFamily} {def.fontSize}/{def.fontWeight}
-              </span>
-              The quick brown fox jumps
+              {t[0].toUpperCase() + t.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        <div className={s.formBody}>
+          {/* text input */}
+          <div className={s.field}>
+            <label className={s.fieldLabel} htmlFor="f-name">
+              Trigger name <span className={s.req}>*</span>
+            </label>
+            <input id="f-name" className={s.formInput} defaultValue="nightly-regression" />
+            <p className={s.fieldHelp}>Lowercase, no spaces. Used in logs and webhooks.</p>
+          </div>
+
+          {/* input with error */}
+          <div className={s.field}>
+            <label className={s.fieldLabel} htmlFor="f-url">Webhook URL</label>
+            <input id="f-url" className={`${s.formInput} ${s.formInputError}`} defaultValue="notaurl" aria-invalid />
+            <p className={s.fieldError}>Enter a valid https:// URL.</p>
+          </div>
+
+          {/* input with suffix button */}
+          <div className={s.field}>
+            <label className={s.fieldLabel}>Generated token</label>
+            <div className={s.inputGroup}>
+              <input className={`${s.formInput} ${s.mono}`} readOnly value="kc_live_8f3a…d21b" />
+              <button className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}>Copy</button>
+            </div>
+          </div>
+
+          {/* select + number row */}
+          <div className={s.fieldRow}>
+            <div className={s.field}>
+              <label className={s.fieldLabel} htmlFor="f-model">Model</label>
+              <div className={s.selectWrap}>
+                <select id="f-model" className={s.formSelect} defaultValue="opus">
+                  <option value="opus">Claude Opus 4.8</option>
+                  <option value="sonnet">Claude Sonnet 4.5</option>
+                  <option value="haiku">Claude Haiku 4</option>
+                </select>
+                <svg className={s.selectChevron} viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" /></svg>
+              </div>
+            </div>
+            <div className={s.field}>
+              <label className={s.fieldLabel} htmlFor="f-budget">Token budget</label>
+              <input id="f-budget" type="number" className={s.formInput} defaultValue={50000} step={1000} />
+            </div>
+          </div>
+
+          {/* textarea */}
+          <div className={s.field}>
+            <label className={s.fieldLabel} htmlFor="f-prompt">System prompt</label>
+            <textarea id="f-prompt" className={s.formTextarea} rows={3} defaultValue={"You are a senior engineer.\nFix failing tests without breaking the public API."} />
+            <p className={s.fieldHelp}>Markdown supported.</p>
+          </div>
+
+          {/* checkbox group */}
+          <div className={s.field}>
+            <span className={s.fieldLabel}>Notifications</span>
+            <label className={s.check}>
+              <input type="checkbox" defaultChecked />
+              <span>Email me when the run finishes</span>
+            </label>
+            <label className={s.check}>
+              <input type="checkbox" />
+              <span>Post to Slack channel</span>
+            </label>
+          </div>
+
+          {/* radio group */}
+          <div className={s.field}>
+            <span className={s.fieldLabel}>Concurrency</span>
+            <label className={s.radio}>
+              <input type="radio" name="conc" defaultChecked />
+              <span>Run serially (safest)</span>
+            </label>
+            <label className={s.radio}>
+              <input type="radio" name="conc" />
+              <span>Parallelize up to 4 agents</span>
+            </label>
+          </div>
+
+          {/* switch rows */}
+          <div className={s.switchRow}>
+            <div>
+              <div className={s.switchLabel}>Auto-merge clean PRs</div>
+              <div className={s.switchHelp}>Merge when checks pass and there are no conflicts.</div>
+            </div>
+            <Toggle defaultOn />
+          </div>
+          <div className={s.switchRow}>
+            <div>
+              <div className={s.switchLabel}>Require human approval</div>
+              <div className={s.switchHelp}>Pause before applying destructive changes.</div>
+            </div>
+            <Toggle />
+          </div>
+
+          {/* search field */}
+          <div className={s.field}>
+            <label className={s.fieldLabel}>Filter repositories</label>
+            <div className={s.searchField}>
+              <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" /><path d="M13 13l-2.6-2.6" /></svg>
+              <input className={s.searchInput} placeholder="Search…" />
+            </div>
+          </div>
+        </div>
+
+        <div className={s.formFooter}>
+          <button className={`${s.btn} ${s.btnGhost}`}>Cancel</button>
+          <button className={`${s.btn} ${s.btnPrimary}`}>Save trigger</button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Cards & alerts                                                      */
+/* ------------------------------------------------------------------ */
+
+function CardsPanel() {
+  return (
+    <section className={s.sec}>
+      <h2 className={s.secTitle}>Cards &amp; alerts</h2>
+      <p className={s.lede}>Hierarchy from surface value, not hue.</p>
+
+      <h3 className={s.sub}>Surface ladder</h3>
+      <div className={s.cluster}>
+        <div className={s.card}>
+          <div className={s.cardTitle}>Project</div>
+          <div className={s.cardMeta}>background → raised → overlay</div>
+          <div className={`${s.card} ${s.cardInset}`}>
+            <div className={s.cardTitle}>Nested surface</div>
+            <div className={s.cardMeta}>Value, not hue, creates hierarchy.</div>
+          </div>
+        </div>
+        <div className={`${s.card} ${s.popover}`}>
+          <div className={s.cardTitle}>Popover / overlay</div>
+          <div className={s.cardMeta}>Floating chrome uses the overlay surface.</div>
+        </div>
+      </div>
+
+      <h3 className={s.sub}>Stat tiles</h3>
+      <div className={s.statRow}>
+        <div className={s.statTile}><div className={s.statValue}>1,284</div><div className={s.statLabel}>Runs this week</div></div>
+        <div className={s.statTile}><div className={s.statValue} style={{ color: "var(--status-green400)" }}>98.2%</div><div className={s.statLabel}>Success rate</div></div>
+        <div className={s.statTile}><div className={s.statValue}>3.4s</div><div className={s.statLabel}>Median latency</div></div>
+      </div>
+
+      <h3 className={s.sub}>Alerts</h3>
+      <div className={s.alert} style={statusStyle("green", 14, 35)}>Agent finished. 3 files changed.</div>
+      <div className={s.alert} style={statusStyle("yellow", 14, 35)}>Token budget at 80%.</div>
+      <div className={s.alert} style={statusStyle("red", 14, 35)}>Build failed: type error in tokens.ts.</div>
+
+      <h3 className={s.sub}>Empty state</h3>
+      <div className={s.empty}>
+        <div className={s.emptyIcon} aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>
+        </div>
+        <div className={s.emptyTitle}>No triggers yet</div>
+        <div className={s.emptyMeta}>Create your first trigger to run agents on a schedule.</div>
+        <button className={`${s.btn} ${s.btnPrimary}`}>New trigger</button>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Mini editor (VS Code-style chrome)                                  */
+/* ------------------------------------------------------------------ */
+
+function EditorPanel({ tokens }: { tokens: Tokens }) {
+  const { color } = tokens;
+  return (
+    <section className={s.sec}>
+      <h2 className={s.secTitle}>Mini editor</h2>
+      <p className={s.lede}>Editor chrome + syntax tokens, the way Kilo Code renders inside VS Code.</p>
+
+      <div className={s.editor}>
+        {/* activity / file tree */}
+        <aside className={s.explorer}>
+          <div className={s.explorerHeader}>Explorer</div>
+          <div className={s.treeRow}><span className={s.treeChevron}>▾</span> src</div>
+          <div className={`${s.treeRow} ${s.treeNested}`}>tokens.ts</div>
+          <div className={`${s.treeRow} ${s.treeNested} ${s.treeActive}`}>theme.css <span className={s.treeDot} /></div>
+          <div className={`${s.treeRow} ${s.treeNested}`}>index.ts</div>
+          <div className={s.treeRow}><span className={s.treeChevron}>▸</span> tests</div>
+        </aside>
+
+        {/* editor main */}
+        <div className={s.editorMain}>
+          <div className={s.editorTabs}>
+            <div className={`${s.editorTab} ${s.editorTabActive}`}>theme.css <span className={s.tabClose}>×</span></div>
+            <div className={s.editorTab}>tokens.ts <span className={s.tabClose}>×</span></div>
+          </div>
+          <div className={s.breadcrumb}>src <span className={s.crumbSep}>›</span> theme.css</div>
+          <pre className={s.editorCode}>
+{lineNo(1)}<span className={s.cCom}>{`/* brand action color */`}</span>{"\n"}
+{lineNo(2)}<span className={s.cKey}>:root</span> {"{"}{"\n"}
+{lineNo(3)}{"  "}<span className={s.cVar}>--primary</span>: <span className={s.cStr}>{color.brand.primary}</span>;{"\n"}
+{lineNo(4)}{"  "}<span className={s.cVar}>--primary-foreground</span>: <span className={s.cStr}>{color.brand.foreground}</span>;{"\n"}
+{lineNo(5)}{"  "}<span className={s.cVar}>--radius</span>: <span className={s.cNum}>0.5rem</span>;{"\n"}
+{lineNo(6)}{"}"}{"\n"}
+{lineNo(7)}{"\n"}
+{lineNo(8)}<span className={s.cKey}>export</span> <span className={s.cKey}>const</span> <span className={s.cConst}>PRIMARY</span> = <span className={s.cStr}>&quot;{color.brand.primary}&quot;</span>;{"\n"}
+{lineNo(9)}<span className={s.cKey}>function</span> <span className={s.cFn}>resolve</span>(<span className={s.cVar}>token</span>: <span className={s.cType}>Token</span>): <span className={s.cType}>string</span> {"{"}{"\n"}
+{lineNo(10)}{"  "}<span className={s.cKey}>return</span> <span className={s.cVar}>token</span>.value ?? <span className={s.cNum}>0</span>;{"\n"}
+{lineNo(11)}{"}"}
+          </pre>
+          <div className={s.statusBar}>
+            <span>theme.css</span>
+            <span className={s.statusSpacer} />
+            <span>CSS</span>
+            <span>Ln 3, Col 14</span>
+            <span style={{ color: "var(--status-green400)" }}>● tokens synced</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function lineNo(n: number) {
+  return <span className={s.gutterNo}>{String(n).padStart(2, " ")}</span>;
+}
+
+/* ------------------------------------------------------------------ */
+/* Diff                                                                */
+/* ------------------------------------------------------------------ */
+
+type DiffLine = { type: "ctx" | "add" | "del" | "hunk"; old?: number; neu?: number; text: string };
+
+const DIFF: DiffLine[] = [
+  { type: "hunk", text: "@@ -12,9 +12,11 @@ export const tokens = {" },
+  { type: "ctx", old: 12, neu: 12, text: "  color: {" },
+  { type: "ctx", old: 13, neu: 13, text: "    brand: {" },
+  { type: "del", old: 14, text: '      primary: "#EDFF00",' },
+  { type: "del", old: 15, text: '      primaryHover: "#D6E600",' },
+  { type: "add", neu: 14, text: '      primary: "#F7F586",' },
+  { type: "add", neu: 15, text: '      primaryHover: "#E6E475",' },
+  { type: "add", neu: 16, text: '      primaryRing: "#F7F58659",' },
+  { type: "ctx", old: 16, neu: 17, text: "    }," },
+  { type: "ctx", old: 17, neu: 18, text: "  }," },
+  { type: "hunk", text: "@@ -41,6 +42,6 @@ function applyTheme() {" },
+  { type: "ctx", old: 41, neu: 42, text: "  const root = document.documentElement;" },
+  { type: "del", old: 42, text: "  root.style.setProperty('--primary', '#EDFF00');" },
+  { type: "add", neu: 43, text: "  root.style.setProperty('--primary', tokens.color.brand.primary);" },
+  { type: "ctx", old: 43, neu: 44, text: "}" },
+];
+
+function DiffPanel() {
+  return (
+    <section className={s.sec}>
+      <h2 className={s.secTitle}>Diff</h2>
+      <p className={s.lede}>Inline diff with gutter, line numbers and hunk headers — driven by the diff tokens.</p>
+
+      <div className={s.diffCard}>
+        <div className={s.diffHeader}>
+          <span className={s.diffFile}>src/tokens.ts</span>
+          <span className={s.diffStat}><span className={s.diffStatAdd}>+4</span> <span className={s.diffStatDel}>−3</span></span>
+        </div>
+        <div className={s.diffBody}>
+          {DIFF.map((line, i) => (
+            <div key={i} className={`${s.diffLine} ${diffClass(line.type)}`}>
+              <span className={s.diffNum}>{line.type === "hunk" ? "" : line.old ?? ""}</span>
+              <span className={s.diffNum}>{line.type === "hunk" ? "" : line.neu ?? ""}</span>
+              <span className={s.diffSign}>{sign(line.type)}</span>
+              <span className={s.diffText}>{line.text}</span>
             </div>
           ))}
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* ---------------- COMPONENTS ---------------- */}
-      <section className={s.sec}>
-        <h2 className={s.secTitle}>Components in context</h2>
+function diffClass(t: DiffLine["type"]) {
+  if (t === "add") return s.dAdd;
+  if (t === "del") return s.dDel;
+  if (t === "hunk") return s.dHunk;
+  return s.dCtx;
+}
+function sign(t: DiffLine["type"]) {
+  if (t === "add") return "+";
+  if (t === "del") return "−";
+  return " ";
+}
 
-        <h3 id="buttons" className={`${s.sub} ${s.anchor}`}>Buttons <span className={s.hint}>— one primary (neon) per surface</span></h3>
-        <div className={s.cluster}>
-          <button className={`${s.btn} ${s.btnPrimary}`}>Run agent</button>
-          <button className={`${s.btn} ${s.btnSecondary}`}>Cancel</button>
-          <button className={`${s.btn} ${s.btnOutline}`}>Settings</button>
-          <button className={`${s.btn} ${s.btnGhost}`}>Dismiss</button>
-          <button className={`${s.btn} ${s.btnDestructive}`}>Delete</button>
-          <button className={`${s.btn} ${s.btnPrimary}`} disabled>Disabled</button>
-        </div>
+/* ------------------------------------------------------------------ */
+/* Chat & tools                                                        */
+/* ------------------------------------------------------------------ */
 
-        <h3 id="badges" className={`${s.sub} ${s.anchor}`}>Status badges <span className={s.hint}>— derived from statusDomain map</span></h3>
-        <div className={s.cluster}>
-          {Object.entries(statusDomain)
-            .filter(([k]) => !isMeta(k))
-            .map(([domain, hue]) => (
-              <span key={domain} className={s.badge} style={statusStyle(hue)}>
-                {domain}
-              </span>
-            ))}
-        </div>
+function ToolCard({ icon, title, subtitle, children }: { icon: string; title: string; subtitle: string; children?: React.ReactNode }) {
+  return (
+    <div className={s.toolCard}>
+      <div className={s.toolHeader}>
+        <span className={s.toolIcon} aria-hidden="true">{icon}</span>
+        <span className={s.toolTitle}>{title}</span>
+        <span className={s.toolSubtitle}>{subtitle}</span>
+        <span className={s.toolChevron}>▾</span>
+      </div>
+      {children && <div className={s.toolBody}>{children}</div>}
+    </div>
+  );
+}
 
-        <h3 id="cards" className={`${s.sub} ${s.anchor}`}>Cards &amp; elevation</h3>
-        <div className={s.cluster}>
-          <div className={s.card}>
-            <div className={s.cardTitle}>Project</div>
-            <div className={s.cardMeta}>Surface ladder: background → raised → overlay</div>
-            <div className={`${s.card} ${s.cardInset}`}>
-              <div className={s.cardTitle}>Nested surface</div>
-              <div className={s.cardMeta}>Value, not hue, creates hierarchy.</div>
+function ChatPanel({ tokens }: { tokens: Tokens }) {
+  const { color } = tokens;
+  return (
+    <section className={s.sec}>
+      <h2 className={s.secTitle}>Chat &amp; tools</h2>
+      <p className={s.lede}>Agent conversation with tool-call cards and a prompt box — the core Kilo Code surface.</p>
+
+      <div className={s.chatShell}>
+        <div className={s.chat}>
+          <div className={s.turnUser}>
+            <div className={`${s.bubble} ${s.bubbleUser}`}>Migrate the primary color to the new brand yellow and update the theme.</div>
+          </div>
+
+          <div className={s.turnAssistant}>
+            <div className={s.assistantText}>
+              On it. I&apos;ll read the current tokens, edit <code className={s.inlineCode}>tokens.ts</code>, and apply the theme.
+            </div>
+
+            <ToolCard icon="◇" title="Read" subtitle="src/tokens.ts" />
+            <ToolCard icon="✎" title="Edit" subtitle="src/tokens.ts">
+              <pre className={s.toolDiff}>
+                <span className={s.dDel}>- primary: &quot;#EDFF00&quot;</span>{"\n"}
+                <span className={s.dAdd}>+ primary: &quot;{color.brand.primary}&quot;</span>
+              </pre>
+            </ToolCard>
+            <ToolCard icon="$" title="Shell" subtitle="pnpm build">
+              <pre className={s.toolOut}>
+                <span style={{ color: "var(--status-green400)" }}>✓</span> Compiled successfully in 968ms
+              </pre>
+            </ToolCard>
+
+            <div className={s.reasoning}>
+              <span className={s.reasoningBar} />
+              <span>Verifying the contrast ratio of the new on-primary color…</span>
+            </div>
+
+            <div className={s.assistantText}>
+              Done — primary is now <code className={s.inlineCode}>{color.brand.primary}</code>.
+              <span className={s.diffSummary}><span className={s.diffStatAdd}>+4</span> <span className={s.diffStatDel}>−3</span> · 1 file</span>
             </div>
           </div>
-          <div className={`${s.card} ${s.popover}`}>
-            <div className={s.cardTitle}>Popover / overlay</div>
-            <div className={s.cardMeta}>Floating chrome uses the overlay surface.</div>
+
+          <div className={s.workingRow}>
+            <span className={s.spinner} aria-hidden="true" />
+            <span className={s.workingText}>Running tests</span>
+            <span className={s.workingElapsed}>0:04</span>
           </div>
         </div>
 
-        <h3 id="inputs" className={`${s.sub} ${s.anchor}`}>Inputs &amp; focus ring</h3>
-        <div className={s.cluster}>
-          <input className={s.input} placeholder="Search repositories…" />
-          <input className={`${s.input} ${s.inputFocus}`} defaultValue="Focused (ring = brand)" />
-          <PreviewSwitch />
-        </div>
-
-        <h3 id="tabs" className={`${s.sub} ${s.anchor}`}>Tabs</h3>
-        <div className={s.tabs}>
-          <button className={`${s.tab} ${s.tabActive}`}>Overview</button>
-          <button className={s.tab}>Logs</button>
-          <button className={s.tab}>Diffs</button>
-          <button className={s.tab}>Settings</button>
-        </div>
-
-        <h3 id="alerts" className={`${s.sub} ${s.anchor}`}>Alerts</h3>
-        <div className={s.alert} style={statusStyle("green", 14, 35)}>Agent finished. 3 files changed.</div>
-        <div className={s.alert} style={statusStyle("yellow", 14, 35)}>Token budget at 80%.</div>
-        <div className={s.alert} style={statusStyle("red", 14, 35)}>Build failed: type error in tokens.ts.</div>
-
-        <h3 id="code" className={`${s.sub} ${s.anchor}`}>Code &amp; diff <span className={s.hint}>— AI coding context</span></h3>
-        <pre className={s.code}><span className={s.cKey}>const</span> <span className={s.cVar}>primary</span> = <span className={s.cStr}>&quot;#EDFF00&quot;</span>; <span className={s.cCom}>// brand === primary</span></pre>
-        <pre className={s.diff}>
-          <span className={s.dAdd}>+  --primary: oklch(0.93 0.23 119);</span>
-          <span className={s.dDel}>-  --primary: oklch(0.922 0 0);</span>
-          <span className={s.dCtx}>   --primary-foreground: #1F1F1F;</span>
-        </pre>
-        <pre className={s.terminal}>
-          <span><span className={s.tPrompt}>$</span> kilo build tokens{"\n"}</span>
-          <span><span className={s.tOk}>✓</span> tokens.web.css   <span className={s.tDim}>(OKLCH)</span>{"\n"}</span>
-          <span><span className={s.tOk}>✓</span> tokens.ts        <span className={s.tDim}>(hex/rgba)</span></span>
-        </pre>
-
-        <h3 id="chat" className={`${s.sub} ${s.anchor}`}>Chat</h3>
-        <div className={s.chat}>
-          <div className={`${s.bubble} ${s.bubbleUser}`}>Migrate the primary color to the brand yellow.</div>
-          <div className={`${s.bubble} ${s.bubbleAssistant}`}>
-            On it. I&apos;ll update <code>--primary</code> and the button variant.
-            <span className={s.toolChip}>edit tokens.json</span>
-            <span className={s.typing}><i /><i /><i /></span>
+        <div className={s.promptBox}>
+          <textarea className={s.promptInput} rows={2} placeholder="Ask Kilo to make a change…" defaultValue="Now add a regression test for the contrast ratio." />
+          <div className={s.promptToolbar}>
+            <span className={s.promptHint}>@ file</span>
+            <span className={s.promptHint}>/ command</span>
+            <span className={s.promptSpacer} />
+            <button className={`${s.btn} ${s.btnSm} ${s.btnPrimary}`}>Send</button>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Shell                                                               */
+/* ------------------------------------------------------------------ */
+
+export function Gallery({ tokens }: { tokens: Tokens }) {
+  const [tab, setTab] = useState<TabId>("foundations");
+
+  return (
+    <div className={s.surface}>
+      <GalleryTabs active={tab} onSelect={setTab} />
+      <div className={s.panel} role="tabpanel">
+        {tab === "foundations" && <FoundationsPanel tokens={tokens} />}
+        {tab === "buttons" && <ButtonsPanel tokens={tokens} />}
+        {tab === "forms" && <FormsPanel />}
+        {tab === "cards" && <CardsPanel />}
+        {tab === "editor" && <EditorPanel tokens={tokens} />}
+        {tab === "diff" && <DiffPanel />}
+        {tab === "chat" && <ChatPanel tokens={tokens} />}
+      </div>
     </div>
   );
 }

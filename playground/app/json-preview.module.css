@@ -23,8 +23,8 @@
 .dirtyDot {
   padding: 1px var(--spacing-1_5, 6px);
   border-radius: var(--radius-full, 9999px);
-  background: color-mix(in srgb, var(--brand-primary, #edff00) 12%, transparent);
-  color: var(--brand-primary, #edff00);
+  background: color-mix(in srgb, var(--brand-primary, #f7f586) 12%, transparent);
+  color: var(--brand-primary, #f7f586);
   font-size: var(--type-eyebrow-size, 0.6875rem); font-weight: var(--type-label-weight, 500);
 }
 .copyBtn {
@@ -38,7 +38,7 @@
 }
 .copyBtn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .copyBtn:hover { background: var(--surface-muted, #3d3d3d); border-color: var(--border-strong, #ffffff2e); }
-.copyBtn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--brand-primaryRing, #edff0059); }
+.copyBtn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--brand-primaryRing, #f7f58659); }
 .copied {
   color: var(--status-green400, #4ade80);
   border-color: color-mix(in srgb, var(--status-green500, #22c55e) 40%, transparent);

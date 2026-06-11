@@ -1,16 +1,128 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
-import { Tokens, isMeta, isDimension, TypeRole } from "@/lib/tokens";
+import { useEffect, useId, useState, type ReactNode } from "react";
+import { COLOR_BUCKETS, ColorBucket, Tokens, isMeta, isColor, isDimension, TypeRole } from "@/lib/tokens";
 import c from "./controls.module.css";
 
 type Setter = (value: string | number) => void;
 type Getter = () => string | number;
 type Entry = [string, unknown];
-type GroupId = "statusDomain" | "radius" | "spacing" | "typography";
+type GroupId = ColorBucket | "statusDomain" | "radius" | "spacing" | "typography";
 
-const GROUP_IDS: GroupId[] = ["statusDomain", "radius", "spacing", "typography"];
+const GROUP_IDS: GroupId[] = [...COLOR_BUCKETS, "statusDomain", "radius", "spacing", "typography"];
 const INITIAL_OPEN_STATE = Object.fromEntries(GROUP_IDS.map((id) => [id, true])) as Record<GroupId, boolean>;
+
+/** A complete hex color: #rgb, #rgba, #rrggbb, or #rrggbbaa. */
+const isHex = (v: string) => /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(v.trim());
+
+function ColorSwatch({
+  bucket,
+  tokenName,
+  label,
+  value,
+  onChange,
+}: {
+  bucket: ColorBucket;
+  tokenName: string;
+  label: string;
+  value: string;
+  onChange: (bucket: ColorBucket, name: string, value: string) => void;
+}) {
+  const base6 = value.match(/^#([0-9a-fA-F]{6})/);
+  const pickerValue = base6 ? `#${base6[1]}` : "#000000";
+  const fieldLabel = `color.${bucket}.${tokenName}`;
+  const [draft, setDraft] = useState(value);
+
+  useEffect(() => { setDraft(value); }, [value]);
+
+  const commit = () => {
+    const next = draft.trim();
+    if (isHex(next)) {
+      if (next !== value) onChange(bucket, tokenName, next);
+    } else {
+      setDraft(value);
+    }
+  };
+
+  const onText = (raw: string) => {
+    setDraft(raw);
+    if (isHex(raw.trim())) onChange(bucket, tokenName, raw.trim());
+  };
+
+  return (
+    <div className={c.swatch}>
+      <div className={c.chip} style={{ background: value }}>
+        <input
+          className={c.swatchPicker}
+          type="color"
+          aria-label={`Pick ${fieldLabel}`}
+          value={pickerValue}
+          onChange={(e) => onChange(bucket, tokenName, e.target.value)}
+        />
+        <span className={c.chipCue}>Edit</span>
+      </div>
+      <div className={c.swatchMeta}>
+        <div className={c.swatchName} title={label}>{label}</div>
+        <input
+          className={c.swatchVal}
+          aria-label={`Set ${fieldLabel}`}
+          value={draft}
+          spellCheck={false}
+          autoComplete="off"
+          onChange={(e) => onText(e.target.value)}
+          onBlur={commit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+            if (e.key === "Escape") { setDraft(value); (e.target as HTMLInputElement).blur(); }
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function StatusSwatches({
+  rows,
+  onChange,
+}: {
+  rows: [string, string][];
+  onChange: (bucket: ColorBucket, name: string, value: string) => void;
+}) {
+  const families = new Map<string, [string, string][]>();
+  const other: [string, string][] = [];
+
+  for (const [name, value] of rows) {
+    const match = name.match(/^([a-z]+)(\d{3})$/i);
+    if (match) {
+      const family = match[1];
+      if (!families.has(family)) families.set(family, []);
+      families.get(family)!.push([name, value]);
+    } else {
+      other.push([name, value]);
+    }
+  }
+
+  const renderFamily = (family: string, swatches: [string, string][]) => {
+    swatches.sort((a, b) => Number(a[0].match(/\d+$/)?.[0] ?? 0) - Number(b[0].match(/\d+$/)?.[0] ?? 0));
+    return (
+      <div key={family} className={c.statusFamily}>
+        <span className={c.familyLabel}>{family}</span>
+        <div className={c.statusSwatchRow}>
+          {swatches.map(([name, value]) => (
+            <ColorSwatch key={name} bucket="status" tokenName={name} label={name} value={value} onChange={onChange} />
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className={c.statusGroups}>
+      {Array.from(families, ([family, swatches]) => renderFamily(family, swatches))}
+      {other.length > 0 && renderFamily("other", other)}
+    </div>
+  );
+}
 
 function DimControl({ label, get, set }: { label: string; get: () => string; set: (v: string) => void }) {
   const id = useId();
@@ -148,7 +260,37 @@ export function Controls({ tokens, onChange }: { tokens: Tokens; onChange: (next
     onToggle: (open: boolean) => setGroupOpen(id, open),
   });
 
+  const colorRows = (bucket: ColorBucket): [string, string][] => {
+    const rows = Object.entries(tokens.color[bucket]).filter(([k, v]) => !isMeta(k) && isColor(v)) as [string, string][];
+    const title = `color.${bucket}`;
+    if (!filterActive || m(title) || m(bucket)) return rows;
+    return rows.filter(([k, v]) => m(k) || m(v));
+  };
+
+  const setColor = (bucket: ColorBucket, name: string, value: string) => {
+    update((draft) => { draft.color[bucket][name] = value; });
+  };
+
   const groups: ReactNode[] = [];
+
+  for (const bucket of COLOR_BUCKETS) {
+    const rows = colorRows(bucket);
+    if (!rows.length) continue;
+    const note = typeof tokens.color[bucket].$comment === "string" ? tokens.color[bucket].$comment : undefined;
+    groups.push(
+      <Group key={bucket} title={`color.${bucket}`} note={note} {...groupProps(bucket)}>
+        {bucket === "status" ? (
+          <StatusSwatches rows={rows} onChange={setColor} />
+        ) : (
+          <div className={c.colorGrid}>
+            {rows.map(([name, value]) => (
+              <ColorSwatch key={name} bucket={bucket} tokenName={name} label={name} value={value} onChange={setColor} />
+            ))}
+          </div>
+        )}
+      </Group>,
+    );
+  }
 
   const statusRows = pick(Object.entries(tokens.statusDomain), "statusDomain", (k) => k);
   if (statusRows.length) {

@@ -35,15 +35,15 @@
 .brandTile {
   width: var(--spacing-6, 24px); height: var(--spacing-6, 24px);
   border-radius: var(--radius-sm, 6px);
-  background: var(--brand-primary, #edff00); color: var(--brand-foreground, #1f1f1f);
+  background: var(--brand-primary, #f7f586); color: var(--brand-foreground, #1f1f1f);
   display: grid; place-items: center;
-  font-weight: var(--type-h1-weight, 700); font-size: var(--type-body-size, 0.875rem); flex: none;
+  font-weight: var(--type-title-weight, 600); font-size: var(--type-body-size, 0.875rem); flex: none;
 }
 .title {
   font-size: var(--type-bodyStrong-size, 0.875rem);
   font-weight: var(--type-bodyStrong-weight, 500);
   line-height: var(--type-bodyStrong-leading, 1.5);
-  margin: 0; letter-spacing: var(--type-h2-tracking, -0.015em);
+  margin: 0; letter-spacing: var(--type-heading-tracking, -0.01em);
   white-space: nowrap;
 }
 .spacer { flex: 1 1 auto; min-width: var(--spacing-2, 8px); }
@@ -76,17 +76,17 @@
 .iconBtn:active { transform: translateY(0); }
 .iconBtn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px var(--brand-primaryRing, #edff0059);
+  box-shadow: 0 0 0 3px var(--brand-primaryRing, #f7f58659);
 }
 .activeIconBtn {
-  border-color: var(--brand-primaryRing, #edff0059);
-  color: var(--brand-primary, #edff00);
-  background: color-mix(in srgb, var(--brand-primary, #edff00) 12%, transparent);
+  border-color: var(--brand-primaryRing, #f7f58659);
+  color: var(--brand-primary, #f7f586);
+  background: color-mix(in srgb, var(--brand-primary, #f7f586) 12%, transparent);
 }
 .activeIconBtn:hover {
-  border-color: var(--brand-primary, #edff00);
-  color: var(--brand-primaryHover, #d6e600);
-  background: color-mix(in srgb, var(--brand-primary, #edff00) 18%, var(--surface-muted, #3d3d3d));
+  border-color: var(--brand-primary, #f7f586);
+  color: var(--brand-primaryHover, #e6e475);
+  background: color-mix(in srgb, var(--brand-primary, #f7f586) 18%, var(--surface-muted, #3d3d3d));
 }
 
 /* ---- status pill ---- */
@@ -111,8 +111,8 @@
 .toneMuted .statusDot { background: var(--foreground-subtle, #7a7a7a); }
 .toneNeutral { color: var(--foreground-default, #fafafa); }
 .toneNeutral .statusDot {
-  background: var(--brand-primary, #edff00);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary, #edff00) 22%, transparent);
+  background: var(--brand-primary, #f7f586);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary, #f7f586) 22%, transparent);
 }
 .toneSuccess {
   color: var(--status-green400, #4ade80);
@@ -155,11 +155,11 @@
 .btn:hover:not(:disabled) { background: var(--surface-muted, #3d3d3d); border-color: var(--border-strong, #ffffff2e); }
 .btn:active:not(:disabled) { background: var(--surface-secondary, #3d3d3d); }
 .btn:disabled { opacity: .4; cursor: not-allowed; }
-.btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--brand-primaryRing, #edff0059); }
-.primary { background: var(--brand-primary, #edff00); color: var(--brand-foreground, #1f1f1f); border-color: transparent; }
-.primary:hover:not(:disabled) { background: var(--brand-primaryHover, #d6e600); border-color: transparent; }
+.btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--brand-primaryRing, #f7f58659); }
+.primary { background: var(--brand-primary, #f7f586); color: var(--brand-foreground, #1f1f1f); border-color: transparent; }
+.primary:hover:not(:disabled) { background: var(--brand-primaryHover, #e6e475); border-color: transparent; }
 .primary:disabled { opacity: .45; }
-.primary:focus-visible { box-shadow: 0 0 0 2px var(--surface-raised, #2b2b2b), 0 0 0 4px var(--brand-primary, #edff00); }
+.primary:focus-visible { box-shadow: 0 0 0 2px var(--surface-raised, #2b2b2b), 0 0 0 4px var(--brand-primary, #f7f586); }
 .danger { color: var(--status-red400, #f87171); border-color: color-mix(in srgb, var(--status-red500, #ef4444) 50%, transparent); }
 .danger:hover:not(:disabled) {
   background: color-mix(in srgb, var(--status-red500, #ef4444) 16%, transparent);

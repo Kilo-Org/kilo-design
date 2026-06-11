@@ -20,6 +20,8 @@ export interface Tokens {
     surface: Record<string, string>;
     foreground: Record<string, string>;
     border: Record<string, string>;
+    syntax: Record<string, string>;
+    diff: Record<string, string>;
   };
   statusDomain: Record<string, string>;
   typography: Record<string, TypeRole | string>;
@@ -27,7 +29,7 @@ export interface Tokens {
   spacing: Record<string, string>;
 }
 
-export const COLOR_BUCKETS = ["brand", "status", "surface", "foreground", "border"] as const;
+export const COLOR_BUCKETS = ["brand", "status", "surface", "foreground", "border", "syntax", "diff"] as const;
 export type ColorBucket = (typeof COLOR_BUCKETS)[number];
 
 export const isMeta = (k: string) => k.startsWith("$");
