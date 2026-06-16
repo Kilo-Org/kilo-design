@@ -1,57 +1,86 @@
 # kilo-design
 
-Canonical source of truth for Kilo's design system across all products (Cloud, Landing,
-Console, VS Code, JetBrains, CLI, Mobile).
+Canonical source of truth for Kilo's design system across products including Cloud, Landing, Console, VS Code, JetBrains, CLI, and Mobile.
 
-> **Status: planning complete, implementation not started.** This repo intentionally contains
-> only decisions, glossary, and plans right now. Tokens, the generator, and the skills do **not**
-> exist yet — they are rebuilt fresh from the ADRs in Steps 2-3. If a file you expect (e.g.
-> `tokens.json`) is missing, that is by design, not an accident (see ADR 0008 and the clean-slate
-> note below).
+This repository currently contains the first implementation slice of the design system: the hand-authored token contract and a local playground for reviewing and tuning it visually.
 
-## Read these first (in order)
+## What Lives Here
 
-1. **`CONTEXT.md`** — the glossary. Plain-language definitions of every term used here
-   (Core Skill, Product Skill, Product Overlay, Pattern Recipe, Canonical Example, Drift, …).
-   Read this before the plans so the vocabulary is unambiguous.
-2. **`docs/adr/`** — the 10 locked decisions, each with its reasoning. These are settled; do not
-   re-litigate them silently. If you must change one, write a new ADR that supersedes it.
-3. **`.plans/kilo-design-system-foundation.md`** — the strategy: the problem, the architecture,
-   and why. The "why" document.
-4. **`.plans/kilo-design-system-execution-checklist.md`** — the ordered, task-by-task plan
-   (Milestones M0-M7, tasks `T#.#`). The "what to do, in order" document. **This is the task
-   list agents pick work from.**
+- `tokens.json` is the canonical design token source for the current dark-first Kilo design language.
+- `playground/` is a local Next.js app for previewing, editing, and saving `tokens.json`.
+- `CONTEXT.md` defines the shared glossary for the design-system architecture.
+- `docs/adr/` records the locked architecture decisions behind the system.
+- `.plans/` contains the foundation plan and execution checklist for future work.
 
-## The decisions at a glance (full reasoning in `docs/adr/`)
+## Token Contract
 
-| ADR | Decision |
-|---|---|
-| 0001 | Prescriptive token *values*; descriptive-but-evolving *patterns* |
-| 0002 | Standalone `kilo-design` repo; hash-sync distribution (guidance → `.agents/skills/`, values → `src/`) |
-| 0003 | Hex source; generate OKLCH for web, hex for portable targets; bespoke generator + `culori` |
-| 0004 | `kilo-design-core` + thin per-product skills, composed by convention |
-| 0005 | `--primary` *is* the brand yellow-green (`#EDFF00`); scarcity enforced by recipe |
-| 0006 | Governance: manual review now → automation → per-team champions |
-| 0007 | One `kilo-design-editor` skill (webview/jetbrains/cli sub-overlays); `console` is its own product |
-| 0008 | Design rules live only in the skill; **no per-repo `DESIGN.md`**; path-scoped trigger |
-| 0009 | **Dark-only** everywhere; remove mobile's incidental light mode; webview honors high-contrast only |
-| 0010 | Manual version-bump PRs now → bot later; generator has a CI staleness check |
+`tokens.json` is intentionally hand-authored JSON. It is the source of truth for token values, not generated output.
 
-## Clean-slate note (why this repo looks empty)
+Current token groups include:
 
-An earlier iteration of this repo held `tokens.json`, `DESIGN.md`, `agent-router.md`,
-`products/`, and `patterns/`. Those were **deliberately removed** to rebuild cleanly from the
-ADRs. The decisions and brand values they encoded are preserved — in `docs/adr/`, in
-`CONTEXT.md`, and (for the exact old token values) in this repo's git history at the commit
-`Add Kilo design source of truth`. Step 2 regenerates `tokens.json` from those.
+- `color.brand` for Kilo's primary brand action color and related action states.
+- `color.status` for product and semantic status hue families.
+- `color.surface` for the dark surface ramp: inset, background, raised, overlay, hover, and selected.
+- `color.foreground` for text and icon colors on surfaces.
+- `color.border` for border and input-fill values.
+- `color.syntax` and `color.diff` for code and review surfaces.
+- `statusDomain` for mapping product domains to status color families.
+- `typography`, `radius`, and `spacing` for portable UI foundations.
 
-## Where work is tracked
+The current primary brand action color is `#F7F586`. The system is dark-only by decision; there is no light-mode token set in this repo.
 
-- **Live progress (manager view):** Linear project "Kilo Design" — 8 high-level steps, each with
-  sub-issues for the detailed tasks.
-- **Detailed tasks:** `.plans/kilo-design-system-execution-checklist.md` in this repo.
+## Run The Playground
 
-## What does NOT live here
+From the repository root:
 
-- The product code (Cloud, Landing, kilo-code, Mobile) lives in its own repos. This repo
-  publishes tokens + skills *to* them; it does not contain them.
+```bash
+cd playground
+pnpm install
+pnpm dev
+```
+
+Then open:
+
+```text
+http://localhost:8731
+```
+
+If dependencies are already installed:
+
+```bash
+cd playground && pnpm dev
+```
+
+Useful playground scripts:
+
+```bash
+pnpm dev     # Start the local playground on port 8731
+pnpm build   # Build smoke test into .next-build
+pnpm start   # Start the production build on port 8731
+pnpm lint    # Next lint command
+```
+
+## Edit Tokens
+
+The playground loads `../tokens.json` at startup and applies the values as live CSS variables.
+
+- Edit color tokens from the preview swatches.
+- Edit radius, spacing, typography, and status-domain mappings from the left control rail.
+- Inspect the serialized output in the right JSON rail.
+- Use `Save to tokens.json` to write the current playground state back to the repo root token file.
+- Use `Cmd+.` or `Ctrl+.` to collapse or expand both side rails together.
+
+The write-back API is local-development only and refuses token reads or writes when `NODE_ENV` is `production`.
+
+## Architecture Decisions
+
+Read these before changing the design-system direction:
+
+1. `CONTEXT.md` for glossary terms such as Core Skill, Product Skill, Product Overlay, Pattern Recipe, Canonical Example, and Drift.
+2. `docs/adr/` for the settled decisions and their reasoning.
+3. `.plans/kilo-design-system-foundation.md` for the strategy behind the design-system architecture.
+4. `.plans/kilo-design-system-execution-checklist.md` for the task-by-task implementation plan.
+
+## What Does Not Live Here
+
+Product code lives in the product repositories. This repo publishes design tokens and agent-consumable design-system guidance to those products; it does not contain the product applications themselves.
