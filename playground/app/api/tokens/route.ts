@@ -3,11 +3,17 @@
 // write surface on a deployed app.
 
 import { NextResponse } from "next/server";
+import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { promisify } from "node:util";
 
-// playground/app/api/tokens -> repo root is four levels up.
-const TOKENS_PATH = path.resolve(process.cwd(), "..", "tokens.json");
+const execFileAsync = promisify(execFile);
+
+const REPO_ROOT = path.resolve(process.cwd(), "..");
+const TOKENS_PATH = path.join(REPO_ROOT, "tokens.json");
+const BUILD_PATH = path.join(REPO_ROOT, "build");
+const GENERATED_ARTIFACTS = ["src/tokens.web.css", "src/tokens.ts", "src/tokens.host-map.md"];
 
 function guard() {
   if (process.env.NODE_ENV === "production") {
@@ -47,6 +53,26 @@ export async function PUT(request: Request) {
   } catch (err) {
     return NextResponse.json(
       { error: `Could not write tokens.json: ${(err as Error).message}` },
+      { status: 500 },
+    );
+  }
+}
+
+export async function POST() {
+  const blocked = guard();
+  if (blocked) return blocked;
+
+  try {
+    await execFileAsync(process.execPath, [BUILD_PATH], { cwd: REPO_ROOT, maxBuffer: 1024 * 1024 });
+    return NextResponse.json({
+      ok: true,
+      generated: GENERATED_ARTIFACTS,
+    });
+  } catch (err) {
+    const error = err as Error & { stderr?: string; stdout?: string };
+    const details = [error.stderr, error.stdout, error.message].filter(Boolean).join("\n").trim();
+    return NextResponse.json(
+      { error: `Could not generate token artifacts: ${details}` },
       { status: 500 },
     );
   }
