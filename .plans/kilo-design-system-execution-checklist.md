@@ -43,11 +43,11 @@ that file is the *why*.
 ## Step 2 / M1 — Tokens + fix the cloud styles
 > Repo was clean-slated (Option A): only `README.md`, `CONTEXT.md`, `docs/adr/`, `.plans/` remain.
 > Old token values recoverable from git commit `acdcc60`.
-- `☐` **T1.1 Author `tokens.json`** (hand-authored **hex** source). `primary` === `brand` ===
+- `☑` **T1.1 Author `tokens.json`** (hand-authored **hex** source). `primary` === `brand` ===
   `#EDFF00`, `--primary-foreground` = `#1F1F1F`; split into **brand+status (mode-agnostic)** vs
   **dark surface neutrals**; include status domain→color map, type scale (Inter + Roboto Mono),
   spacing, radius. _(ADR 0003, 0005, 0009.)_ _DoD: `tokens.json` exists and matches the ADRs._
-- `☐` **T1.2 Build the generator** (`build/` + `culori`): emits `tokens.web.css` (OKLCH, web),
+- `☑` **T1.2 Build the generator** (`build/` + `culori`): emits `tokens.web.css` (OKLCH, web),
   `tokens.ts` (hex, portable), `tokens.host-map.md` (incl. the `--vscode-*` mapping); own
   `package.json` + a **CI staleness check**. _(ADR 0003, 0010.)_ _DoD: `node build` regenerates
   all three; CI fails if artifacts drift from source._

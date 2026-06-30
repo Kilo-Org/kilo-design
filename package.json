@@ -1,0 +1,11 @@
+{
+  "name": "kilo-design",
+  "private": true,
+  "packageManager": "pnpm@10.12.1",
+  "scripts": {
+    "build:tokens": "node build",
+    "dev:playground": "pnpm --dir playground dev",
+    "build:playground": "pnpm --dir playground build",
+    "typecheck:playground": "pnpm --dir playground exec tsc --noEmit"
+  }
+}
