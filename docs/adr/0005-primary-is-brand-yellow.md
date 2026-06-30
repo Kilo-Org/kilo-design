@@ -1,9 +1,9 @@
 # Primary action color is the brand yellow-green (primary and brand are one token)
 
-The Kilo suite is dark-first, and the neon yellow-green is the brand's defining accent. A
+The Kilo suite is dark-first, and the brand yellow-green is the brand's defining accent. A
 neutral/gray primary reads as dead and generic in dark mode, so **`--primary` *is* the brand
 color** — primary and brand are the same token, exactly as `tokens.json` already encodes
-(`primary` === `brand` === `#EDFF00`), with near-black `--primary-foreground` (`#1F1F1F`) for
+(`primary` === `brand` === `#F7F586`), with near-black `--primary-foreground` (`#1F1F1F`) for
 AA contrast. shadcn's default button variant carries it.
 
 Consequence: cloud's current neutral `--primary` (`oklch(0.922 0 0)`) is **Drift** to be

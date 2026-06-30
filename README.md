@@ -12,7 +12,7 @@ This repository currently contains the first implementation slice of the design 
 - `playground/` is a local Next.js app for previewing, editing, and saving `tokens.json`.
 - `CONTEXT.md` defines the shared glossary for the design-system architecture.
 - `docs/adr/` records the locked architecture decisions behind the system.
-- `.plans/` contains the foundation plan and execution checklist for future work.
+- `.plans/` contains archived planning rationale and a pointer to the canonical Linear project plan.
 
 ## Token Contract
 
@@ -97,8 +97,8 @@ Read these before changing the design-system direction:
 
 1. `CONTEXT.md` for glossary terms such as Core Skill, Product Skill, Product Overlay, Pattern Recipe, Canonical Example, and Drift.
 2. `docs/adr/` for the settled decisions and their reasoning.
-3. `.plans/kilo-design-system-foundation.md` for the strategy behind the design-system architecture.
-4. `.plans/kilo-design-system-execution-checklist.md` for the task-by-task implementation plan.
+3. Linear project `Kilo Design` for the active big-picture plan and current status: https://linear.app/vheissu/project/kilo-design-30d3263d297a
+4. `.plans/kilo-design-system-foundation.md` only for archived background rationale.
 
 ## What Does Not Live Here
 

@@ -56,5 +56,5 @@ The gap between shipped product code and the canonical design system. Values can
 
 ### Primary (brand action color)
 
-The neon yellow-green (`#EDFF00`). In Kilo, primary and brand are the **same token** — the primary action color is the brand color, because the suite is dark-first and the neon is the identity. Used for the one primary action per surface, plus atmospheric brand roles (logo tile, focus ring, glow). Scarcity is enforced by the `primary-actions` recipe, not by making the token neutral.
+The brand yellow-green (`#F7F586`). In Kilo, primary and brand are the **same token** — the primary action color is the brand color, because the suite is dark-first and the yellow-green is the identity. Used for the one primary action per surface, plus atmospheric brand roles (logo tile, focus ring, glow). Scarcity is enforced by the `primary-actions` recipe, not by making the token neutral.
 _Avoid_: a neutral/gray primary; "accent" as a synonym for primary.
