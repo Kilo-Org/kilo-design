@@ -6,13 +6,13 @@
 
 A design system shaped for both people and AI agents. It includes canonical design language, tokens, reusable pattern recipes, and loading rules that help agents choose the right context without filling the session with unrelated design material.
 
-### Core Skill
+### Product-Facing Core
 
-The single installable skill (`kilo-design-core`) that carries the shared Kilo design language, voice, token meaning, and the Context Router. Installed once by anyone doing Kilo UI; authored exactly once. Every Product Skill instructs the agent to load it first.
+The product-consumable center of the design system: `tokens.json` plus generated artifacts in `src/` (`tokens.web.css`, `tokens.ts`, `tokens.host-map.md`). This is the current core. A standalone `kilo-design-core` runtime skill is deferred until a second product skill proves reuse.
 
 ### Product Skill
 
-A small installable skill per product family (`kilo-design-cloud`, `-landing`, `-mobile`, `-console`, `-editor`) containing only that product's Product Overlay and Pattern Recipes. Depends on the Core Skill by convention (its `SKILL.md` says "load `kilo-design-core` first"), not by a tool-enforced dependency. A "family" is decided by theming contract (who owns the colors), not by which code library a surface imports.
+A small installable skill per product family. The current pilot is `kilo-design-cloud`; future candidates include `-landing`, `-mobile`, `-console`, and `-editor`. A product skill contains that product's Product Overlay, internal agent references, and Pattern Recipes. A "family" is decided by theming contract (who owns the colors), not by which code library a surface imports.
 _Avoid_: "design plugin", "product pack".
 
 ### Host Sub-overlay
@@ -36,9 +36,9 @@ A short set of loading rules that tells an agent which design files to read for 
 The single narrow line in a repo's existing AGENTS.md that points the agent at the design skill based on **which file is being edited** (e.g. a UI screen under `apps/web/src/**`), never on the keyword "design." It carries no design rules — only the pointer. It is what stops the old keyword-triggered over-loading.
 _Avoid_: a `DESIGN.md` file in a product repo (rules live only in the skill; never recreate it).
 
-### Evolving Pilot
+### Cloud Pilot Skill
 
-A deliberately incomplete design-system slice that proves a format through real product work before expanding. Cloud web is the current evolving pilot.
+The first agent-facing adapter, published as `kilo-design-cloud`. It proves the skill format with Cloud web before any standalone core skill or other product skill is created.
 
 ### Product Overlay
 

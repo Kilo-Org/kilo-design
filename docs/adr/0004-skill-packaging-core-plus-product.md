@@ -1,5 +1,7 @@
 # Skill packaging: a shared Core Skill + thin Product Skills, composed by convention
 
+Status: Superseded by ADR 0011 for the Cloud pilot. The shared-core concept is deferred; the first shipped runtime skill is `kilo-design-cloud`.
+
 The design guidance ships as **multiple skills published from the one `kilo-design` repo**
 (the same way `cloudflare/skills` exposes `durable-objects`, `wrangler`, … from one repo):
 

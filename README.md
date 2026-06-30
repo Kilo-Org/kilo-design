@@ -2,12 +2,13 @@
 
 Canonical source of truth for Kilo's design system across products including Cloud, Landing, Console, VS Code, JetBrains, CLI, and Mobile.
 
-This repository currently contains the first implementation slice of the design system: the hand-authored token contract, generated token artifacts, and a local playground for reviewing and tuning tokens visually.
+This repository currently contains the first implementation slice of the design system: the hand-authored token contract, generated token artifacts, the Cloud pilot skill, and a local playground for reviewing and tuning tokens visually.
 
 ## What Lives Here
 
 - `tokens.json` is the canonical design token source for the current dark-first Kilo design language.
 - `src/` contains generated token artifacts for product consumption.
+- `kilo-design-cloud/` is the Cloud pilot skill for agents.
 - `build/` contains the token generator used by humans, the playground, and CI.
 - `playground/` is a local Next.js app for previewing, editing, and saving `tokens.json`.
 - `CONTEXT.md` defines the shared glossary for the design-system architecture.
@@ -46,6 +47,22 @@ This regenerates:
 - `src/tokens.host-map.md`: generated host-environment mapping notes for VS Code, JetBrains, and CLI/ANSI usage.
 
 CI runs the same command and fails if regenerated artifacts differ from the committed files. That keeps `tokens.json` and `src/` in sync.
+
+## Installable Skill
+
+This repo currently publishes one pilot skill from a top-level folder, following the `npx skills` discovery model.
+
+- `kilo-design-cloud` applies the Cloud overlay, internal agent references, and pilot recipes.
+- The design-system core for products is `tokens.json` plus generated artifacts in `src/`, not a runtime skill.
+- ADRs, Linear, and `.plans/` are scaffolding for creating the skill, not daily product guidance.
+
+Validate local skill discovery with:
+
+```bash
+npx skills@latest add . --list --full-depth --yes
+```
+
+Expected result today: one discovered skill, `kilo-design-cloud`. Other product skills are intentionally not built yet.
 
 ## Run The Playground
 
@@ -95,7 +112,7 @@ The write-back API is local-development only and refuses token reads or writes w
 
 Read these before changing the design-system direction:
 
-1. `CONTEXT.md` for glossary terms such as Core Skill, Product Skill, Product Overlay, Pattern Recipe, Canonical Example, and Drift.
+1. `CONTEXT.md` for glossary terms such as Product-Facing Core, Product Skill, Product Overlay, Pattern Recipe, Canonical Example, and Drift.
 2. `docs/adr/` for the settled decisions and their reasoning.
 3. Linear project `Kilo Design` for the active big-picture plan and current status: https://linear.app/vheissu/project/kilo-design-30d3263d297a
 4. `.plans/kilo-design-system-foundation.md` only for archived background rationale.
