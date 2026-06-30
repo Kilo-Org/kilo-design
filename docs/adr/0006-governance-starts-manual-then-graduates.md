@@ -1,5 +1,7 @@
 # Governance starts manual (A), graduates to automation (B), then champions (C)
 
+Status: Accepted. Note: per ADR 0011, current ownership is of product-facing assets and the Cloud pilot skill; a standalone core skill is deferred.
+
 To stay lean, the design system **starts with manual review**: Iván reviews design-touching
 PRs directly, rather than standing up Chromatic gates, `DriftAudit` enforcement, and per-team
 ownership before the system even exists.
@@ -12,7 +14,7 @@ This is a deliberate staged model, not a permanent state. The graduation trigger
   automatically; human review narrows to `kilo-design` changes (tokens, core, recipes) and
   net-new patterns flagged as recipe candidates.
 - **B → C (per-team champions):** when product teams have stable ownership and each can own its
-  Product Skill while Iván owns the Core Skill.
+  Product Skill while Iván owns the product-facing core assets.
 
 Risk: A is a bottleneck and the system can rot if the triggers are ignored. This ADR exists so
 that "A forever" is recognized as a failure mode, and the move to B is expected, not optional.

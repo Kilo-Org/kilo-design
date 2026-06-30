@@ -1,5 +1,7 @@
 # Product-skill granularity, the editor family, and component-library sharing
 
+Status: Partially superseded by ADR 0011 for sequencing. Product-skill granularity still stands, but `kilo-design-core` is deferred until a second product skill proves reuse.
+
 Refines ADR 0004. The unit of a Product Skill is a **product family**, decided by **theming
 contract** (who owns the colors), not by which code library a surface happens to import.
 
@@ -9,8 +11,8 @@ Granularity rule:
 - **Multi-host family** → one Product Skill with **host sub-overlays**, one per theming
   contract, selected by the router.
 
-Product skills (alongside `kilo-design-core`): `kilo-design-cloud`, `kilo-design-landing`,
-`kilo-design-mobile`, `kilo-design-console`, and `kilo-design-editor`.
+Current product skill: `kilo-design-cloud`. Future product skills may include
+`kilo-design-landing`, `kilo-design-mobile`, `kilo-design-console`, and `kilo-design-editor`.
 
 ## The editor family
 

@@ -1,5 +1,10 @@
 # Kilo Design System Foundation — Plan
 
+> Archived background rationale. Linear is the canonical active project plan:
+> https://linear.app/vheissu/project/kilo-design-30d3263d297a
+> This archive contains superseded pre-pilot references to `kilo-design-core`; ADR 0011 and Linear
+> are current.
+
 Owner: Iván (solo design, product-led). Audience: ~20 engineers + their agents.
 Scope: kilo-design (canonical), kilo-cloud, kilo-code (extensions/CLI/JetBrains/webview), kilo-landing, kilo-cloud mobile.
 Status: proposal for review. Not started.

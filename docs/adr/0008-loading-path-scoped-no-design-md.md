@@ -1,5 +1,7 @@
 # Loading design context: rules live only in the skill, triggered by file path, no per-repo DESIGN.md
 
+Status: Partially superseded by ADR 0011 for the Cloud pilot. Path-scoped loading still stands; Cloud installs the single `kilo-design-cloud` pilot skill for now.
+
 Design rules live in **one place only — the skill** — and load on demand. No product repo keeps
 a `DESIGN.md`. The old 390-line `DESIGN.md` is deleted and **not recreated** (not even as a tiny
 "pointer" file): rules-in-repo-files attract growth, and that file — loaded by an always-on,
@@ -8,8 +10,9 @@ task pulled in design.md" failure).
 
 Loading is governed by three layered levers, **none keyed on the word "design"**:
 
-1. **Per-repo install scoping.** A repo installs only `kilo-design-core` + its product skill(s).
-   An agent cannot load another product's rules because they are not present.
+1. **Per-repo install scoping.** A repo installs only its relevant product skill(s). For the
+   Cloud pilot, that means `kilo-design-cloud` only. An agent cannot load another product's rules
+   because they are not present.
 2. **Path-scoped trigger.** A single narrow line in the repo's *existing* AGENTS.md points to the
    skill when UI files are edited (e.g. `apps/web/src/**/*.tsx`, component/style dirs) — never on
    the keyword "design." This fixes both failure modes: backend tasks don't match (no
