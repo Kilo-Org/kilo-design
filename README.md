@@ -1,4 +1,4 @@
-# kilo-design
+# Kilo Design
 
 Kilo's canonical design source for product UI and agent guidance.
 
@@ -8,18 +8,18 @@ It is intentionally small: token source, generated artifacts, a local playground
 
 > 🚧 This project is still in progress. The ADRs and `CONTEXT.md` are intentionally visible because the system is still being shaped; they explain current decisions, terminology, and rollout boundaries while the Cloud pilot proves the approach.
 
-## 🧭 Current Status
+## Current Status
 
 | Area | Status | Notes |
 | --- | --- | --- |
-| 🎨 Tokens | Done | `tokens.json` is the source of truth. |
-| 📦 Generated artifacts | Done | `node build` writes product-targeted files under `src/`. |
-| 🧪 Playground | Done | Local tool for editing tokens and previewing token behavior. |
-| ☁️ Cloud skill | In progress | First agent-facing product skill lives in `skills/kilo-design-cloud/`. |
-| ✅ Cloud proof | Next | Validate the skill against real Cloud UI work before wider rollout. |
-| 🚚 Other products | Later | Landing, Editor, Console, Mobile wait until Cloud proves the shape. |
+| Tokens | Done | `tokens.json` is the source of truth. |
+| Generated artifacts | Done | `node build` writes product-targeted files under `src/`. |
+| Playground | Done | Local tool for editing tokens and previewing token behavior. |
+| Cloud skill | In progress | First agent-facing product skill lives in `skills/kilo-design-cloud/`. |
+| Cloud proof | Next | Validate the skill against real Cloud UI work before wider rollout. |
+| Other products | Later | Landing, Editor, Console, Mobile wait until Cloud proves the shape. |
 
-## 🧱 Repository Model
+## Repository Model
 
 | Surface | What it is | Authority |
 | --- | --- | --- |
@@ -28,7 +28,6 @@ It is intentionally small: token source, generated artifacts, a local playground
 | `playground/` | Local token editor and specimen viewer | Human review tool only |
 | `skills/` | Draft product skill sources | Agent guidance under development |
 | `docs/adr/` | Decision records | Why decisions exist |
-| `skill-comparison/` | Static skill behavior comparison | Test specimens only |
 
 Product code does not live here. Product repos consume this repo's artifacts and skills from their own codebases.
 
@@ -70,6 +69,8 @@ This regenerates:
 Generated files are committed, but never edited by hand. CI should fail if they drift from `tokens.json`.
 
 ## 🧪 Token Playground
+
+<img width="3288" height="2024" alt="Screenshot 2026-07-01 at 12 30 59@2x" src="https://github.com/user-attachments/assets/9834f2c2-58ae-4945-a743-4cb5ca2981c6" />
 
 The playground is the local authoring surface for tokens.
 
@@ -119,24 +120,6 @@ Use this order when sources disagree:
 3. product skill sources, starting with `skills/kilo-design-cloud/`
 4. pattern recipes with shipped product Canonical Examples
 5. nearby shipped product UI
-6. ADRs and planning context
-
-Linear is the active project plan. `.plans/` is archived context.
-
-## 🗺️ Active Rollout
-
-Linear project:
-
-```text
-https://linear.app/vheissu/project/kilo-design-30d3263d297a
-```
-
-Current sequence:
-
-1. Tokens - done.
-2. Skills - now.
-3. Cloud proof - next.
-4. Other products - later.
 
 ## ✅ Change Checklist
 
