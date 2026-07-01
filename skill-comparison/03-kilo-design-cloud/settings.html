@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kilo Skill Settings</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body class="output kilo">
+<div class="screen shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark"></span>Kilo Cloud</div>
+    <nav class="nav">
+      <span>Overview</span>
+      <span class="active">Settings</span>
+      <span>Billing</span>
+      <span>Members</span>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div><h1>Workspace settings</h1><p>Configure identity, access, and billing defaults for Acme Labs.</p></div>
+      <span class="spacer"></span>
+      <span class="button secondary">Discard changes</span>
+      <span class="button primary">Save changes</span>
+    </header>
+    <section class="content">
+      <div class="tabs"><span class="active">General</span><span>Access</span><span>Billing</span></div>
+      <div class="settings-grid">
+        <div class="panel">
+          <h2>General</h2>
+          <div class="field"><label>Workspace name</label><div class="input">Acme Labs</div></div>
+          <div class="field"><label>Default region</label><div class="input">United States</div></div>
+          <div class="field"><label>Session retention</label><div class="input">90 days</div></div>
+        </div>
+        <div class="panel danger">
+          <h3>Delete workspace</h3>
+          <p class="metric">Delete Acme Labs and remove all workspace data. This cannot be undone.</p>
+          <span class="button secondary" style="margin-top:18px;">Delete workspace</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

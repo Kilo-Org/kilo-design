@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No Skill Dashboard</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body class="output no-skill">
+<div class="screen shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark"></span>Kilo Cloud</div>
+    <nav class="nav">
+      <span class="active">Dashboard</span>
+      <span>Usage</span>
+      <span>Billing</span>
+      <span>Settings</span>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1>Workspace dashboard</h1>
+        <p>Overview of usage, seats, spend, and workspace health.</p>
+      </div>
+      <span class="spacer"></span>
+      <span class="button primary">New workspace</span>
+      <span class="button primary">Upgrade plan</span>
+    </header>
+    <section class="content">
+      <div class="cards">
+        <div class="card"><span class="metric">Monthly spend</span><div class="value">$8,420</div></div>
+        <div class="card"><span class="metric">Seats</span><div class="value">42</div></div>
+        <div class="card"><span class="metric">Sessions</span><div class="value">1,284</div></div>
+        <div class="card"><span class="metric">Errors</span><div class="value">3</div></div>
+      </div>
+      <div class="split">
+        <div class="panel">
+          <h2>Usage trend</h2>
+          <div style="height:220px;border-radius:16px;background:linear-gradient(135deg,#dfe7ff,#eef3ff);margin-top:16px;"></div>
+        </div>
+        <div class="panel">
+          <h2>Alerts</h2>
+          <p class="metric">Your workspace is close to the included monthly usage limit.</p>
+          <p class="metric">Two agents need attention.</p>
+          <span class="button primary" style="margin-top:18px;">Resolve now</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

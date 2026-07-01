@@ -15,9 +15,10 @@ Each surface gets one primary action. It uses the semantic primary action role, 
 Real code to copy:
 
 - `apps/web/src/components/ui/button.tsx`
-- `Button` default variant: `bg-primary text-primary-foreground shadow hover:bg-primary/90`
+- The current shared `Button` primitive and its current variant source in the Cloud repo.
+- Primary action styling should resolve to semantic `primary` and `primary-foreground` tokens.
 
-Do not copy the current `variant="primary"` implementation in the same file. It is hardcoded blue drift and is tracked for migration.
+Before adopting this recipe in Cloud, verify the exact current variant file and class string from the active Cloud branch. Do not copy legacy color variants when building new Cloud UI.
 
 ## Implementation Rules
 
@@ -39,6 +40,5 @@ Do not copy the current `variant="primary"` implementation in the same file. It 
 
 ## Known Drift
 
-- `apps/web/src/components/ui/button.tsx` still has a blue `primary` variant.
-- `apps/web/src/components/Button.tsx` has legacy color variants.
+- Legacy Cloud button variants may still exist outside the shared primitive; verify on the active Cloud branch before migration.
 - Cloud token adoption in `globals.css` is tracked separately by `VVV-130`.

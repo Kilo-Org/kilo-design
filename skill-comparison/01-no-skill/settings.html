@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No Skill Settings</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body class="output no-skill">
+<div class="screen shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark"></span>Kilo Settings</div>
+    <nav class="nav">
+      <span>Dashboard</span>
+      <span class="active">Settings</span>
+      <span>Members</span>
+      <span>Integrations</span>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div><h1>Workspace settings</h1><p>Manage workspace preferences and access.</p></div>
+      <span class="spacer"></span>
+      <span class="button primary">Save</span>
+      <span class="button primary">Invite user</span>
+    </header>
+    <section class="content">
+      <div class="tabs"><span class="active">General</span><span>Security</span><span>Billing</span></div>
+      <div class="settings-grid">
+        <div class="panel">
+          <h2>General settings</h2>
+          <div class="field"><label>Workspace name</label><div class="input">Acme Team</div></div>
+          <div class="field"><label>Default region</label><div class="input">United States</div></div>
+          <div class="field"><label>Notifications</label><div class="input">Every activity update</div></div>
+        </div>
+        <div class="panel danger">
+          <h3>Danger zone</h3>
+          <p class="metric">Delete this workspace and all data.</p>
+          <span class="button primary" style="margin-top:18px;">Delete</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

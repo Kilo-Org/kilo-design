@@ -22,6 +22,7 @@ Supporting context:
 | `build/` | Token generator |
 | `CONTEXT.md` | Shared vocabulary |
 | `docs/adr/` | Accepted design-system decisions |
+| `skill-comparison/` | Static comparison playground for skill behavior specimens |
 | `.plans/` | Archived planning pointer; Linear is current |
 
 Product code does not live here. Cloud, Landing, Console, VS Code, JetBrains, CLI, and Mobile consume this repo from their own repositories.

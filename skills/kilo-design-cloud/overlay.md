@@ -17,7 +17,6 @@ Cloud is the pilot product for Kilo's agent-consumable design system. It is a de
 | shadcn config | `apps/web/components.json` |
 | UI primitives | `apps/web/src/components/ui/*.tsx` |
 | Legacy button drift | `apps/web/src/components/Button.tsx` |
-| Drift audit | `apps/storybook/stories/design-system/DriftAudit.stories.tsx` |
 
 ## Token Mapping
 
@@ -43,6 +42,7 @@ Known drift: Cloud token adoption is tracked by `VVV-130`. Until that lands, rec
 - Prefer `gap-*` and grouped spacing over dividers between every row.
 - Keep status color as small signals: badges, inline text, rings, or charts. Do not let status hues become the UI palette.
 - Use Inter for UI and Roboto Mono for code, identifiers, token names, and tabular data.
+- Treat focus, disabled, loading, error, and responsive states as part of the surface, not follow-up polish.
 
 ## Cloud Anti-Patterns
 
@@ -51,6 +51,7 @@ Known drift: Cloud token adoption is tracked by `VVV-130`. Until that lands, rec
 - Equal-card dashboard grids when the task has one focal action.
 - New component libraries or new design primitives when shadcn/Radix already exists.
 - Marketing copy, fake slogans, avatars, decorative AI stars, glass panels, or gradient text inside product UI.
+- Hover-only required actions, missing focus-visible states, or custom overlay behavior that bypasses Radix.
 - Large implementation sweeps before the matching recipe exists.
 
 ## Current Coverage

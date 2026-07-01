@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kilo Skill Agent Thread</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body class="output kilo">
+<div class="screen shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark"></span>Kilo Cloud</div>
+    <div class="thread-list">
+      <div class="thread-item"><strong>Cost review</strong><span>active now</span></div>
+      <div class="thread-item"><strong>Deploy check</strong><span>14 minutes ago</span></div>
+      <div class="thread-item"><strong>Seat audit</strong><span>Yesterday</span></div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div><h1>Cost review session</h1><p>Agent reasoning, tool output, and follow-up action in one compact thread.</p></div>
+      <span class="spacer"></span>
+      <span class="button secondary">Export log</span>
+      <span class="button primary">Start session</span>
+    </header>
+    <section class="content split">
+      <div class="panel">
+        <div class="messages">
+          <div class="message"><b>Operator</b><p>Check workspace spend and explain the increase.</p></div>
+          <div class="message me"><b>Kilo Agent</b><p>Spend increased after scheduled code review runs used the larger model on three active repositories.</p></div>
+          <div class="message"><b>Operator</b><p>Reduce spend without disabling automation.</p></div>
+          <div class="message me"><b>Kilo Agent</b><p>Set nightly review to the smaller model and keep full review for protected branches.</p></div>
+        </div>
+      </div>
+      <aside class="panel">
+        <h2>Run context</h2>
+        <table class="table">
+          <tr><td>Workspace</td><td>Acme Labs</td></tr>
+          <tr><td>Model</td><td>auto</td></tr>
+          <tr><td>Status</td><td><span class="pill on">healthy</span></td></tr>
+        </table>
+      </aside>
+    </section>
+    <section class="content" style="padding-top:0;">
+      <div class="composer"><span>Ask the agent to apply the lower-cost schedule...</span><span class="button primary">Send</span></div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

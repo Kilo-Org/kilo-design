@@ -8,7 +8,7 @@ This reference is for agent behavior inside Cloud UI work. It is not product cod
 | --- | --- | --- |
 | Shape | Clarify a flow, hierarchy, states, and tradeoffs. Do not edit. | The recommendation is concrete enough to implement. |
 | Implement | Make the smallest coherent Cloud code change. | Changed code matches the overlay or recipe, or calls out a gap. |
-| Review | Inspect code/screens and report findings. Do not edit. | Findings cite paths, severity, rule, and fix. |
+| Review | Inspect code/screens and report findings. Do not edit. | Findings cite paths, severity, rule, fix, and relevant interaction or responsive gaps. |
 | Copy | Improve labels, empty states, errors, and confirmations. | Copy says what happened and what to do next. |
 
 ## Authority Order
@@ -36,3 +36,5 @@ If no overlay rule or recipe exists:
 - Say which guidance is missing.
 - Do not invent a new recipe unless repeated drift proves the need.
 - Do not block unrelated work because a recipe is missing.
+
+For UI reviews, include interaction quality only when relevant to the changed surface: focus-visible behavior, keyboard behavior, responsive breakpoints, reduced motion, and loading, disabled, error, or success states.

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kilo Skill Dashboard</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../shared.css">
+</head>
+<body class="output kilo">
+<div class="screen shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark"></span>Kilo Cloud</div>
+    <nav class="nav">
+      <span class="active">Overview</span>
+      <span>Usage</span>
+      <span>Billing</span>
+      <span>Members</span>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1>Workspace usage</h1>
+        <p>Operational usage, billing exposure, and agent health for Acme Labs.</p>
+      </div>
+      <span class="spacer"></span>
+      <span class="button secondary">View invoices</span>
+      <span class="button primary">Create workspace</span>
+    </header>
+    <section class="content">
+      <div class="cards">
+        <div class="card"><span class="metric">Monthly spend</span><div class="value">$8,420</div></div>
+        <div class="card"><span class="metric">Active seats</span><div class="value">42</div></div>
+        <div class="card"><span class="metric">Agent sessions</span><div class="value">1,284</div></div>
+        <div class="card"><span class="metric">Failed runs</span><div class="value">3</div></div>
+      </div>
+      <div class="split">
+        <div class="panel">
+          <h2>Recent usage</h2>
+          <table class="table">
+            <tr><th>Source</th><th>Sessions</th><th>Status</th></tr>
+            <tr><td>Cloud Agent</td><td>642</td><td><span class="pill on">healthy</span></td></tr>
+            <tr><td>KiloClaw</td><td>388</td><td><span class="pill">review</span></td></tr>
+            <tr><td>Billing jobs</td><td>254</td><td><span class="pill on">healthy</span></td></tr>
+          </table>
+        </div>
+        <div class="panel">
+          <h2>Usage note</h2>
+          <p class="metric">Spend increased after three scheduled code review runs moved to a larger model.</p>
+          <p class="metric">Use one primary action for the next decision; supporting actions stay neutral.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>
