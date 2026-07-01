@@ -1,6 +1,6 @@
 # Governance starts manual (A), graduates to automation (B), then champions (C)
 
-Status: Accepted. Note: per ADR 0011, current ownership is of product-facing assets and the Cloud pilot skill; a standalone core skill is deferred.
+Status: Accepted. Note: per ADR 0011, current ownership is of product-facing assets and the Cloud pilot skill source; a standalone core skill is deferred.
 
 To stay lean, the design system **starts with manual review**: Iván reviews design-touching
 PRs directly, rather than standing up Chromatic gates, `DriftAudit` enforcement, and per-team

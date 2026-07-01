@@ -11,8 +11,9 @@ Granularity rule:
 - **Multi-host family** → one Product Skill with **host sub-overlays**, one per theming
   contract, selected by the router.
 
-Current product skill: `kilo-design-cloud`. Future product skills may include
-`kilo-design-landing`, `kilo-design-mobile`, `kilo-design-console`, and `kilo-design-editor`.
+Current product skill source: `skills/kilo-design-cloud`. Future product skill sources may
+include `kilo-design-landing`, `kilo-design-mobile`, `kilo-design-console`, and
+`kilo-design-editor`.
 
 ## The editor family
 

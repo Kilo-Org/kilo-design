@@ -2,6 +2,8 @@
 
 A small local Next.js tool for editing and previewing the canonical Kilo Design `tokens.json` file. It is intentionally scoped to this repository and is not meant to be deployed as a public app.
 
+The playground's UI is specimen UI. It exists to show how token values behave in plausible product surfaces. It is not a component library, product implementation, or Canonical Example source for pattern recipes.
+
 ## What It Does
 
 - Reads the source of truth from `../tokens.json` at startup.
@@ -11,6 +13,13 @@ A small local Next.js tool for editing and previewing the canonical Kilo Design 
 - Shows the current JSON output in the right rail.
 - Can copy, download, reset, or write changes back to `tokens.json` during local development.
 - Can regenerate the committed `../src/` token artifacts from the saved source file.
+
+## What It Does Not Do
+
+- It does not define final Kilo components.
+- It does not replace Cloud, Landing, or editor product code.
+- It does not provide Canonical Examples for recipes.
+- It does not prove a product pattern is ready.
 
 ## Running Locally
 
@@ -49,7 +58,7 @@ Changes are local to the browser state until you choose one of the actions in th
 
 - `Save Tokens` writes the current token state back to `../tokens.json`.
 - `Undo last save` restores the previous `../tokens.json` state after an accidental save.
-- `Generate Tokens` lives in the dropdown next to `Save Tokens`. It runs `node build` to regenerate `../src/tokens.web.css`, `../src/tokens.ts`, and `../src/tokens.host-map.md` from the saved source file. It is disabled while there are unsaved edits.
+- `Generate Tokens` lives in the dropdown next to `Save Tokens`. It runs `node build` to regenerate `../src/tokens.web.css`, `../src/tokens.cloud.ts`, and `../src/tokens.editor-host-map.md` from the saved source file. It is disabled while there are unsaved edits.
 - `Reset edits` restores the last loaded source state.
 - `Download` lives in the dropdown next to `Save Tokens` and saves the current token state as a JSON file.
 - `Copy JSON` in the JSON preview rail copies the current serialized token state.

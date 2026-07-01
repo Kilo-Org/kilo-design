@@ -374,7 +374,7 @@ function CardsPanel() {
       <Section title="Alerts">
         <div className={s.alert} style={statusStyle("green", 14, 35)}>Agent finished. 3 files changed.</div>
         <div className={s.alert} style={statusStyle("yellow", 14, 35)}>Token budget at 80%.</div>
-        <div className={s.alert} style={statusStyle("red", 14, 35)}>Build failed: type error in tokens.ts.</div>
+        <div className={s.alert} style={statusStyle("red", 14, 35)}>Build failed: type error in tokens.cloud.ts.</div>
       </Section>
 
       <Section title="Empty state">
@@ -407,7 +407,7 @@ function EditorPanel({ tokens }: { tokens: Tokens }) {
         <aside className={s.explorer}>
           <div className={s.explorerHeader}>Explorer</div>
           <div className={s.treeRow}><span className={s.treeChevron}>▾</span> src</div>
-          <div className={`${s.treeRow} ${s.treeNested}`}>tokens.ts</div>
+          <div className={`${s.treeRow} ${s.treeNested}`}>tokens.cloud.ts</div>
           <div className={`${s.treeRow} ${s.treeNested} ${s.treeActive}`}>theme.css <span className={s.treeDot} /></div>
           <div className={`${s.treeRow} ${s.treeNested}`}>index.ts</div>
           <div className={s.treeRow}><span className={s.treeChevron}>▸</span> tests</div>
@@ -417,7 +417,7 @@ function EditorPanel({ tokens }: { tokens: Tokens }) {
         <div className={s.editorMain}>
           <div className={s.editorTabs}>
             <div className={`${s.editorTab} ${s.editorTabActive}`}>theme.css <span className={s.tabClose}>×</span></div>
-            <div className={s.editorTab}>tokens.ts <span className={s.tabClose}>×</span></div>
+            <div className={s.editorTab}>tokens.cloud.ts <span className={s.tabClose}>×</span></div>
           </div>
           <div className={s.breadcrumb}>src <span className={s.crumbSep}>›</span> theme.css</div>
           <pre className={s.editorCode}>
@@ -482,7 +482,7 @@ function DiffPanel() {
 
       <div className={s.diffCard}>
         <div className={s.diffHeader}>
-          <span className={s.diffFile}>src/tokens.ts</span>
+          <span className={s.diffFile}>src/tokens.cloud.ts</span>
           <span className={s.diffStat}><span className={s.diffStatAdd}>+4</span> <span className={s.diffStatDel}>−3</span></span>
         </div>
         <div className={s.diffBody}>
@@ -545,11 +545,11 @@ function ChatPanel({ tokens }: { tokens: Tokens }) {
 
           <div className={s.turnAssistant}>
             <div className={s.assistantText}>
-              On it. I&apos;ll read the current tokens, edit <code className={s.inlineCode}>tokens.ts</code>, and apply the theme.
+              On it. I&apos;ll read the current tokens, edit <code className={s.inlineCode}>tokens.cloud.ts</code>, and apply the theme.
             </div>
 
-            <ToolCard icon="◇" title="Read" subtitle="src/tokens.ts" />
-            <ToolCard icon="✎" title="Edit" subtitle="src/tokens.ts">
+            <ToolCard icon="◇" title="Read" subtitle="src/tokens.cloud.ts" />
+            <ToolCard icon="✎" title="Edit" subtitle="src/tokens.cloud.ts">
               <pre className={s.toolDiff}>
                 <span className={s.dDel}>- primary: &quot;#EDFF00&quot;</span>{"\n"}
                 <span className={s.dAdd}>+ primary: &quot;{color.brand.primary}&quot;</span>

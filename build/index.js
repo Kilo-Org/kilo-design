@@ -12,8 +12,8 @@ const OUTPUT_DIR = path.join(REPO_ROOT, "src");
 
 const OUTPUTS = {
   webCss: path.join(OUTPUT_DIR, "tokens.web.css"),
-  portableTs: path.join(OUTPUT_DIR, "tokens.ts"),
-  hostMap: path.join(OUTPUT_DIR, "tokens.host-map.md"),
+  cloudTs: path.join(OUTPUT_DIR, "tokens.cloud.ts"),
+  editorHostMap: path.join(OUTPUT_DIR, "tokens.editor-host-map.md"),
 };
 
 const COLOR_BUCKETS = ["brand", "status", "surface", "foreground", "border", "syntax", "diff"];
@@ -186,7 +186,7 @@ function stringifyConst(value) {
   return JSON.stringify(value, null, 2);
 }
 
-function generatePortableTs(tokens) {
+function generateCloudTs(tokens) {
   const cssVars = flattenToCssVars(tokens, { colorFormat: "hex" });
   return [
     `// ${GENERATED_HEADER}`,
@@ -274,7 +274,7 @@ function generateHostMap(tokens) {
   ]);
 
   return [
-    "# Kilo Token Host Map",
+    "# Kilo Editor Token Host Map",
     "",
     `> ${GENERATED_HEADER}`,
     "",
@@ -282,9 +282,9 @@ function generateHostMap(tokens) {
     "",
     "## Generated Artifacts",
     "",
-    "- `src/tokens.web.css`: OKLCH CSS variables for browser surfaces such as Cloud and Landing.",
-    "- `src/tokens.ts`: hex source values and flattened CSS-variable names for portable targets such as webviews, React Native, CLI, and native integrations.",
-    "- `src/tokens.host-map.md`: this generated host mapping reference.",
+    "- `src/tokens.web.css`: OKLCH CSS variables for browser surfaces such as Landing.",
+    "- `src/tokens.cloud.ts`: hex source values and flattened CSS-variable names for Cloud TypeScript consumers.",
+    "- `src/tokens.editor-host-map.md`: this generated host mapping reference for VS Code, JetBrains, and CLI/ANSI surfaces.",
     "",
     "## VS Code Webview",
     "",
@@ -324,15 +324,15 @@ export async function generateTokenArtifacts({ tokensPath = TOKENS_PATH, outputD
   const tokens = await readTokens(tokensPath);
   const outputs = {
     webCss: path.join(outputDir, "tokens.web.css"),
-    portableTs: path.join(outputDir, "tokens.ts"),
-    hostMap: path.join(outputDir, "tokens.host-map.md"),
+    cloudTs: path.join(outputDir, "tokens.cloud.ts"),
+    editorHostMap: path.join(outputDir, "tokens.editor-host-map.md"),
   };
 
   await fs.mkdir(outputDir, { recursive: true });
   await Promise.all([
     fs.writeFile(outputs.webCss, generateWebCss(tokens), "utf8"),
-    fs.writeFile(outputs.portableTs, generatePortableTs(tokens), "utf8"),
-    fs.writeFile(outputs.hostMap, generateHostMap(tokens), "utf8"),
+    fs.writeFile(outputs.cloudTs, generateCloudTs(tokens), "utf8"),
+    fs.writeFile(outputs.editorHostMap, generateHostMap(tokens), "utf8"),
   ]);
 
   return outputs;
@@ -353,4 +353,4 @@ if (isCli) {
   }
 }
 
-export { OUTPUTS, flattenToCssVars, generateHostMap, generatePortableTs, generateWebCss, validateTokens };
+export { OUTPUTS, flattenToCssVars, generateCloudTs, generateHostMap, generateWebCss, validateTokens };

@@ -8,11 +8,30 @@ A design system shaped for both people and AI agents. It includes canonical desi
 
 ### Product-Facing Core
 
-The product-consumable center of the design system: `tokens.json` plus generated artifacts in `src/` (`tokens.web.css`, `tokens.ts`, `tokens.host-map.md`). This is the current core. A standalone `kilo-design-core` runtime skill is deferred until a second product skill proves reuse.
+The product-consumable center of the design system: `tokens.json` plus generated artifacts in `src/` (`tokens.web.css`, `tokens.cloud.ts`, `tokens.editor-host-map.md`). This is the current core. A standalone `kilo-design-core` runtime skill is deferred until a second product skill proves reuse.
 
-### Product Skill
+### Generated Artifact
 
-A small installable skill per product family. The current pilot is `kilo-design-cloud`; future candidates include `-landing`, `-mobile`, `-console`, and `-editor`. A product skill contains that product's Product Overlay, internal agent references, and Pattern Recipes. A "family" is decided by theming contract (who owns the colors), not by which code library a surface imports.
+A committed output file produced by `node build` from `tokens.json`. Generated artifacts live in `src/` and are never edited by hand.
+
+Current artifacts:
+
+- `tokens.web.css` for browser CSS consumers such as Landing.
+- `tokens.cloud.ts` for Cloud TypeScript consumers.
+- `tokens.editor-host-map.md` for VS Code, JetBrains, and CLI/ANSI host mapping.
+
+### Token Playground
+
+The local Next.js app in `playground/` used to edit `tokens.json`, preview token behavior, and regenerate artifacts. It is a human authoring tool, not a product UI reference.
+_Avoid_: using playground components as Canonical Examples.
+
+### Specimen UI
+
+Illustrative UI inside the Token Playground that shows how token values behave in plausible interfaces. Specimens can reveal token problems, but they are not product components, design patterns, or recipes.
+
+### Product Skill Source
+
+A draft skill source per product family, stored under `skills/`. The current pilot source is `skills/kilo-design-cloud`; future candidates include `-landing`, `-mobile`, `-console`, and `-editor`. A product skill source contains that product's Product Overlay, internal agent references, and Pattern Recipes. A "family" is decided by theming contract (who owns the colors), not by which code library a surface imports.
 _Avoid_: "design plugin", "product pack".
 
 ### Host Sub-overlay
@@ -38,7 +57,7 @@ _Avoid_: a `DESIGN.md` file in a product repo (rules live only in the skill; nev
 
 ### Cloud Pilot Skill
 
-The first agent-facing adapter, published as `kilo-design-cloud`. It proves the skill format with Cloud web before any standalone core skill or other product skill is created.
+The first agent-facing adapter source, stored at `skills/kilo-design-cloud`. It proves the skill format with Cloud web before any standalone core skill or other product skill is created. It is not treated as published until the rollout explicitly says so.
 
 ### Product Overlay
 

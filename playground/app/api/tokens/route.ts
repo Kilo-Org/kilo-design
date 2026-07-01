@@ -13,7 +13,7 @@ const execFileAsync = promisify(execFile);
 const REPO_ROOT = path.resolve(process.cwd(), "..");
 const TOKENS_PATH = path.join(REPO_ROOT, "tokens.json");
 const BUILD_PATH = path.join(REPO_ROOT, "build");
-const GENERATED_ARTIFACTS = ["src/tokens.web.css", "src/tokens.ts", "src/tokens.host-map.md"];
+const GENERATED_ARTIFACTS = ["src/tokens.web.css", "src/tokens.cloud.ts", "src/tokens.editor-host-map.md"];
 
 function guard() {
   if (process.env.NODE_ENV === "production") {

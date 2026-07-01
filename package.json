@@ -4,6 +4,7 @@
   "packageManager": "pnpm@10.12.1",
   "scripts": {
     "build:tokens": "node build",
+    "playground": "pnpm --dir playground dev",
     "dev:playground": "pnpm --dir playground dev",
     "build:playground": "pnpm --dir playground build",
     "typecheck:playground": "pnpm --dir playground exec tsc --noEmit"

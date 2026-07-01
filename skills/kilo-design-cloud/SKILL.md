@@ -15,6 +15,7 @@ This is the first agent-facing adapter for the Kilo design system. It covers Kil
 4. Load at most one matching recipe unless the task clearly spans multiple patterns.
 5. If no recipe exists, use the overlay plus current Cloud code and report a coverage gap.
 6. Keep broad product cleanup out of focused tasks.
+7. Do not use playground specimen UI as a Cloud Canonical Example.
 
 Completion criterion: the answer or change names the loaded overlay/recipe, follows real Cloud code, and does not normalize unrelated UI.
 
@@ -34,6 +35,7 @@ Completion criterion: the answer or change names the loaded overlay/recipe, foll
 - Do not recreate a Cloud `DESIGN.md`.
 - Do not migrate every hardcoded blue button unless the task is `primary-actions` implementation.
 - Do not invent recipes without a real Canonical Example in shipped Cloud code.
+- Do not copy UI structures from `playground/`; it previews token behavior only.
 
 ## Reference Map
 

@@ -1,25 +1,46 @@
 # kilo-design
 
-Canonical source of truth for Kilo's design system across products including Cloud, Landing, Console, VS Code, JetBrains, CLI, and Mobile.
+Canonical design-system source for Kilo products.
 
-This repository currently contains the first implementation slice of the design system: the hand-authored token contract, generated token artifacts, the Cloud pilot skill, and a local playground for reviewing and tuning tokens visually.
+This repo has one job: keep Kilo UI decisions consumable by both people and agents without turning every product repo into another design-system fork.
 
-## What Lives Here
+## Read This First
 
-- `tokens.json` is the canonical design token source for the current dark-first Kilo design language.
-- `src/` contains generated token artifacts for product consumption.
-- `kilo-design-cloud/` is the Cloud pilot skill for agents.
-- `build/` contains the token generator used by humans, the playground, and CI.
-- `playground/` is a local Next.js app for previewing, editing, and saving `tokens.json`.
-- `CONTEXT.md` defines the shared glossary for the design-system architecture.
-- `docs/adr/` records the locked architecture decisions behind the system.
-- `.plans/` contains archived planning rationale and a pointer to the canonical Linear project plan.
+The repo has four active surfaces:
 
-## Token Contract
+| Surface | Purpose | Authority |
+| --- | --- | --- |
+| `tokens.json` | Hand-authored token source | Canonical values |
+| `src/` | Generated token artifacts | Committed output from `node build` |
+| `playground/` | Local token editing and visual specimens | Human review tool only |
+| `skills/` | Draft product-skill sources | Agent guidance under development |
 
-`tokens.json` is intentionally hand-authored JSON. It is the source of truth for token values, not generated output.
+Supporting context:
 
-Current token groups include:
+| Path | Purpose |
+| --- | --- |
+| `build/` | Token generator |
+| `CONTEXT.md` | Shared vocabulary |
+| `docs/adr/` | Accepted design-system decisions |
+| `.plans/` | Archived planning pointer; Linear is current |
+
+Product code does not live here. Cloud, Landing, Console, VS Code, JetBrains, CLI, and Mobile consume this repo from their own repositories.
+
+## Authority Model
+
+Use this order when sources disagree:
+
+1. `tokens.json` is the source of truth for values.
+2. `src/` artifacts are generated from `tokens.json` and should not be edited by hand.
+3. Product skill sources, starting with `skills/kilo-design-cloud/`, tell agents how to use values in product work.
+4. Pattern recipes must cite real shipped product code as Canonical Examples.
+5. `playground/` specimens preview token behavior only. They are not product components, recipes, or canonical examples.
+6. ADRs explain why decisions exist; they are not daily agent guidance.
+7. Linear is the active project plan.
+
+## Tokens
+
+`tokens.json` is intentionally hand-authored JSON. Current token groups include:
 
 - `color.brand` for Kilo's primary brand action color and related action states.
 - `color.status` for product and semantic status hue families.
@@ -30,47 +51,40 @@ Current token groups include:
 - `statusDomain` for mapping product domains to status color families.
 - `typography`, `radius`, and `spacing` for portable UI foundations.
 
-The current primary brand action color is `#F7F586`. The system is dark-only by decision; there is no light-mode token set in this repo.
+The current primary brand action color is `#F7F586`. Kilo is dark-only; there is no light-mode token set.
 
 ## Generated Artifacts
 
-Run the generator from the repository root:
+Run the generator from the repo root:
 
 ```bash
 node build
 ```
 
-This regenerates:
+It regenerates:
 
-- `src/tokens.web.css`: OKLCH CSS variables for browser products.
-- `src/tokens.ts`: hex token values and flattened CSS-variable names for portable JavaScript/TypeScript consumers.
-- `src/tokens.host-map.md`: generated host-environment mapping notes for VS Code, JetBrains, and CLI/ANSI usage.
+- `src/tokens.web.css`: OKLCH CSS variables for browser CSS consumers such as Landing.
+- `src/tokens.cloud.ts`: hex values and flattened CSS-variable names for Cloud TypeScript consumers.
+- `src/tokens.editor-host-map.md`: host-environment mapping notes for VS Code, JetBrains, and CLI/ANSI usage.
 
-CI runs the same command and fails if regenerated artifacts differ from the committed files. That keeps `tokens.json` and `src/` in sync.
+CI runs `node build` and fails if committed artifacts differ from the source.
 
-## Installable Skill
+## Playground
 
-This repo currently publishes one pilot skill from a top-level folder, following the `npx skills` discovery model.
+The playground is a local token authoring tool. It helps tune `tokens.json`, preview color/type/spacing behavior, and regenerate committed artifacts.
 
-- `kilo-design-cloud` applies the Cloud overlay, internal agent references, and pilot recipes.
-- The design-system core for products is `tokens.json` plus generated artifacts in `src/`, not a runtime skill.
-- ADRs, Linear, and `.plans/` are scaffolding for creating the skill, not daily product guidance.
+It is not:
 
-Validate local skill discovery with:
+- A component library.
+- A product UI reference implementation.
+- A source for pattern recipes.
+- A replacement for real Cloud, Landing, or editor code.
 
-```bash
-npx skills@latest add . --list --full-depth --yes
-```
-
-Expected result today: one discovered skill, `kilo-design-cloud`. Other product skills are intentionally not built yet.
-
-## Run The Playground
-
-From the repository root:
+Run it locally:
 
 ```bash
 pnpm install
-pnpm --dir playground dev
+pnpm run playground
 ```
 
 Then open:
@@ -79,44 +93,45 @@ Then open:
 http://localhost:8731
 ```
 
-If dependencies are already installed:
+Useful commands:
 
 ```bash
+pnpm run playground
 pnpm --dir playground dev
+pnpm --dir playground build
+pnpm --dir playground start
+pnpm --dir playground lint
 ```
-
-Useful playground scripts:
-
-```bash
-pnpm --dir playground dev     # Start the local playground on port 8731
-pnpm --dir playground build   # Build smoke test into .next-build
-pnpm --dir playground start   # Start the production build on port 8731
-pnpm --dir playground lint    # Next lint command
-```
-
-## Edit Tokens
-
-The playground loads `../tokens.json` at startup and applies the values as live CSS variables.
-
-- Edit color tokens from the preview swatches.
-- Edit radius, spacing, typography, and status-domain mappings from the left control rail.
-- Inspect the serialized output in the right JSON rail.
-- Use `Save Tokens` to write the current playground state back to the source file.
-- Use `Undo last save` if a saved experiment should be restored to the previous source state.
-- Open the dropdown next to `Save Tokens` and choose `Generate Tokens` to regenerate `src/` from the saved source file. This action is disabled while there are unsaved edits.
-- Use `Cmd+.` or `Ctrl+.` to collapse or expand both side rails together.
 
 The write-back API is local-development only and refuses token reads or writes when `NODE_ENV` is `production`.
 
-## Architecture Decisions
+## Draft Skills
 
-Read these before changing the design-system direction:
+This repo currently contains one draft product skill source:
 
-1. `CONTEXT.md` for glossary terms such as Product-Facing Core, Product Skill, Product Overlay, Pattern Recipe, Canonical Example, and Drift.
-2. `docs/adr/` for the settled decisions and their reasoning.
-3. Linear project `Kilo Design` for the active big-picture plan and current status: https://linear.app/vheissu/project/kilo-design-30d3263d297a
-4. `.plans/kilo-design-system-foundation.md` only for archived background rationale.
+- `skills/kilo-design-cloud`
 
-## What Does Not Live Here
+It contains the Cloud overlay, Cloud-specific references, and the first pilot recipes. It is not treated as published yet. A standalone `kilo-design-core` runtime skill does not exist; ADR 0011 defers that until a second product skill proves real reuse.
 
-Product code lives in the product repositories. This repo publishes design tokens and agent-consumable design-system guidance to those products; it does not contain the product applications themselves.
+## Active Plan
+
+Linear is the canonical project plan:
+
+https://linear.app/vheissu/project/kilo-design-30d3263d297a
+
+Current simplified sequence:
+
+1. Tokens — done.
+2. Skills — now.
+3. Cloud proof — next.
+4. Other products — later.
+
+## Change Checklist
+
+When editing this repo:
+
+1. If token values change, edit `tokens.json`, then run `node build`.
+2. If artifact names or destinations change, update `build/`, CI, README, CONTEXT, ADR 0011, playground write-back, and product-skill references.
+3. If agent guidance changes, update the relevant product skill and keep recipes tied to shipped product code.
+4. Do not add publication or discovery instructions until the skill is ready to ship.
+5. If the change is just planning/status, update Linear instead of adding another repo plan.
