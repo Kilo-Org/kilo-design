@@ -33,4 +33,4 @@ jobs:
         run: node build
 
       - name: Check generated artifacts are committed
-        run: git diff --exit-code -- src/tokens.web.css src/tokens.cloud.ts src/tokens.editor-host-map.md
+        run: git diff --exit-code -- src/tokens.landing.css src/tokens.cloud.ts src/tokens.extension-host-map.md
