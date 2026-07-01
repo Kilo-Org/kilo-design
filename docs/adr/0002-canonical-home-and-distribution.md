@@ -9,8 +9,8 @@ model (`skills-lock.json`) rather than a published package or a git submodule. T
 land in **different places** per consumer repo:
 
 - **Agent guidance** (skill, overlays, recipes) → `.agents/skills/kilo-design/`.
-- **Generated token values** (`tokens.web.css`, `tokens.cloud.ts`,
-  `tokens.editor-host-map.md`) → a build-visible `src/` path, so code imports real source,
+- **Generated token values** (`tokens.landing.css`, `tokens.cloud.ts`,
+  `tokens.extension-host-map.md`) → a build-visible `src/` path, so code imports real source,
   never from `.agents/`.
 
 Rejected: a standalone npm package (registry + publish auth across three separate toolchains —

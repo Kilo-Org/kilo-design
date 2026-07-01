@@ -19,6 +19,12 @@ This is the first agent-facing adapter for the Kilo design system. It covers Kil
 
 Completion criterion: the answer or change names the loaded overlay/recipe, follows real Cloud code, and does not normalize unrelated UI.
 
+## Token Contract
+
+- Cloud's generated token artifact is `src/tokens.cloud.ts`.
+- Cloud UI code maps token values through `apps/web/src/app/globals.css` and semantic roles such as `--primary`, `--background`, and `--ring`.
+- Do not use `src/tokens.landing.css` or `src/tokens.extension-host-map.md` as Cloud UI sources.
+
 ## Recipe Router
 
 | Prompt or file signal | Load |

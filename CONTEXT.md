@@ -8,7 +8,7 @@ A design system shaped for both people and AI agents. It includes canonical desi
 
 ### Product-Facing Core
 
-The product-consumable center of the design system: `tokens.json` plus generated artifacts in `src/` (`tokens.web.css`, `tokens.cloud.ts`, `tokens.editor-host-map.md`). This is the current core. A standalone `kilo-design-core` runtime skill is deferred until a second product skill proves reuse.
+The product-consumable center of the design system: `tokens.json` plus generated artifacts in `src/` (`tokens.landing.css`, `tokens.cloud.ts`, `tokens.extension-host-map.md`). This is the current core. A standalone `kilo-design-core` runtime skill is deferred until a second product skill proves reuse.
 
 ### Generated Artifact
 
@@ -16,9 +16,9 @@ A committed output file produced by `node build` from `tokens.json`. Generated a
 
 Current artifacts:
 
-- `tokens.web.css` for browser CSS consumers such as Landing.
+- `tokens.landing.css` for Landing browser surfaces.
 - `tokens.cloud.ts` for Cloud TypeScript consumers.
-- `tokens.editor-host-map.md` for VS Code, JetBrains, and CLI/ANSI host mapping.
+- `tokens.extension-host-map.md` for VS Code, JetBrains, and CLI/ANSI host mapping.
 
 ### Token Playground
 

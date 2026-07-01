@@ -58,7 +58,7 @@ Changes are local to the browser state until you choose one of the actions in th
 
 - `Save Tokens` writes the current token state back to `../tokens.json`.
 - `Undo last save` restores the previous `../tokens.json` state after an accidental save.
-- `Generate Tokens` lives in the dropdown next to `Save Tokens`. It runs `node build` to regenerate `../src/tokens.web.css`, `../src/tokens.cloud.ts`, and `../src/tokens.editor-host-map.md` from the saved source file. It is disabled while there are unsaved edits.
+- `Generate Tokens` lives in the dropdown next to `Save Tokens`. It runs `node build` to regenerate `../src/tokens.landing.css`, `../src/tokens.cloud.ts`, and `../src/tokens.extension-host-map.md` from the saved source file. It is disabled while there are unsaved edits.
 - `Reset edits` restores the last loaded source state.
 - `Download` lives in the dropdown next to `Save Tokens` and saves the current token state as a JSON file.
 - `Copy JSON` in the JSON preview rail copies the current serialized token state.

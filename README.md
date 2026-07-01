@@ -64,9 +64,9 @@ node build
 
 It regenerates:
 
-- `src/tokens.web.css`: OKLCH CSS variables for browser CSS consumers such as Landing.
+- `src/tokens.landing.css`: OKLCH CSS variables for Landing browser surfaces.
 - `src/tokens.cloud.ts`: hex values and flattened CSS-variable names for Cloud TypeScript consumers.
-- `src/tokens.editor-host-map.md`: host-environment mapping notes for VS Code, JetBrains, and CLI/ANSI usage.
+- `src/tokens.extension-host-map.md`: host-environment mapping notes for VS Code, JetBrains, and CLI/ANSI usage.
 
 CI runs `node build` and fails if committed artifacts differ from the source.
 
@@ -132,7 +132,7 @@ Current simplified sequence:
 When editing this repo:
 
 1. If token values change, edit `tokens.json`, then run `node build`.
-2. If artifact names or destinations change, update `build/`, CI, README, CONTEXT, ADR 0011, playground write-back, and product-skill references.
+2. If artifact names or destinations change, update `build/`, CI, README, CONTEXT, ADRs, playground write-back, and product-skill references.
 3. If agent guidance changes, update the relevant product skill and keep recipes tied to shipped product code.
 4. Do not add publication or discovery instructions until the skill is ready to ship.
 5. If the change is just planning/status, update Linear instead of adding another repo plan.

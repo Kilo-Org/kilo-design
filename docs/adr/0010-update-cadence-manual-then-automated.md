@@ -11,6 +11,6 @@ enable a Renovate-style bot to auto-open "update available" PRs — the same
 start-lean-then-graduate staging as the governance model (ADR 0006).
 
 Guardrail: the `kilo-design` generator has its **own `package.json`** and a **CI check that
-fails if the generated token artifacts are stale** versus `tokens.json`, so `tokens.web.css`,
-`tokens.cloud.ts`, and `tokens.editor-host-map.md` can never silently drift from the source
+fails if the generated token artifacts are stale** versus `tokens.json`, so `tokens.landing.css`,
+`tokens.cloud.ts`, and `tokens.extension-host-map.md` can never silently drift from the source
 values.

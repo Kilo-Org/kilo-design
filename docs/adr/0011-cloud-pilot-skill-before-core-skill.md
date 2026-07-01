@@ -5,9 +5,9 @@ Status: Accepted. Supersedes the runtime-skill packaging parts of ADR 0004, ADR 
 The design-system core for products is **not** a standalone runtime skill yet. The product-facing core is:
 
 - `tokens.json`
-- `src/tokens.web.css`
+- `src/tokens.landing.css`
 - `src/tokens.cloud.ts`
-- `src/tokens.editor-host-map.md`
+- `src/tokens.extension-host-map.md`
 
 ADRs, Linear, and `.plans/` are scaffolding for creating the skills. They are not daily product guidance for agents working in product repos.
 

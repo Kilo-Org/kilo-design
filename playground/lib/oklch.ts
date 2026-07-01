@@ -1,5 +1,5 @@
 // Hex/rgba -> OKLCH preview. Mirrors what the T1.2 generator will emit for
-// tokens.web.css, so the playground preview is WYSIWYG with the web export.
+// tokens.landing.css, so the playground preview is WYSIWYG with the Landing export.
 // Source of truth stays HEX (ADR 0003); OKLCH is preview/export-only.
 
 import { oklch, formatCss, parse, clampChroma, differenceEuclidean } from "culori";

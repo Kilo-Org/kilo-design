@@ -11,9 +11,9 @@ const TOKENS_PATH = path.join(REPO_ROOT, "tokens.json");
 const OUTPUT_DIR = path.join(REPO_ROOT, "src");
 
 const OUTPUTS = {
-  webCss: path.join(OUTPUT_DIR, "tokens.web.css"),
+  landingCss: path.join(OUTPUT_DIR, "tokens.landing.css"),
   cloudTs: path.join(OUTPUT_DIR, "tokens.cloud.ts"),
-  editorHostMap: path.join(OUTPUT_DIR, "tokens.editor-host-map.md"),
+  extensionHostMap: path.join(OUTPUT_DIR, "tokens.extension-host-map.md"),
 };
 
 const COLOR_BUCKETS = ["brand", "status", "surface", "foreground", "border", "syntax", "diff"];
@@ -274,7 +274,7 @@ function generateHostMap(tokens) {
   ]);
 
   return [
-    "# Kilo Editor Token Host Map",
+    "# Kilo Extension Token Host Map",
     "",
     `> ${GENERATED_HEADER}`,
     "",
@@ -282,9 +282,9 @@ function generateHostMap(tokens) {
     "",
     "## Generated Artifacts",
     "",
-    "- `src/tokens.web.css`: OKLCH CSS variables for browser surfaces such as Landing.",
+    "- `src/tokens.landing.css`: OKLCH CSS variables for Landing browser surfaces.",
     "- `src/tokens.cloud.ts`: hex source values and flattened CSS-variable names for Cloud TypeScript consumers.",
-    "- `src/tokens.editor-host-map.md`: this generated host mapping reference for VS Code, JetBrains, and CLI/ANSI surfaces.",
+    "- `src/tokens.extension-host-map.md`: this generated host mapping reference for VS Code, JetBrains, and CLI/ANSI surfaces.",
     "",
     "## VS Code Webview",
     "",
@@ -323,16 +323,16 @@ export async function readTokens(tokensPath = TOKENS_PATH) {
 export async function generateTokenArtifacts({ tokensPath = TOKENS_PATH, outputDir = OUTPUT_DIR } = {}) {
   const tokens = await readTokens(tokensPath);
   const outputs = {
-    webCss: path.join(outputDir, "tokens.web.css"),
+    landingCss: path.join(outputDir, "tokens.landing.css"),
     cloudTs: path.join(outputDir, "tokens.cloud.ts"),
-    editorHostMap: path.join(outputDir, "tokens.editor-host-map.md"),
+    extensionHostMap: path.join(outputDir, "tokens.extension-host-map.md"),
   };
 
   await fs.mkdir(outputDir, { recursive: true });
   await Promise.all([
-    fs.writeFile(outputs.webCss, generateWebCss(tokens), "utf8"),
+    fs.writeFile(outputs.landingCss, generateWebCss(tokens), "utf8"),
     fs.writeFile(outputs.cloudTs, generateCloudTs(tokens), "utf8"),
-    fs.writeFile(outputs.editorHostMap, generateHostMap(tokens), "utf8"),
+    fs.writeFile(outputs.extensionHostMap, generateHostMap(tokens), "utf8"),
   ]);
 
   return outputs;
