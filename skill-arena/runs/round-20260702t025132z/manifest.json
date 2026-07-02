@@ -1,0 +1,37 @@
+{
+  "id": "round-20260702t025132z",
+  "label": "round-20260702t025132z",
+  "createdAt": "2026-07-02T02:51:32.743Z",
+  "updatedAt": "2026-07-02T02:55:42.062Z",
+  "source": "codex",
+  "prompt": "Design a Kilo Cloud billing usage screen for workspace owners. Include monthly spend, model usage breakdown, budget alert, and invoice history. Build only the product UI.",
+  "conditions": {
+    "no-skill": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t025132z/no-skill/output.html",
+      "logUrl": "/runs/round-20260702t025132z/no-skill/log.txt",
+      "startedAt": "2026-07-02T02:51:32.750Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T02:54:21.483Z",
+      "message": "Output file is ready."
+    },
+    "frontend-design": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t025132z/frontend-design/output.html",
+      "logUrl": "/runs/round-20260702t025132z/frontend-design/log.txt",
+      "startedAt": "2026-07-02T02:51:32.746Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T02:55:12.127Z",
+      "message": "Output file is ready."
+    },
+    "kilo-design-cloud": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t025132z/kilo-design-cloud/output.html",
+      "logUrl": "/runs/round-20260702t025132z/kilo-design-cloud/log.txt",
+      "startedAt": "2026-07-02T02:51:32.745Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T02:55:42.061Z",
+      "message": "Output file is ready."
+    }
+  }
+}

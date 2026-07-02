@@ -6,6 +6,8 @@
     "build:tokens": "node build",
     "playground": "pnpm --dir playground dev",
     "dev:playground": "pnpm --dir playground dev",
+    "skill-arena": "node skill-arena/server.mjs",
+    "dev:skill-arena": "node skill-arena/server.mjs",
     "build:playground": "pnpm --dir playground build",
     "typecheck:playground": "pnpm --dir playground exec tsc --noEmit"
   }

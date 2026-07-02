@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kilo Cloud Run Detail</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101114;
+      --panel: #181a1f;
+      --panel-2: #202329;
+      --panel-3: #272b32;
+      --line: #353a43;
+      --line-soft: #282d35;
+      --text: #eef0f4;
+      --muted: #9aa3b2;
+      --subtle: #717b8d;
+      --blue: #5aa7ff;
+      --green: #61d394;
+      --amber: #f2bd5c;
+      --red: #ff756f;
+      --violet: #b69bff;
+      --cyan: #58d7e6;
+      --shadow: 0 18px 50px rgba(0, 0, 0, .28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 18% -10%, rgba(90, 167, 255, .18), transparent 32rem),
+        linear-gradient(180deg, #121419 0%, #0f1013 100%);
+      color: var(--text);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line-soft);
+      background: rgba(18, 20, 25, .88);
+      padding: 20px 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 36px;
+      margin-bottom: 26px;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #5aa7ff, #61d394);
+      color: #101114;
+      font-weight: 900;
+    }
+
+    .nav-section {
+      margin-bottom: 28px;
+    }
+
+    .nav-label {
+      margin: 0 0 8px 10px;
+      color: var(--subtle);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      padding: 0 10px;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-item.active {
+      background: #232832;
+      color: var(--text);
+    }
+
+    .nav-icon {
+      width: 18px;
+      text-align: center;
+      color: var(--subtle);
+    }
+
+    .main {
+      min-width: 0;
+      padding: 24px 28px 32px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .breadcrumbs {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .breadcrumbs span {
+      color: var(--text);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      font-weight: 750;
+    }
+
+    .run-subtitle {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      align-items: center;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(97, 211, 148, .12);
+      border: 1px solid rgba(97, 211, 148, .32);
+      color: #a6efc7;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 5px rgba(97, 211, 148, .12);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 13px;
+      color: var(--text);
+      background: var(--panel-2);
+      cursor: default;
+    }
+
+    .btn.danger {
+      color: #ffd5d2;
+      border-color: rgba(255, 117, 111, .32);
+      background: rgba(255, 117, 111, .1);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .metric {
+      background: rgba(24, 26, 31, .92);
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 92px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: 23px;
+      font-weight: 760;
+      line-height: 1.1;
+    }
+
+    .metric-detail {
+      margin-top: 8px;
+      color: var(--subtle);
+      font-size: 12px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(340px, .9fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .stack {
+      display: grid;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .panel {
+      background: rgba(24, 26, 31, .95);
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      min-height: 50px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 750;
+      margin: 0;
+    }
+
+    .panel-meta {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .steps {
+      padding: 8px 0;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      gap: 12px;
+      padding: 13px 16px;
+      border-bottom: 1px solid rgba(53, 58, 67, .55);
+    }
+
+    .step:last-child {
+      border-bottom: 0;
+    }
+
+    .step-dot {
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      border-radius: 50%;
+      border: 2px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: #101114;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .step.done .step-dot {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .step.running .step-dot {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 5px rgba(90, 167, 255, .12);
+      background: rgba(90, 167, 255, .18);
+    }
+
+    .step.waiting .step-dot {
+      border-color: var(--amber);
+      background: rgba(242, 189, 92, .14);
+    }
+
+    .step-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .step-body {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .step-time {
+      color: var(--subtle);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      padding: 0 7px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255, 255, 255, .03);
+    }
+
+    .tag.running {
+      color: #bdddff;
+      border-color: rgba(90, 167, 255, .35);
+      background: rgba(90, 167, 255, .1);
+    }
+
+    .tag.waiting {
+      color: #ffe0a7;
+      border-color: rgba(242, 189, 92, .4);
+      background: rgba(242, 189, 92, .11);
+    }
+
+    .permission {
+      margin: 16px;
+      border: 1px solid rgba(242, 189, 92, .38);
+      background: linear-gradient(180deg, rgba(242, 189, 92, .12), rgba(242, 189, 92, .06));
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .permission-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      border-bottom: 1px solid rgba(242, 189, 92, .24);
+    }
+
+    .warning-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: rgba(242, 189, 92, .16);
+      color: var(--amber);
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .permission h2 {
+      margin: 0 0 4px;
+      font-size: 14px;
+    }
+
+    .permission p {
+      margin: 0;
+      color: #d9c69e;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .command {
+      margin: 14px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #111317;
+      border: 1px solid rgba(242, 189, 92, .2);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      color: #f4dca7;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .permission-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      padding: 0 14px 14px;
+    }
+
+    .approve {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: #19140a;
+      font-weight: 750;
+    }
+
+    .tool-list,
+    .file-list {
+      padding: 8px;
+    }
+
+    .tool-call,
+    .file-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 8px;
+      border-radius: 8px;
+    }
+
+    .tool-call + .tool-call,
+    .file-row + .file-row {
+      margin-top: 2px;
+    }
+
+    .tool-call:hover,
+    .file-row:hover {
+      background: rgba(255, 255, 255, .035);
+    }
+
+    .tool-icon,
+    .file-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: var(--panel-3);
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .tool-name,
+    .file-name {
+      font-size: 13px;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tool-detail,
+    .file-detail {
+      margin-top: 3px;
+      color: var(--subtle);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .status {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .status.ok {
+      color: var(--green);
+    }
+
+    .status.run {
+      color: var(--blue);
+    }
+
+    .status.wait {
+      color: var(--amber);
+    }
+
+    .file-stats {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .plus {
+      color: var(--green);
+    }
+
+    .minus {
+      color: var(--red);
+    }
+
+    .usage {
+      padding: 16px;
+    }
+
+    .bar-row {
+      margin-bottom: 14px;
+    }
+
+    .bar-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .bar-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .bar {
+      height: 9px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #111317;
+      border: 1px solid var(--line-soft);
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+    }
+
+    .bar-fill.violet {
+      background: linear-gradient(90deg, var(--violet), #f3a0ff);
+    }
+
+    .timeline {
+      padding: 14px 16px 16px;
+    }
+
+    .log-line {
+      display: grid;
+      grid-template-columns: 62px minmax(0, 1fr);
+      gap: 12px;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.65;
+      border-bottom: 1px solid rgba(53, 58, 67, .36);
+      padding: 5px 0;
+    }
+
+    .log-line:last-child {
+      border-bottom: 0;
+    }
+
+    .log-time {
+      color: var(--subtle);
+    }
+
+    .log-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1050px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .layout,
+      .metrics {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .layout {
+        align-items: stretch;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .main {
+        padding: 18px 14px 24px;
+      }
+
+      .topbar,
+      .actions {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .actions,
+      .btn {
+        width: 100%;
+      }
+
+      .metrics,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .step {
+        grid-template-columns: 24px minmax(0, 1fr);
+      }
+
+      .step-time {
+        grid-column: 2;
+      }
+
+      .permission-actions {
+        flex-direction: column-reverse;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <div class="brand">
+        <div class="mark">K</div>
+        <div>Kilo Cloud</div>
+      </div>
+
+      <div class="nav-section">
+        <p class="nav-label">Workspace</p>
+        <div class="nav-item"><span class="nav-icon">⌂</span> Dashboard</div>
+        <div class="nav-item active"><span class="nav-icon">↻</span> Agent Runs</div>
+        <div class="nav-item"><span class="nav-icon">⌁</span> Repositories</div>
+        <div class="nav-item"><span class="nav-icon">◈</span> Environments</div>
+      </div>
+
+      <div class="nav-section">
+        <p class="nav-label">Project</p>
+        <div class="nav-item"><span class="nav-icon">▣</span> kilo-web</div>
+        <div class="nav-item"><span class="nav-icon">⑂</span> Branches</div>
+        <div class="nav-item"><span class="nav-icon">☷</span> Artifacts</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="breadcrumbs">Agent Runs / <span>run_7h4k9p</span></div>
+          <h1>Implement billing usage export</h1>
+          <div class="run-subtitle">
+            <span class="live-pill"><span class="pulse"></span>Active run</span>
+            <span>main → kilo/export-usage-csv</span>
+            <span>Started 14 minutes ago</span>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn">View Logs</button>
+          <button class="btn danger">Stop Run</button>
+        </div>
+      </header>
+
+      <section class="metrics" aria-label="Run metrics">
+        <div class="metric">
+          <div class="metric-label">Elapsed Time</div>
+          <div class="metric-value">14m 32s</div>
+          <div class="metric-detail">Last update 8s ago</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Token Usage</div>
+          <div class="metric-value">128.4K</div>
+          <div class="metric-detail">71% of run budget</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Tool Calls</div>
+          <div class="metric-value">24</div>
+          <div class="metric-detail">1 waiting for approval</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Changed Files</div>
+          <div class="metric-value">7</div>
+          <div class="metric-detail">+428 / -96 lines</div>
+        </div>
+      </section>
+
+      <div class="layout">
+        <div class="stack">
+          <section class="panel" aria-label="Running steps">
+            <div class="panel-header">
+              <h2 class="panel-title">Running Steps</h2>
+              <div class="panel-meta">Step 5 of 7</div>
+            </div>
+            <div class="steps">
+              <article class="step done">
+                <div class="step-dot">✓</div>
+                <div>
+                  <div class="step-title-row">
+                    <div class="step-title">Inspect repository structure</div>
+                    <span class="tag">complete</span>
+                  </div>
+                  <div class="step-body">Mapped billing routes, export services, and existing account usage models.</div>
+                </div>
+                <div class="step-time">1m 18s</div>
+              </article>
+              <article class="step done">
+                <div class="step-dot">✓</div>
+                <div>
+                  <div class="step-title-row">
+                    <div class="step-title">Add usage export endpoint</div>
+                    <span class="tag">complete</span>
+                  </div>
+                  <div class="step-body">Created authenticated CSV export handler with account-level filtering.</div>
+                </div>
+                <div class="step-time">4m 06s</div>
+              </article>
+              <article class="step done">
+                <div class="step-dot">✓</div>
+                <div>
+                  <div class="step-title-row">
+                    <div class="step-title">Update dashboard controls</div>
+                    <span class="tag">complete</span>
+                  </div>
+                  <div class="step-body">Added export action, disabled states, and success messaging to billing usage.</div>
+                </div>
+                <div class="step-time">3m 41s</div>
+              </article>
+              <article class="step running">
+                <div class="step-dot"></div>
+                <div>
+                  <div class="step-title-row">
+                    <div class="step-title">Run focused test suite</div>
+                    <span class="tag running">running</span>
+                  </div>
+                  <div class="step-body">Executing billing API and dashboard component tests before preparing summary.</div>
+                </div>
+                <div class="step-time">2m 22s</div>
+              </article>
+              <article class="step waiting">
+                <div class="step-dot"></div>
+                <div>
+                  <div class="step-title-row">
+                    <div class="step-title">Apply database migration</div>
+                    <span class="tag waiting">approval needed</span>
+                  </div>
+                  <div class="step-body">Waiting for permission to run migration against the preview database.</div>
+                </div>
+                <div class="step-time">pending</div>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel" aria-label="Changed files">
+            <div class="panel-header">
+              <h2 class="panel-title">Changed Files</h2>
+              <div class="panel-meta">7 files</div>
+            </div>
+            <div class="file-list">
+              <div class="file-row">
+                <div class="file-icon">TS</div>
+                <div>
+                  <div class="file-name">app/api/billing/usage/export/route.ts</div>
+                  <div class="file-detail">New CSV export route with scoped account query</div>
+                </div>
+                <div class="file-stats"><span class="plus">+132</span><span class="minus">-0</span></div>
+              </div>
+              <div class="file-row">
+                <div class="file-icon">TSX</div>
+                <div>
+                  <div class="file-name">app/billing/usage/usage-table.tsx</div>
+                  <div class="file-detail">Export button, loading state, and toast handling</div>
+                </div>
+                <div class="file-stats"><span class="plus">+86</span><span class="minus">-24</span></div>
+              </div>
+              <div class="file-row">
+                <div class="file-icon">SQL</div>
+                <div>
+                  <div class="file-name">db/migrations/202607011315_usage_export.sql</div>
+                  <div class="file-detail">Adds export audit table and retention index</div>
+                </div>
+                <div class="file-stats"><span class="plus">+44</span><span class="minus">-0</span></div>
+              </div>
+              <div class="file-row">
+                <div class="file-icon">T</div>
+                <div>
+                  <div class="file-name">tests/billing-usage-export.test.ts</div>
+                  <div class="file-detail">Coverage for permissions, filters, and CSV formatting</div>
+                </div>
+                <div class="file-stats"><span class="plus">+118</span><span class="minus">-12</span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="stack">
+          <section class="panel" aria-label="Permission request">
+            <div class="panel-header">
+              <h2 class="panel-title">Permission Request</h2>
+              <div class="panel-meta">Waiting</div>
+            </div>
+            <div class="permission">
+              <div class="permission-head">
+                <div class="warning-icon">!</div>
+                <div>
+                  <h2>Approve database migration</h2>
+                  <p>The agent wants to run a schema migration in the preview environment before continuing validation.</p>
+                </div>
+              </div>
+              <div class="command">pnpm db:migrate --env preview --name usage_export</div>
+              <div class="permission-actions">
+                <button class="btn">Deny</button>
+                <button class="btn approve">Approve</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" aria-label="Tool calls">
+            <div class="panel-header">
+              <h2 class="panel-title">Tool Calls</h2>
+              <div class="panel-meta">24 total</div>
+            </div>
+            <div class="tool-list">
+              <div class="tool-call">
+                <div class="tool-icon">⌕</div>
+                <div>
+                  <div class="tool-name">search_files</div>
+                  <div class="tool-detail">billing usage route references</div>
+                </div>
+                <div class="status ok">done</div>
+              </div>
+              <div class="tool-call">
+                <div class="tool-icon">✎</div>
+                <div>
+                  <div class="tool-name">edit_file</div>
+                  <div class="tool-detail">app/api/billing/usage/export/route.ts</div>
+                </div>
+                <div class="status ok">done</div>
+              </div>
+              <div class="tool-call">
+                <div class="tool-icon">▶</div>
+                <div>
+                  <div class="tool-name">run_tests</div>
+                  <div class="tool-detail">billing-usage-export.test.ts</div>
+                </div>
+                <div class="status run">running</div>
+              </div>
+              <div class="tool-call">
+                <div class="tool-icon">⚿</div>
+                <div>
+                  <div class="tool-name">shell_command</div>
+                  <div class="tool-detail">pnpm db:migrate --env preview</div>
+                </div>
+                <div class="status wait">waiting</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" aria-label="Token usage">
+            <div class="panel-header">
+              <h2 class="panel-title">Token Usage</h2>
+              <div class="panel-meta">128,420 / 180,000</div>
+            </div>
+            <div class="usage">
+              <div class="bar-row">
+                <div class="bar-labels">
+                  <span>Context</span>
+                  <span>92.6K</span>
+                </div>
+                <div class="bar"><div class="bar-fill" style="width: 73%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-labels">
+                  <span>Output</span>
+                  <span>35.8K</span>
+                </div>
+                <div class="bar"><div class="bar-fill violet" style="width: 48%"></div></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" aria-label="Live activity">
+            <div class="panel-header">
+              <h2 class="panel-title">Live Activity</h2>
+              <div class="panel-meta">Streaming</div>
+            </div>
+            <div class="timeline">
+              <div class="log-line">
+                <div class="log-time">14:28</div>
+                <div class="log-text">test worker started billing API suite</div>
+              </div>
+              <div class="log-line">
+                <div class="log-time">14:29</div>
+                <div class="log-text">validated CSV header ordering</div>
+              </div>
+              <div class="log-line">
+                <div class="log-time">14:30</div>
+                <div class="log-text">permission required for preview migration</div>
+              </div>
+              <div class="log-line">
+                <div class="log-time">14:31</div>
+                <div class="log-text">waiting for approval before continuing</div>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kilo Cloud Sign In</title>
+  <style>
+    :root {
+      --ink: #11130f;
+      --muted: #667067;
+      --faint: #eef1ea;
+      --line: #d8ded3;
+      --paper: #fbfcf7;
+      --panel: #ffffff;
+      --green: #176b4d;
+      --green-soft: #e8f6ef;
+      --amber: #bd7715;
+      --blue: #295c91;
+      --red: #a13d2d;
+      --shadow: 0 30px 80px rgba(33, 40, 29, .18);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+      background:
+        radial-gradient(circle at 8% 18%, rgba(43, 94, 70, .18), transparent 28rem),
+        radial-gradient(circle at 92% 14%, rgba(189, 119, 21, .16), transparent 25rem),
+        linear-gradient(135deg, #f5f8ee 0%, #eef3ea 48%, #f8f0e2 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(22, 25, 18, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 25, 18, .045) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(115deg, rgba(0,0,0,.8), rgba(0,0,0,.18) 65%, transparent);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .screen {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 48px;
+    }
+
+    .shell {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: minmax(360px, 485px) minmax(320px, 1fr);
+      align-items: stretch;
+      background: rgba(255, 255, 255, .72);
+      border: 1px solid rgba(255, 255, 255, .78);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(28px) saturate(1.2);
+      position: relative;
+    }
+
+    .shell::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(17, 19, 15, .08);
+      pointer-events: none;
+    }
+
+    .login {
+      background: var(--panel);
+      padding: 44px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .security {
+      position: relative;
+      z-index: 1;
+      padding: 44px;
+      background:
+        linear-gradient(135deg, rgba(22, 107, 77, .08), rgba(255,255,255,.28) 45%, rgba(189, 119, 21, .08)),
+        rgba(247, 250, 241, .7);
+      border-left: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .security::before {
+      content: "";
+      position: absolute;
+      width: 340px;
+      height: 340px;
+      right: -170px;
+      top: -145px;
+      border: 1px solid rgba(23, 107, 77, .2);
+      transform: rotate(18deg);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 54px;
+    }
+
+    .mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--ink);
+      border-radius: 7px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
+      position: relative;
+    }
+
+    .mark::before,
+    .mark::after {
+      content: "";
+      position: absolute;
+      background: currentColor;
+    }
+
+    .mark::before {
+      width: 5px;
+      height: 20px;
+      transform: skewX(-22deg);
+      left: 13px;
+      top: 9px;
+    }
+
+    .mark::after {
+      width: 16px;
+      height: 5px;
+      transform: skewX(-22deg);
+      left: 13px;
+      top: 17px;
+    }
+
+    .brand-text {
+      display: grid;
+      gap: 1px;
+    }
+
+    .brand-name {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .brand-product {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(36px, 6vw, 54px);
+      line-height: .95;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    .subhead {
+      margin: 0 0 32px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+      max-width: 34ch;
+    }
+
+    .form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .label-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    label {
+      color: #283026;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .hint,
+    .link {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .link {
+      color: var(--green);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      min-height: 50px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcf8;
+      transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+
+    .input-wrap:focus-within {
+      border-color: var(--green);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(23, 107, 77, .12);
+    }
+
+    .input-wrap span {
+      flex: 0 0 auto;
+      color: #879080;
+      padding: 0 0 0 15px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--ink);
+      padding: 14px 15px;
+      min-width: 0;
+    }
+
+    input::placeholder {
+      color: #9ca596;
+    }
+
+    .workspace input {
+      padding-left: 7px;
+    }
+
+    .actions {
+      display: grid;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .primary {
+      min-height: 52px;
+      border: 0;
+      border-radius: var(--radius);
+      color: #fff;
+      background:
+        linear-gradient(135deg, #10140f, #1a3d30 68%, #24553f);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 16px 26px rgba(19, 52, 39, .22);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 34px rgba(19, 52, 39, .28);
+    }
+
+    .divider {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      color: #8a9385;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin: 8px 0 2px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      background: var(--line);
+    }
+
+    .sso-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .sso {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      font-weight: 850;
+      cursor: pointer;
+      transition: border-color .18s ease, transform .18s ease, background .18s ease;
+    }
+
+    .sso:hover {
+      border-color: #aab5a5;
+      background: #fbfcf7;
+      transform: translateY(-1px);
+    }
+
+    .sso-icon {
+      width: 20px;
+      height: 20px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 5px;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .sso-icon.google {
+      color: #fff;
+      background: conic-gradient(from -45deg, #4285f4 0 25%, #34a853 0 50%, #fbbc05 0 75%, #ea4335 0);
+    }
+
+    .sso-icon.saml {
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .foot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      align-items: center;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status-card {
+      position: relative;
+      background: rgba(255, 255, 255, .82);
+      border: 1px solid rgba(216, 222, 211, .9);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 18px 54px rgba(41, 55, 37, .12);
+      backdrop-filter: blur(20px);
+    }
+
+    .status-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .status-title {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1.08;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      color: var(--green);
+      background: var(--green-soft);
+      border: 1px solid rgba(23, 107, 77, .18);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 5px rgba(23, 107, 77, .1);
+    }
+
+    .meter {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 26px;
+    }
+
+    .meter-row {
+      display: flex;
+      justify-content: space-between;
+      color: #3f493f;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .bar {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e1e7dc;
+      box-shadow: inset 0 1px 2px rgba(29, 35, 28, .08);
+    }
+
+    .bar span {
+      display: block;
+      width: 88%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), #60a887 74%, var(--amber));
+    }
+
+    .checks {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .check {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      align-items: center;
+      gap: 11px;
+      min-height: 54px;
+      padding: 11px 12px;
+      background: rgba(251, 252, 247, .82);
+      border: 1px solid rgba(216, 222, 211, .8);
+      border-radius: var(--radius);
+    }
+
+    .check-icon {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      color: #fff;
+      background: var(--green);
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .check-icon.warn {
+      background: var(--amber);
+    }
+
+    .check-title {
+      display: block;
+      color: #263127;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .check-sub {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .time {
+      color: #7a8376;
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .device {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .device strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .device span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .fingerprint {
+      width: 54px;
+      aspect-ratio: 1;
+      border: 1px solid rgba(23, 107, 77, .22);
+      border-radius: 50%;
+      background:
+        radial-gradient(ellipse at center, transparent 0 23%, rgba(23,107,77,.18) 24% 26%, transparent 27% 36%, rgba(23,107,77,.2) 37% 39%, transparent 40% 50%, rgba(23,107,77,.24) 51% 53%, transparent 54%),
+        var(--green-soft);
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .mini {
+      min-height: 86px;
+      padding: 12px;
+      border: 1px solid rgba(216, 222, 211, .82);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.58);
+    }
+
+    .mini b {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .mini span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.25;
+      font-weight: 750;
+    }
+
+    @media (max-width: 880px) {
+      .screen {
+        padding: 24px;
+      }
+
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .security {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .screen {
+        padding: 0;
+        place-items: stretch;
+      }
+
+      .shell {
+        min-height: 100vh;
+        box-shadow: none;
+        border: 0;
+      }
+
+      .shell::after {
+        display: none;
+      }
+
+      .login,
+      .security {
+        padding: 30px 22px;
+      }
+
+      .brand {
+        margin-bottom: 36px;
+      }
+
+      .sso-grid,
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .check {
+        grid-template-columns: 28px 1fr;
+      }
+
+      .time {
+        grid-column: 2;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="screen">
+    <section class="shell" aria-label="Kilo Cloud sign in">
+      <div class="login">
+        <div class="brand" aria-label="Kilo Cloud">
+          <div class="mark" aria-hidden="true"></div>
+          <div class="brand-text">
+            <span class="brand-name">Kilo</span>
+            <span class="brand-product">Cloud</span>
+          </div>
+        </div>
+
+        <h1>Welcome back.</h1>
+        <p class="subhead">Return to your team workspace with the credentials and security controls already tied to your account.</p>
+
+        <form class="form">
+          <div class="field">
+            <label for="workspace">Workspace slug</label>
+            <div class="input-wrap workspace">
+              <span>https://</span>
+              <input id="workspace" name="workspace" type="text" value="northstar" autocomplete="organization" />
+              <span>.kilo.cloud</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Work email</label>
+            <div class="input-wrap">
+              <input id="email" name="email" type="email" placeholder="name@company.com" autocomplete="email" />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label-row">
+              <label for="password">Password</label>
+              <a class="link" href="#">Reset password</a>
+            </div>
+            <div class="input-wrap">
+              <input id="password" name="password" type="password" placeholder="Enter password" autocomplete="current-password" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" type="submit">Sign in to workspace</button>
+            <div class="divider">or use SSO</div>
+            <div class="sso-grid">
+              <button class="sso" type="button"><span class="sso-icon google">G</span> Google</button>
+              <button class="sso" type="button"><span class="sso-icon saml">S</span> SAML SSO</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="foot">
+          <span>New device?</span>
+          <a class="link" href="#">Verify with admin</a>
+        </div>
+      </div>
+
+      <aside class="security" aria-label="Security status">
+        <div class="status-card">
+          <div class="status-top">
+            <h2 class="status-title">Security status</h2>
+            <span class="pill"><span class="dot"></span>Protected</span>
+          </div>
+
+          <div class="meter" aria-label="Workspace trust score">
+            <div class="meter-row">
+              <span>Workspace trust</span>
+              <span>88%</span>
+            </div>
+            <div class="bar"><span></span></div>
+          </div>
+
+          <ul class="checks">
+            <li class="check">
+              <span class="check-icon">✓</span>
+              <span>
+                <span class="check-title">SSO policy active</span>
+                <span class="check-sub">Google and SAML providers are available.</span>
+              </span>
+              <span class="time">now</span>
+            </li>
+            <li class="check">
+              <span class="check-icon">✓</span>
+              <span>
+                <span class="check-title">Device recognized</span>
+                <span class="check-sub">MacBook Pro signed in from Guadalajara.</span>
+              </span>
+              <span class="time">2m</span>
+            </li>
+            <li class="check">
+              <span class="check-icon warn">!</span>
+              <span>
+                <span class="check-title">MFA recheck on submit</span>
+                <span class="check-sub">One prompt may be required for admin tools.</span>
+              </span>
+              <span class="time">queued</span>
+            </li>
+          </ul>
+
+          <div class="device">
+            <div>
+              <strong>Session lock</strong>
+              <span>15 minute idle timeout with encrypted token refresh.</span>
+            </div>
+            <div class="fingerprint" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini">
+            <b>24</b>
+            <span>member sessions monitored</span>
+          </div>
+          <div class="mini">
+            <b>0</b>
+            <span>open security incidents</span>
+          </div>
+          <div class="mini">
+            <b>2FA</b>
+            <span>required for deploy keys</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

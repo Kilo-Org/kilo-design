@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kilo Cloud Run Detail</title>
+  <style>
+    :root {
+      --ink: #191714;
+      --muted: #655f55;
+      --subtle: #8d867a;
+      --line: #d8d1c4;
+      --line-strong: #b9ac98;
+      --paper: #f5f0e6;
+      --paper-soft: #fbf8ef;
+      --paper-deep: #e9dfcf;
+      --panel: rgba(255, 252, 242, 0.82);
+      --panel-solid: #fffaf0;
+      --teal: #087f72;
+      --teal-soft: #d9eee9;
+      --green: #1e7b43;
+      --amber: #b26300;
+      --amber-soft: #ffe4b8;
+      --red: #a13b35;
+      --blue: #326da8;
+      --violet: #7355a6;
+      --shadow: 0 20px 55px rgba(73, 62, 42, 0.13);
+      --mono: "SF Mono", "Cascadia Code", "Liberation Mono", Menlo, monospace;
+      --sans: Avenir Next, "Segoe UI", "Helvetica Neue", sans-serif;
+      color-scheme: light;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(8, 127, 114, 0.14), transparent 26rem),
+        radial-gradient(circle at 86% 4%, rgba(178, 99, 0, 0.12), transparent 22rem),
+        linear-gradient(135deg, #f8f3e9 0%, #ece2d1 48%, #f7f0e3 100%);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.45;
+      background:
+        linear-gradient(rgba(25, 23, 20, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(25, 23, 20, 0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto minmax(210px, 0.6fr);
+      align-items: center;
+      gap: 18px;
+      padding: 18px 28px;
+      border-bottom: 1px solid rgba(106, 93, 72, 0.22);
+      background: rgba(251, 248, 239, 0.78);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #24211d;
+      border-radius: 7px;
+      background:
+        linear-gradient(135deg, #fdf8e9 0 42%, transparent 42%),
+        linear-gradient(135deg, #15130f 42% 58%, transparent 58%),
+        linear-gradient(135deg, transparent 58%, #087f72 58%);
+      box-shadow: 4px 4px 0 #191714;
+      flex: 0 0 auto;
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .product {
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .crumb {
+      margin-top: 2px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .run-state {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border: 1px solid rgba(8, 127, 114, 0.26);
+      border-radius: 999px;
+      background: rgba(217, 238, 233, 0.86);
+      color: #075f55;
+      font-weight: 800;
+      box-shadow: 0 8px 26px rgba(8, 127, 114, 0.12);
+      white-space: nowrap;
+    }
+
+    .pulse {
+      position: relative;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    .pulse::after {
+      content: "";
+      position: absolute;
+      inset: -7px;
+      border: 1px solid rgba(8, 127, 114, 0.45);
+      border-radius: inherit;
+      animation: pulse 1.8s ease-out infinite;
+    }
+
+    @keyframes pulse {
+      from {
+        opacity: 0.8;
+        transform: scale(0.45);
+      }
+      to {
+        opacity: 0;
+        transform: scale(1.5);
+      }
+    }
+
+    .top-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .icon-button,
+    .ghost-button,
+    .primary-button,
+    .danger-button {
+      min-height: 36px;
+      border-radius: 7px;
+      border: 1px solid var(--line-strong);
+      background: rgba(255, 250, 240, 0.78);
+      color: var(--ink);
+      cursor: default;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 750;
+      box-shadow: inset 0 -1px 0 rgba(25, 23, 20, 0.06);
+    }
+
+    .icon-button {
+      width: 36px;
+      padding: 0;
+    }
+
+    .ghost-button {
+      padding: 0 12px;
+    }
+
+    .primary-button {
+      padding: 0 14px;
+      border-color: #065f56;
+      background: #087f72;
+      color: white;
+      box-shadow: 0 8px 18px rgba(8, 127, 114, 0.22);
+    }
+
+    .danger-button {
+      padding: 0 14px;
+      border-color: rgba(161, 59, 53, 0.55);
+      background: #fff6ef;
+      color: var(--red);
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      flex: 0 0 auto;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(330px, 0.92fr) minmax(520px, 1.4fr) minmax(300px, 0.78fr);
+      gap: 18px;
+      padding: 22px 28px 26px;
+      min-height: 0;
+    }
+
+    .column {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .run-header {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(440px, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      padding-bottom: 4px;
+    }
+
+    .title-wrap {
+      min-width: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(30px, 3.5vw, 54px);
+      line-height: 0.96;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 12px 0 0;
+      color: var(--muted);
+      max-width: 820px;
+      font-size: 15px;
+    }
+
+    .run-meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(96px, 1fr));
+      gap: 8px;
+      min-width: 430px;
+    }
+
+    .metric {
+      min-height: 72px;
+      padding: 11px 12px;
+      border: 1px solid rgba(106, 93, 72, 0.24);
+      border-radius: 8px;
+      background: rgba(255, 250, 240, 0.72);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.74);
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .metric-value {
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .metric-note {
+      color: var(--subtle);
+      font-family: var(--mono);
+      font-size: 11px;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    section,
+    aside {
+      min-width: 0;
+    }
+
+    .panel {
+      border: 1px solid rgba(106, 93, 72, 0.28);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: clip;
+    }
+
+    .panel.flat {
+      box-shadow: none;
+      background: rgba(255, 250, 240, 0.58);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 48px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(106, 93, 72, 0.2);
+      background: rgba(255, 250, 240, 0.58);
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .panel-title span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .panel-kicker {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .steps {
+      padding: 6px 0;
+    }
+
+    .step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 31px 1fr auto;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(106, 93, 72, 0.13);
+      min-height: 62px;
+    }
+
+    .step:last-child {
+      border-bottom: 0;
+    }
+
+    .step::before {
+      content: "";
+      position: absolute;
+      left: 29px;
+      top: 42px;
+      bottom: -20px;
+      width: 1px;
+      background: var(--line);
+    }
+
+    .step:last-child::before {
+      display: none;
+    }
+
+    .step-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      background: var(--panel-solid);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 800;
+      z-index: 1;
+    }
+
+    .step.done .step-dot {
+      border-color: rgba(30, 123, 67, 0.35);
+      background: #e2f2df;
+      color: var(--green);
+    }
+
+    .step.active {
+      background:
+        linear-gradient(90deg, rgba(8, 127, 114, 0.1), transparent 52%),
+        rgba(255, 250, 240, 0.5);
+    }
+
+    .step.active .step-dot {
+      border-color: rgba(8, 127, 114, 0.55);
+      background: var(--teal);
+      color: white;
+      box-shadow: 0 0 0 5px rgba(8, 127, 114, 0.11);
+    }
+
+    .step.waiting {
+      background:
+        linear-gradient(90deg, rgba(178, 99, 0, 0.13), transparent 52%),
+        rgba(255, 250, 240, 0.44);
+    }
+
+    .step.waiting .step-dot {
+      border-color: rgba(178, 99, 0, 0.45);
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .step-main {
+      min-width: 0;
+    }
+
+    .step-name {
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .step-name span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .step-copy {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .step-time {
+      color: var(--subtle);
+      font-family: var(--mono);
+      font-size: 12px;
+      align-self: start;
+      padding-top: 2px;
+      white-space: nowrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 22px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(106, 93, 72, 0.22);
+      color: var(--muted);
+      background: rgba(255, 250, 240, 0.7);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .badge.teal {
+      color: #075f55;
+      border-color: rgba(8, 127, 114, 0.28);
+      background: rgba(217, 238, 233, 0.72);
+    }
+
+    .badge.green {
+      color: var(--green);
+      border-color: rgba(30, 123, 67, 0.27);
+      background: rgba(226, 242, 223, 0.75);
+    }
+
+    .badge.amber {
+      color: var(--amber);
+      border-color: rgba(178, 99, 0, 0.3);
+      background: rgba(255, 228, 184, 0.72);
+    }
+
+    .badge.blue {
+      color: var(--blue);
+      border-color: rgba(50, 109, 168, 0.26);
+      background: rgba(225, 238, 249, 0.76);
+    }
+
+    .activity {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .console {
+      min-height: 400px;
+      background:
+        linear-gradient(rgba(255, 250, 240, 0.62), rgba(255, 250, 240, 0.62)),
+        repeating-linear-gradient(0deg, rgba(25, 23, 20, 0.035) 0 1px, transparent 1px 32px);
+      padding: 8px 0;
+    }
+
+    .call {
+      display: grid;
+      grid-template-columns: 74px minmax(0, 1fr) auto;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(106, 93, 72, 0.14);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .call:last-child {
+      border-bottom: 0;
+    }
+
+    .call-time {
+      color: var(--subtle);
+      white-space: nowrap;
+    }
+
+    .call-main {
+      min-width: 0;
+    }
+
+    .call-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .call-name strong,
+    .call-detail {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .call-detail {
+      margin-top: 5px;
+      color: var(--muted);
+    }
+
+    .call-status {
+      align-self: start;
+      color: var(--subtle);
+      white-space: nowrap;
+    }
+
+    .call.running .call-status {
+      color: var(--teal);
+      font-weight: 800;
+    }
+
+    .tiny-spinner {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid rgba(8, 127, 114, 0.2);
+      border-top-color: var(--teal);
+      animation: spin 0.9s linear infinite;
+      flex: 0 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .approval {
+      border-color: rgba(178, 99, 0, 0.4);
+      background:
+        linear-gradient(135deg, rgba(255, 228, 184, 0.62), transparent 58%),
+        rgba(255, 250, 240, 0.92);
+      box-shadow: 0 22px 58px rgba(143, 92, 13, 0.19);
+    }
+
+    .approval .panel-head {
+      border-bottom-color: rgba(178, 99, 0, 0.2);
+      background: rgba(255, 241, 215, 0.78);
+    }
+
+    .approval-body {
+      padding: 15px;
+    }
+
+    .approval-command {
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid rgba(178, 99, 0, 0.26);
+      border-radius: 7px;
+      background: rgba(34, 30, 23, 0.92);
+      color: #fff6e6;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .approval-copy {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .approval-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 13px;
+    }
+
+    .scope-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .scope-list li {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .scope-list code {
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .files {
+      padding: 6px 0;
+    }
+
+    .file-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 9px;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(106, 93, 72, 0.13);
+      min-height: 44px;
+    }
+
+    .file-row:last-child {
+      border-bottom: 0;
+    }
+
+    .file-path {
+      min-width: 0;
+      font-family: var(--mono);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .diff-stat {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .plus {
+      color: var(--green);
+      font-weight: 850;
+    }
+
+    .minus {
+      color: var(--red);
+      font-weight: 850;
+    }
+
+    .file-icon {
+      width: 22px;
+      height: 26px;
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+      background:
+        linear-gradient(135deg, transparent 0 68%, rgba(25, 23, 20, 0.12) 68% 100%),
+        rgba(255, 250, 240, 0.9);
+      box-shadow: inset 0 -4px 0 rgba(25, 23, 20, 0.035);
+    }
+
+    .usage {
+      padding: 14px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .usage-total {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: baseline;
+    }
+
+    .usage-total strong {
+      font-family: var(--mono);
+      font-size: 30px;
+      letter-spacing: 0;
+    }
+
+    .usage-total span {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .usage-bar {
+      height: 14px;
+      border: 1px solid rgba(106, 93, 72, 0.25);
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(233, 223, 207, 0.9);
+      display: flex;
+    }
+
+    .usage-bar span:nth-child(1) {
+      width: 58%;
+      background: var(--teal);
+    }
+
+    .usage-bar span:nth-child(2) {
+      width: 27%;
+      background: var(--amber);
+    }
+
+    .usage-bar span:nth-child(3) {
+      width: 15%;
+      background: var(--violet);
+    }
+
+    .usage-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .usage-cell {
+      padding: 9px;
+      border: 1px solid rgba(106, 93, 72, 0.18);
+      border-radius: 7px;
+      background: rgba(255, 250, 240, 0.54);
+      min-width: 0;
+    }
+
+    .usage-cell span {
+      display: block;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .usage-cell strong {
+      display: block;
+      margin-top: 5px;
+      font-family: var(--mono);
+      font-size: 15px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .timeline {
+      padding: 12px 14px 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 11px;
+      align-items: start;
+      font-size: 13px;
+    }
+
+    .timeline-row time {
+      color: var(--subtle);
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .timeline-row strong {
+      display: block;
+      font-weight: 800;
+    }
+
+    .timeline-row span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+    }
+
+    .branch {
+      padding: 12px 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .branch-line {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .branch-line strong {
+      color: var(--ink);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .progress-rail {
+      height: 6px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(216, 209, 196, 0.82);
+    }
+
+    .progress-fill {
+      width: 68%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--teal), #1e7b43 72%, var(--amber));
+      animation: breathe 1.9s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% {
+        filter: saturate(1);
+      }
+      50% {
+        filter: saturate(1.35) brightness(1.08);
+      }
+    }
+
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border: 1px solid rgba(106, 93, 72, 0.32);
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      background: rgba(255, 250, 240, 0.8);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 1180px) {
+      main {
+        grid-template-columns: minmax(300px, 0.9fr) minmax(480px, 1.3fr);
+      }
+
+      .column.side {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+      }
+
+      .run-header {
+        grid-template-columns: 1fr;
+      }
+
+      .run-meta {
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .topbar {
+        grid-template-columns: 1fr auto;
+        padding: 14px 16px;
+      }
+
+      .run-state {
+        justify-self: end;
+      }
+
+      .top-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+      }
+
+      main {
+        grid-template-columns: 1fr;
+        padding: 18px 14px 22px;
+      }
+
+      .run-header {
+        gap: 14px;
+      }
+
+      .run-meta,
+      .column.side {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .call {
+        grid-template-columns: 62px minmax(0, 1fr);
+      }
+
+      .call-status {
+        grid-column: 2;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .run-state,
+      .top-actions {
+        justify-self: start;
+      }
+
+      .run-meta,
+      .column.side,
+      .usage-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .step {
+        grid-template-columns: 31px 1fr;
+      }
+
+      .step-time {
+        grid-column: 2;
+        padding-top: 0;
+      }
+
+      .approval-actions {
+        justify-content: stretch;
+      }
+
+      .approval-actions button {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div class="brand-copy">
+          <div class="product">Kilo Cloud</div>
+          <div class="crumb">runs / kcl_4927 / active-agent-run</div>
+        </div>
+      </div>
+      <div class="run-state"><span class="pulse" aria-hidden="true"></span>Active run</div>
+      <div class="top-actions">
+        <button class="icon-button" aria-label="Copy run link">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"></path></svg>
+        </button>
+        <button class="ghost-button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
+          Logs
+        </button>
+        <button class="danger-button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg>
+          Stop
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div class="run-header">
+        <div class="title-wrap">
+          <h1>Implement token export controls</h1>
+          <p class="subtitle">Agent is updating the token playground flow, validating generated artifacts, and preparing a scoped patch for review.</p>
+        </div>
+        <div class="run-meta" aria-label="Run metrics">
+          <div class="metric">
+            <div class="metric-label">Elapsed</div>
+            <div class="metric-value">18:42</div>
+            <div class="metric-note">since 04:24 UTC</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Tokens</div>
+            <div class="metric-value">83.6k</div>
+            <div class="metric-note">67% budget</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Tool calls</div>
+            <div class="metric-value">27</div>
+            <div class="metric-note">1 waiting</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Files</div>
+            <div class="metric-value">6</div>
+            <div class="metric-note">+412 -97</div>
+          </div>
+        </div>
+      </div>
+
+      <section class="column">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"></path><path d="M4 12h10"></path><path d="M4 18h7"></path><path d="M17 15l3 3-3 3"></path></svg>
+              <span>Running Steps</span>
+            </div>
+            <span class="panel-kicker">5 of 7</span>
+          </div>
+          <div class="steps">
+            <div class="step done">
+              <div class="step-dot">1</div>
+              <div class="step-main">
+                <div class="step-name"><span>Read run scope</span><span class="badge green">done</span></div>
+                <div class="step-copy">Mapped target screen, active state, and approval gate.</div>
+              </div>
+              <div class="step-time">00:42</div>
+            </div>
+            <div class="step done">
+              <div class="step-dot">2</div>
+              <div class="step-main">
+                <div class="step-name"><span>Inspect token artifacts</span><span class="badge green">done</span></div>
+                <div class="step-copy">Confirmed token names and output contract.</div>
+              </div>
+              <div class="step-time">02:18</div>
+            </div>
+            <div class="step done">
+              <div class="step-dot">3</div>
+              <div class="step-main">
+                <div class="step-name"><span>Patch export menu</span><span class="badge green">done</span></div>
+                <div class="step-copy">Added split action and download item wiring.</div>
+              </div>
+              <div class="step-time">06:04</div>
+            </div>
+            <div class="step active">
+              <div class="step-dot">4</div>
+              <div class="step-main">
+                <div class="step-name"><span>Run verification</span><span class="badge teal">running</span></div>
+                <div class="step-copy">Type checking playground and rebuilding generated CSS.</div>
+              </div>
+              <div class="step-time">09:11</div>
+            </div>
+            <div class="step waiting">
+              <div class="step-dot">5</div>
+              <div class="step-main">
+                <div class="step-name"><span>Request permission</span><span class="badge amber">waiting</span></div>
+                <div class="step-copy">Needs approval before installing missing package cache.</div>
+              </div>
+              <div class="step-time">18:42</div>
+            </div>
+            <div class="step">
+              <div class="step-dot">6</div>
+              <div class="step-main">
+                <div class="step-name"><span>Capture result summary</span><span class="badge">queued</span></div>
+                <div class="step-copy">Prepare final diff and verification notes.</div>
+              </div>
+              <div class="step-time">--:--</div>
+            </div>
+            <div class="step">
+              <div class="step-dot">7</div>
+              <div class="step-main">
+                <div class="step-name"><span>Finish run</span><span class="badge">queued</span></div>
+                <div class="step-copy">Hand back clean status with remaining risks.</div>
+              </div>
+              <div class="step-time">--:--</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel flat">
+          <div class="panel-head">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v12"></path><path d="M18 9v12"></path><path d="M6 15l4-4"></path><path d="M6 15l-4-4"></path><path d="M18 9l4 4"></path><path d="M18 9l-4 4"></path></svg>
+              <span>Branch</span>
+            </div>
+            <span class="badge blue">syncing</span>
+          </div>
+          <div class="branch">
+            <div class="branch-line"><span class="kbd">git</span><strong>feat/token-export-controls</strong></div>
+            <div class="branch-line"><span class="kbd">base</span><strong>origin/main</strong></div>
+            <div class="progress-rail" aria-hidden="true"><div class="progress-fill"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="column">
+        <div class="panel approval">
+          <div class="panel-head">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.4 8.5-8 9-4.6-.5-8-4-8-9V7l8-4z"></path><path d="M12 8v5"></path><path d="M12 17h.01"></path></svg>
+              <span>Permission Request</span>
+            </div>
+            <span class="badge amber">waiting for approval</span>
+          </div>
+          <div class="approval-body">
+            <p class="approval-copy">The agent wants to run a command that may update the local package cache before verification can continue.</p>
+            <div class="approval-command">pnpm --dir playground install --frozen-lockfile</div>
+            <ul class="scope-list" aria-label="Permission scope">
+              <li><span class="badge amber">network</span><code>registry.npmjs.org</code></li>
+              <li><span class="badge">write</span><code>playground/node_modules/.pnpm</code></li>
+              <li><span class="badge">timeout</span><code>up to 120s</code></li>
+            </ul>
+            <div class="approval-actions">
+              <button class="ghost-button">Deny</button>
+              <button class="primary-button">Approve</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel activity">
+          <div class="panel-head">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-6-6-6"></path><path d="M12 19h8"></path></svg>
+              <span>Tool Calls</span>
+            </div>
+            <span class="panel-kicker">live stream</span>
+          </div>
+          <div class="console" aria-label="Tool call log">
+            <div class="call">
+              <div class="call-time">18:32.481</div>
+              <div class="call-main">
+                <div class="call-name"><strong>rg</strong><span class="badge green">0</span></div>
+                <div class="call-detail">searched token export handlers in playground/src</div>
+              </div>
+              <div class="call-status">done</div>
+            </div>
+            <div class="call">
+              <div class="call-time">18:34.902</div>
+              <div class="call-main">
+                <div class="call-name"><strong>sed</strong><span class="badge green">0</span></div>
+                <div class="call-detail">read TokenWorkbench.tsx around split-button controls</div>
+              </div>
+              <div class="call-status">done</div>
+            </div>
+            <div class="call">
+              <div class="call-time">18:36.119</div>
+              <div class="call-main">
+                <div class="call-name"><strong>apply_patch</strong><span class="badge green">0</span></div>
+                <div class="call-detail">updated export menu markup and action routing</div>
+              </div>
+              <div class="call-status">done</div>
+            </div>
+            <div class="call">
+              <div class="call-time">18:38.774</div>
+              <div class="call-main">
+                <div class="call-name"><strong>node build</strong><span class="badge green">0</span></div>
+                <div class="call-detail">generated token artifacts from tokens.json</div>
+              </div>
+              <div class="call-status">done</div>
+            </div>
+            <div class="call running">
+              <div class="call-time">18:41.006</div>
+              <div class="call-main">
+                <div class="call-name"><span class="tiny-spinner" aria-hidden="true"></span><strong>pnpm exec tsc</strong><span class="badge teal">active</span></div>
+                <div class="call-detail">checking playground TypeScript without emitting files</div>
+              </div>
+              <div class="call-status">running</div>
+            </div>
+            <div class="call">
+              <div class="call-time">18:42.213</div>
+              <div class="call-main">
+                <div class="call-name"><strong>pnpm install</strong><span class="badge amber">blocked</span></div>
+                <div class="call-detail">awaiting approval for package cache access</div>
+              </div>
+              <div class="call-status">waiting</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="column side">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M9 15h6"></path><path d="M9 18h6"></path></svg>
+              <span>Changed Files</span>
+            </div>
+            <span class="panel-kicker">6 files</span>
+          </div>
+          <div class="files">
+            <div class="file-row">
+              <div class="file-icon" aria-hidden="true"></div>
+              <div class="file-path">playground/src/TokenWorkbench.tsx</div>
+              <div class="diff-stat"><span class="plus">+128</span><span class="minus">-31</span></div>
+            </div>
+            <div class="file-row">
+              <div class="file-icon" aria-hidden="true"></div>
+              <div class="file-path">playground/src/components/SplitAction.tsx</div>
+              <div class="diff-stat"><span class="plus">+96</span><span class="minus">-0</span></div>
+            </div>
+            <div class="file-row">
+              <div class="file-icon" aria-hidden="true"></div>
+              <div class="file-path">playground/src/styles/workbench.css</div>
+              <div class="diff-stat"><span class="plus">+84</span><span class="minus">-22</span></div>
+            </div>
+            <div class="file-row">
+              <div class="file-icon" aria-hidden="true"></div>
+              <div class="file-path">playground/src/downloads.ts</div>
+              <div class="diff-stat"><span class="plus">+57</span><span class="minus">-18</span></div>
+            </div>
+            <div class="file-row">
+              <div class="file-icon" aria-hidden="true"></div>
+              <div class="file-path">dist/kilo-tokens.css</div>
+              <div class="diff-stat"><span class="plus">+39</span><span class="minus">-26</span></div>
+            </div>
+            <div class="file-row">
+              <div class="file-icon" aria-hidden="true"></div>
+              <div class="file-path">README.md</div>
+              <div class="diff-stat"><span class="plus">+8</span><span class="minus">-0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M7 16l4-5 4 3 4-8"></path></svg>
+              <span>Token Usage</span>
+            </div>
+            <span class="badge teal">83.6k</span>
+          </div>
+          <div class="usage">
+            <div class="usage-total"><strong>83,642</strong><span>tokens used</span></div>
+            <div class="usage-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="usage-grid">
+              <div class="usage-cell"><span>input</span><strong>48.7k</strong></div>
+              <div class="usage-cell"><span>output</span><strong>22.4k</strong></div>
+              <div class="usage-cell"><span>tools</span><strong>12.5k</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel flat">
+          <div class="panel-head">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+              <span>Run Timeline</span>
+            </div>
+          </div>
+          <div class="timeline">
+            <div class="timeline-row">
+              <time>04:24:03</time>
+              <div><strong>Started</strong><span>Cloud runner allocated workspace.</span></div>
+            </div>
+            <div class="timeline-row">
+              <time>04:27:38</time>
+              <div><strong>First patch</strong><span>Split action component added.</span></div>
+            </div>
+            <div class="timeline-row">
+              <time>04:38:09</time>
+              <div><strong>Build passed</strong><span>Token artifact generation completed.</span></div>
+            </div>
+            <div class="timeline-row">
+              <time>04:42:45</time>
+              <div><strong>Paused</strong><span>Permission request is waiting.</span></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+</body>
+</html>

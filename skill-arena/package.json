@@ -1,0 +1,11 @@
+{
+  "name": "kilo-design-skill-arena",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local app for running and comparing Kilo design skill prompt passes.",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs"
+  }
+}

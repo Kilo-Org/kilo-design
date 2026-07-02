@@ -9,13 +9,14 @@ This is the first agent-facing adapter for the Kilo design system. It covers Kil
 
 ## Run Order
 
-1. Read the target Cloud file first. For components, also read the matching primitive in `apps/web/src/components/ui/`.
-2. Load `overlay.md` for all Cloud UI work.
-3. Load one internal reference only when the task needs it: product judgment, brand, token architecture, voice, or interaction quality.
-4. Load at most one matching recipe unless the task clearly spans multiple patterns.
-5. If no recipe exists, use the overlay plus current Cloud code and report a coverage gap.
-6. Keep broad product cleanup out of focused tasks.
-7. Do not use playground specimen UI as a Cloud Canonical Example.
+1. If the task has a target Cloud file, read it first. For components, also read the matching primitive in `apps/web/src/components/ui/`.
+2. If the task asks for a standalone mockup, prototype, or self-contained HTML with no target Cloud file, use Standalone Generation Mode.
+3. Load `overlay.md` for all Cloud UI work.
+4. Load one internal reference only when the task needs it: product judgment, brand, token architecture, voice, or interaction quality.
+5. Load at most one matching recipe unless the task clearly spans multiple patterns.
+6. If no recipe exists, use the overlay plus current Cloud code and report a coverage gap.
+7. Keep broad product cleanup out of focused tasks.
+8. Do not use playground specimen UI as a Cloud Canonical Example.
 
 Completion criterion: the answer or change names the loaded overlay/recipe, follows real Cloud code, and does not normalize unrelated UI.
 
@@ -35,6 +36,31 @@ Completion criterion: the answer or change names the loaded overlay/recipe, foll
 | copy, empty states, labels, errors, confirmations | `reference/voice.md` |
 | forms, focus, keyboard, overlays, responsive layout, touch targets, loading, disabled, motion | `reference/interaction-quality.md` |
 | badges, alerts, dialogs, sidebar, empty states | `overlay.md`; report coverage gap if a rule is missing |
+| standalone mockup, prototype, generated HTML, arena pass, no target Cloud file | Standalone Generation Mode |
+| login, auth, workspace slug, returning team, security status | `reference/brand.md`; `reference/voice.md`; `reference/token-architecture.md`; `reference/interaction-quality.md`; `patterns/cloud-web/primary-actions.md` |
+
+## Standalone Generation Mode
+
+Use this mode only when the task asks for generated UI without a real Cloud source file to read. The goal is a product-faithful Kilo Cloud surface, not a generic SaaS screen with Kilo labels.
+
+Load these before designing:
+
+1. `overlay.md`
+2. `reference/brand.md`
+3. `reference/voice.md`
+4. `reference/token-architecture.md`
+5. `reference/interaction-quality.md` when the surface includes forms, auth, overlays, responsive behavior, loading, disabled, error, or success states
+6. One matching pattern recipe when available
+
+Allowed read-only product artifact: `src/tokens.cloud.ts` when exact token values are needed.
+
+Generated standalone HTML should:
+
+- Define semantic CSS roles such as `--background`, `--foreground`, `--card`, `--muted-foreground`, `--primary`, `--primary-foreground`, `--border`, `--input`, and `--ring`.
+- Resolve `--primary` to Kilo brand primary and `--primary-foreground` to Kilo brand foreground when writing self-contained CSS.
+- Use Kilo Cloud product nouns from the prompt: workspaces, teams, agent runs, tool calls, changed files, billing, subscriptions, KiloClaw, security, or operational status.
+- Stay compact, dark-first, technical, and task-oriented.
+- Keep generated product UI free of guidance notes, gap reports, arena labels, skill labels, or comparison text.
 
 ## Non-Goals
 

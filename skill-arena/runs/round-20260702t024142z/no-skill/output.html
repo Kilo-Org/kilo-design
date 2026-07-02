@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kilo Cloud Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #17201b;
+      --muted: #66736b;
+      --line: #dbe3dd;
+      --field: #f8fbf9;
+      --green: #12744a;
+      --green-dark: #0d5e3a;
+      --mint: #e9f7ef;
+      --amber: #b87716;
+      --white: #ffffff;
+      --shadow: 0 24px 80px rgba(18, 40, 29, 0.16);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 20%, rgba(18, 116, 74, 0.14), transparent 28%),
+        radial-gradient(circle at 84% 12%, rgba(184, 119, 22, 0.12), transparent 24%),
+        linear-gradient(135deg, #eef5f0 0%, #f8faf7 48%, #e7f0ec 100%);
+      display: grid;
+      place-items: center;
+      padding: 32px;
+    }
+
+    .login-shell {
+      width: min(1040px, 100%);
+      min-height: 680px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .brand-panel {
+      position: relative;
+      padding: 42px;
+      background:
+        linear-gradient(160deg, rgba(17, 112, 73, 0.94), rgba(11, 64, 52, 0.98)),
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.1) 0 1px, transparent 1px 16px);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .brand-panel::before {
+      content: "";
+      position: absolute;
+      inset: auto -90px -120px auto;
+      width: 330px;
+      height: 330px;
+      border-radius: 50%;
+      border: 64px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .brand {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .panel-copy {
+      position: relative;
+      max-width: 360px;
+      padding-bottom: 30px;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(36px, 5vw, 56px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .panel-copy p {
+      margin: 22px 0 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .security-card {
+      position: relative;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(14px);
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .security-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .security-title {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .security-state {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #dcffec;
+      background: rgba(220, 255, 236, 0.13);
+      font-size: 13px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #72f0a2;
+      box-shadow: 0 0 0 5px rgba(114, 240, 162, 0.14);
+    }
+
+    .security-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .security-list li {
+      min-width: 0;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .form-panel {
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(250,252,250,0.96));
+    }
+
+    .form-wrap {
+      width: min(440px, 100%);
+    }
+
+    .welcome {
+      margin-bottom: 28px;
+    }
+
+    .welcome h2 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .welcome p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .sso-button,
+    .primary-button {
+      width: 100%;
+      min-height: 48px;
+      border: 0;
+      border-radius: 8px;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .sso-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--ink);
+      background: var(--white);
+      border: 1px solid var(--line);
+      box-shadow: 0 1px 0 rgba(18, 40, 29, 0.04);
+    }
+
+    .sso-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, #2165e3 0 50%, #22a35a 50% 100%);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .divider {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 14px;
+      margin: 24px 0;
+      color: #89938d;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      background: var(--line);
+    }
+
+    form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    label {
+      color: #344139;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    input {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 14px;
+      background: var(--field);
+      color: var(--ink);
+      font: inherit;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: rgba(18, 116, 74, 0.62);
+      box-shadow: 0 0 0 4px rgba(18, 116, 74, 0.12);
+      background: #ffffff;
+    }
+
+    .workspace-input {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--field);
+      overflow: hidden;
+    }
+
+    .workspace-input:focus-within {
+      border-color: rgba(18, 116, 74, 0.62);
+      box-shadow: 0 0 0 4px rgba(18, 116, 74, 0.12);
+      background: #ffffff;
+    }
+
+    .workspace-input input {
+      border: 0;
+      box-shadow: none;
+      background: transparent;
+      border-radius: 0;
+    }
+
+    .workspace-input input:focus {
+      box-shadow: none;
+    }
+
+    .suffix {
+      padding: 0 14px 0 10px;
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .form-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 2px;
+      font-size: 14px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .remember input {
+      width: 16px;
+      min-height: 16px;
+      height: 16px;
+      accent-color: var(--green);
+    }
+
+    a {
+      color: var(--green);
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .primary-button {
+      margin-top: 4px;
+      color: white;
+      background: linear-gradient(180deg, var(--green), var(--green-dark));
+      box-shadow: 0 12px 24px rgba(18, 116, 74, 0.22);
+    }
+
+    .inline-status {
+      display: none;
+      margin-top: 22px;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #c9e9d4;
+      background: var(--mint);
+      color: #24533a;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .inline-status strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--green-dark);
+    }
+
+    .footer-note {
+      margin: 24px 0 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 820px) {
+      body {
+        padding: 18px;
+        place-items: start center;
+      }
+
+      .login-shell {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .brand-panel {
+        min-height: 330px;
+        padding: 30px;
+      }
+
+      .panel-copy {
+        padding-top: 52px;
+        padding-bottom: 0;
+      }
+
+      .security-card {
+        display: none;
+      }
+
+      .form-panel {
+        padding: 34px 24px 30px;
+      }
+
+      .inline-status {
+        display: block;
+      }
+    }
+
+    @media (max-width: 460px) {
+      body {
+        padding: 0;
+        background: #f6faf7;
+      }
+
+      .login-shell {
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .brand-panel {
+        min-height: 280px;
+        padding: 24px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .welcome h2 {
+        font-size: 26px;
+      }
+
+      .form-meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .suffix {
+        font-size: 13px;
+        padding-right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="login-shell" aria-label="Kilo Cloud sign in">
+    <section class="brand-panel" aria-label="Kilo Cloud">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">K</div>
+        <span>Kilo Cloud</span>
+      </div>
+
+      <div class="panel-copy">
+        <p class="eyebrow">Team access</p>
+        <h1>Welcome back to your workspace.</h1>
+        <p>Sign in with your team credentials to continue managing builds, usage, and deployment activity.</p>
+      </div>
+
+      <div class="security-card" aria-label="Security status">
+        <div class="security-row">
+          <span class="security-title">Security status</span>
+          <span class="security-state"><span class="dot" aria-hidden="true"></span>Protected</span>
+        </div>
+        <ul class="security-list">
+          <li>SSO policy active</li>
+          <li>2FA enforced</li>
+          <li>Session audit on</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="form-panel">
+      <div class="form-wrap">
+        <div class="welcome">
+          <h2>Sign in</h2>
+          <p>Use your Kilo Cloud account or your organization identity provider.</p>
+        </div>
+
+        <button class="sso-button" type="button">
+          <span class="sso-icon" aria-hidden="true">S</span>
+          Continue with SSO
+        </button>
+
+        <div class="divider">or</div>
+
+        <form>
+          <div class="field">
+            <label for="workspace">Workspace slug</label>
+            <div class="workspace-input">
+              <input id="workspace" name="workspace" type="text" autocomplete="organization" placeholder="acme-team">
+              <span class="suffix">.kilo.cloud</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="name@company.com">
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password">
+          </div>
+
+          <div class="form-meta">
+            <label class="remember">
+              <input type="checkbox" name="remember">
+              Keep me signed in
+            </label>
+            <a href="#">Forgot password?</a>
+          </div>
+
+          <button class="primary-button" type="submit">Sign in to workspace</button>
+        </form>
+
+        <div class="inline-status" aria-label="Security status">
+          <strong>Security status: Protected</strong>
+          SSO policy, two-factor authentication, and session audit are active for this workspace.
+        </div>
+
+        <p class="footer-note">Need access? Contact your workspace admin.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

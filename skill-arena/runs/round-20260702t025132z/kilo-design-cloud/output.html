@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kilo Cloud Billing Usage</title>
+  <style>
+    :root {
+      --background: #070708;
+      --foreground: #f3f3e8;
+      --card: #101113;
+      --card-raised: #15171a;
+      --popover: #181a1d;
+      --secondary: #202226;
+      --muted: #191b1f;
+      --accent: #23262b;
+      --muted-foreground: #9a9b94;
+      --primary: #f7f586;
+      --primary-foreground: #1f1f1f;
+      --border: #2a2d31;
+      --input: #30333a;
+      --ring: #f7f586;
+      --success: #5dd287;
+      --warning: #d9b35f;
+      --danger: #f27676;
+      --info: #7db3ff;
+      --radius: 8px;
+      --mono: "Roboto Mono", "SFMono-Regular", Consolas, monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--background);
+      color: var(--foreground);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(circle at 68% 0%, rgba(247, 245, 134, 0.05), transparent 32rem),
+        linear-gradient(180deg, #08090a 0%, var(--background) 38rem);
+      color: var(--foreground);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      display: grid;
+      min-height: 100vh;
+      grid-template-columns: 248px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--border);
+      background: rgba(12, 13, 15, 0.96);
+      padding: 18px 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 36px;
+      padding: 0 4px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .brand-text {
+      display: grid;
+      gap: 1px;
+    }
+
+    .brand-name {
+      font-weight: 680;
+    }
+
+    .brand-meta {
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .workspace-switcher {
+      margin: 16px 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      padding: 10px;
+    }
+
+    .eyebrow {
+      color: var(--muted-foreground);
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .workspace-name {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 4px;
+      color: var(--foreground);
+      font-weight: 650;
+    }
+
+    .workspace-slug,
+    .mono {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+
+    .workspace-slug {
+      margin-top: 3px;
+      color: var(--muted-foreground);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: grid;
+      gap: 4px;
+      margin-top: 10px;
+    }
+
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 36px;
+      border-radius: 7px;
+      color: var(--muted-foreground);
+      padding: 8px 9px;
+      font-weight: 540;
+    }
+
+    .nav a:hover {
+      background: var(--muted);
+      color: var(--foreground);
+    }
+
+    .nav a[aria-current="page"] {
+      background: rgba(247, 245, 134, 0.1);
+      color: var(--foreground);
+      box-shadow: inset 0 0 0 1px rgba(247, 245, 134, 0.22);
+    }
+
+    .nav-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #4e525b;
+      flex: none;
+    }
+
+    .nav a[aria-current="page"] .nav-dot {
+      background: var(--primary);
+    }
+
+    .sidebar-footer {
+      display: grid;
+      gap: 10px;
+      margin-top: 28px;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 24px;
+      border: 1px solid rgba(93, 210, 135, 0.24);
+      border-radius: 999px;
+      background: rgba(93, 210, 135, 0.08);
+      color: #a5efbc;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .status-pill::before,
+    .alert-title::before,
+    .health::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: currentColor;
+      flex: none;
+    }
+
+    .main {
+      min-width: 0;
+      padding: 22px 24px 32px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 18px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .breadcrumbs span:not(:last-child)::after {
+      content: "/";
+      margin-left: 8px;
+      color: #585c64;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 5px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .page-subtitle {
+      margin-top: 4px;
+      max-width: 780px;
+      color: var(--muted-foreground);
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 36px;
+      border-radius: 7px;
+      padding: 8px 12px;
+      font-weight: 660;
+      white-space: nowrap;
+      transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+    }
+
+    .button:active {
+      transform: translateY(1px);
+    }
+
+    .button.primary {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    .button.primary:hover {
+      background: #ffffa1;
+    }
+
+    .button.secondary {
+      border: 1px solid var(--border);
+      background: var(--secondary);
+      color: var(--foreground);
+    }
+
+    .button.secondary:hover {
+      border-color: #3a3e45;
+      background: var(--accent);
+    }
+
+    .button.ghost {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted-foreground);
+    }
+
+    .button.ghost:hover {
+      border-color: var(--border);
+      background: var(--muted);
+      color: var(--foreground);
+    }
+
+    .content {
+      display: grid;
+      gap: 16px;
+      padding-top: 18px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 1.45fr) minmax(240px, 0.85fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .card,
+    .alert,
+    .table-wrap {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+    }
+
+    .card {
+      padding: 16px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .section-note {
+      margin-top: 2px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .spend-line {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+    }
+
+    .spend-value {
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(32px, 6vw, 54px);
+      font-weight: 760;
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .spend-caption {
+      margin-top: 8px;
+      color: var(--muted-foreground);
+    }
+
+    .spend-meta {
+      display: grid;
+      gap: 6px;
+      min-width: 170px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .spend-meta strong {
+      color: var(--foreground);
+      font-family: var(--mono);
+      font-weight: 600;
+    }
+
+    .meter {
+      overflow: hidden;
+      width: 100%;
+      height: 9px;
+      margin-top: 18px;
+      border-radius: 999px;
+      background: #25282e;
+    }
+
+    .meter-fill {
+      width: 86%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), var(--warning));
+    }
+
+    .spend-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .kpi {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--muted);
+      padding: 10px;
+    }
+
+    .kpi-label {
+      color: var(--muted-foreground);
+      font-size: 11px;
+      font-weight: 650;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .kpi-value {
+      margin-top: 5px;
+      font-family: var(--mono);
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 650;
+    }
+
+    .alert {
+      display: grid;
+      align-content: space-between;
+      gap: 18px;
+      padding: 16px;
+      background:
+        linear-gradient(180deg, rgba(217, 179, 95, 0.12), transparent 50%),
+        var(--card);
+    }
+
+    .alert-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #f0cf85;
+      font-size: 14px;
+      font-weight: 720;
+    }
+
+    .alert-copy {
+      margin-top: 9px;
+      color: #d8d0b6;
+    }
+
+    .alert-copy strong {
+      color: var(--foreground);
+      font-weight: 680;
+    }
+
+    .alert-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .alert-stat {
+      border: 1px solid rgba(217, 179, 95, 0.18);
+      border-radius: 7px;
+      background: rgba(7, 7, 8, 0.35);
+      padding: 9px;
+    }
+
+    .alert-stat span {
+      display: block;
+      color: var(--muted-foreground);
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .alert-stat strong {
+      display: block;
+      margin-top: 4px;
+      font-family: var(--mono);
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .usage-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 1.1fr) minmax(280px, 0.9fr);
+      gap: 16px;
+    }
+
+    .model-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .model-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 1fr) minmax(160px, 1.2fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--muted);
+      padding: 10px;
+    }
+
+    .model-name {
+      font-weight: 650;
+    }
+
+    .model-detail {
+      margin-top: 2px;
+      color: var(--muted-foreground);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .bar {
+      overflow: hidden;
+      height: 8px;
+      border-radius: 999px;
+      background: #282b31;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--primary);
+    }
+
+    .model-cost {
+      min-width: 82px;
+      text-align: right;
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-weight: 650;
+    }
+
+    .operations {
+      display: grid;
+      gap: 10px;
+    }
+
+    .op-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding: 9px 0;
+    }
+
+    .op-row:first-of-type {
+      padding-top: 0;
+    }
+
+    .op-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .op-label {
+      color: var(--muted-foreground);
+    }
+
+    .op-value {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-weight: 650;
+    }
+
+    .health {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 24px;
+      border: 1px solid rgba(93, 210, 135, 0.22);
+      border-radius: 999px;
+      background: rgba(93, 210, 135, 0.08);
+      color: #a5efbc;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .table-wrap {
+      overflow: hidden;
+    }
+
+    .table-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    th {
+      color: var(--muted-foreground);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    td {
+      color: #e6e5d8;
+    }
+
+    .amount,
+    .right {
+      text-align: right;
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge.paid {
+      border: 1px solid rgba(93, 210, 135, 0.22);
+      background: rgba(93, 210, 135, 0.08);
+      color: #a5efbc;
+    }
+
+    .badge.open {
+      border: 1px solid rgba(125, 179, 255, 0.24);
+      background: rgba(125, 179, 255, 0.09);
+      color: #b8d5ff;
+    }
+
+    .invoice-link {
+      color: var(--primary);
+      font-weight: 650;
+    }
+
+    .invoice-link:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .muted {
+      color: var(--muted-foreground);
+    }
+
+    @media (max-width: 1080px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: auto minmax(180px, 1fr);
+        gap: 12px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        padding: 12px;
+      }
+
+      .brand {
+        border-bottom: 0;
+        padding: 0;
+      }
+
+      .workspace-switcher {
+        margin: 0;
+      }
+
+      .nav,
+      .sidebar-footer {
+        grid-column: 1 / -1;
+      }
+
+      .nav {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .nav a {
+        justify-content: center;
+      }
+
+      .nav-dot {
+        display: none;
+      }
+
+      .sidebar-footer {
+        display: none;
+      }
+
+      .summary-grid,
+      .usage-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .main {
+        padding: 16px;
+      }
+
+      .topbar,
+      .spend-line,
+      .table-head {
+        display: grid;
+      }
+
+      .top-actions {
+        justify-content: stretch;
+      }
+
+      .top-actions .button {
+        width: 100%;
+      }
+
+      .spend-meta {
+        min-width: 0;
+        text-align: left;
+      }
+
+      .spend-kpis,
+      .alert-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .model-row {
+        grid-template-columns: 1fr;
+      }
+
+      .model-cost {
+        text-align: left;
+      }
+
+      .nav {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+
+      .nav a {
+        flex: 0 0 auto;
+        min-height: 44px;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .sidebar {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace-switcher {
+        width: 100%;
+      }
+
+      .spend-kpis,
+      .alert-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">K</div>
+        <div class="brand-text">
+          <div class="brand-name">Kilo Cloud</div>
+          <div class="brand-meta">Owner console</div>
+        </div>
+      </div>
+
+      <div class="workspace-switcher" aria-label="Current workspace">
+        <div class="eyebrow">Workspace</div>
+        <div class="workspace-name">
+          <span>Acme Platform</span>
+          <span class="health">Owner</span>
+        </div>
+        <div class="workspace-slug">acme-platform-prod</div>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="#"><span class="nav-dot"></span>Agent runs</a>
+        <a href="#"><span class="nav-dot"></span>KiloClaw</a>
+        <a href="#"><span class="nav-dot"></span>Tool calls</a>
+        <a href="#" aria-current="page"><span class="nav-dot"></span>Billing</a>
+        <a href="#"><span class="nav-dot"></span>Security</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="status-row">
+          <span>Subscription</span>
+          <strong class="mono">Team Pro</strong>
+        </div>
+        <div class="status-row">
+          <span>Operational status</span>
+          <span class="status-pill">Healthy</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="breadcrumbs" aria-label="Breadcrumb">
+            <span>Acme Platform</span>
+            <span>Billing</span>
+            <span>Usage</span>
+          </div>
+          <h1>Billing usage</h1>
+          <p class="page-subtitle">Monitor workspace spend, token usage, model costs, and invoices for the July 2026 billing cycle.</p>
+        </div>
+        <div class="top-actions">
+          <button class="button secondary" type="button">Download usage CSV</button>
+          <button class="button primary" type="button">Update budget</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="summary-grid" aria-label="Monthly spend and budget alert">
+          <div class="card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">Monthly spend</h2>
+                <p class="section-note">July 1-31, metered across agent runs, tool calls, and model tokens.</p>
+              </div>
+              <span class="badge open">86% of budget</span>
+            </div>
+
+            <div class="spend-line">
+              <div>
+                <div class="spend-value">$1,284.72</div>
+                <p class="spend-caption">of $1,500.00 workspace budget</p>
+              </div>
+              <div class="spend-meta" aria-label="Billing cycle metadata">
+                <span>Projected total <strong>$1,682.40</strong></span>
+                <span>Renews <strong>Aug 1</strong></span>
+                <span>Payment method <strong>Visa 4242</strong></span>
+              </div>
+            </div>
+
+            <div class="meter" aria-label="86 percent of workspace budget used">
+              <div class="meter-fill"></div>
+            </div>
+
+            <div class="spend-kpis">
+              <div class="kpi">
+                <div class="kpi-label">Agent runs</div>
+                <div class="kpi-value">3,482</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">Tool calls</div>
+                <div class="kpi-value">41,903</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">Changed files</div>
+                <div class="kpi-value">8,216</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">Token usage</div>
+                <div class="kpi-value">128.6M</div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="alert" aria-label="Budget alert">
+            <div>
+              <div class="alert-title">Budget alert</div>
+              <p class="alert-copy">At the current agent run rate, <strong>Acme Platform</strong> is projected to pass the workspace budget on <strong>Jul 24</strong>.</p>
+            </div>
+
+            <div class="alert-grid">
+              <div class="alert-stat">
+                <span>Remaining</span>
+                <strong>$215.28</strong>
+              </div>
+              <div class="alert-stat">
+                <span>Daily average</span>
+                <strong>$83.72</strong>
+              </div>
+              <div class="alert-stat">
+                <span>Alert threshold</span>
+                <strong>80%</strong>
+              </div>
+              <div class="alert-stat">
+                <span>Owner notified</span>
+                <strong>Jul 2</strong>
+              </div>
+            </div>
+
+            <button class="button secondary" type="button">Review budget policy</button>
+          </aside>
+        </section>
+
+        <section class="usage-grid" aria-label="Usage details">
+          <div class="card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">Model usage breakdown</h2>
+                <p class="section-note">Spend by model for completed workspace runs.</p>
+              </div>
+              <span class="muted mono">128.6M tokens</span>
+            </div>
+
+            <div class="model-list">
+              <div class="model-row">
+                <div>
+                  <div class="model-name">Claude Sonnet 4</div>
+                  <div class="model-detail">64.2M tokens</div>
+                </div>
+                <div class="bar" aria-label="Claude Sonnet 4 used 50 percent of model spend"><span style="width: 50%"></span></div>
+                <div class="model-cost">$642.18</div>
+              </div>
+              <div class="model-row">
+                <div>
+                  <div class="model-name">GPT-4.1</div>
+                  <div class="model-detail">31.8M tokens</div>
+                </div>
+                <div class="bar" aria-label="GPT-4.1 used 25 percent of model spend"><span style="width: 25%"></span></div>
+                <div class="model-cost">$321.44</div>
+              </div>
+              <div class="model-row">
+                <div>
+                  <div class="model-name">Gemini 2.5 Pro</div>
+                  <div class="model-detail">22.1M tokens</div>
+                </div>
+                <div class="bar" aria-label="Gemini 2.5 Pro used 17 percent of model spend"><span style="width: 17%"></span></div>
+                <div class="model-cost">$218.66</div>
+              </div>
+              <div class="model-row">
+                <div>
+                  <div class="model-name">KiloClaw cache reads</div>
+                  <div class="model-detail">10.5M tokens</div>
+                </div>
+                <div class="bar" aria-label="KiloClaw cache reads used 8 percent of model spend"><span style="width: 8%"></span></div>
+                <div class="model-cost">$102.44</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-title">Workspace usage drivers</h2>
+                <p class="section-note">Billing signals tied to owner controls.</p>
+              </div>
+            </div>
+
+            <div class="operations">
+              <div class="op-row">
+                <div>
+                  <div class="op-label">Highest spend team</div>
+                  <div class="muted">Infrastructure agents</div>
+                </div>
+                <div class="op-value">$532.16</div>
+              </div>
+              <div class="op-row">
+                <div>
+                  <div class="op-label">Most expensive run</div>
+                  <div class="muted mono">run_9x42fd7</div>
+                </div>
+                <div class="op-value">$18.94</div>
+              </div>
+              <div class="op-row">
+                <div>
+                  <div class="op-label">Tool call spend</div>
+                  <div class="muted">GitHub, Linear, Browser, Slack</div>
+                </div>
+                <div class="op-value">$146.20</div>
+              </div>
+              <div class="op-row">
+                <div>
+                  <div class="op-label">Security status</div>
+                  <div class="muted">No billing-risk policy events</div>
+                </div>
+                <span class="health">Clear</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="table-wrap" aria-label="Invoice history">
+          <div class="table-head">
+            <div>
+              <h2 class="section-title">Invoice history</h2>
+              <p class="section-note">Invoices are visible to workspace owners and billing admins.</p>
+            </div>
+            <button class="button ghost" type="button">Manage subscription</button>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Invoice</th>
+                  <th>Period</th>
+                  <th>Status</th>
+                  <th class="right">Usage</th>
+                  <th class="right">Amount</th>
+                  <th class="right">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="mono">INV-2026-071</span></td>
+                  <td>Jul 2026 cycle</td>
+                  <td><span class="badge open">Open</span></td>
+                  <td class="right">128.6M tokens</td>
+                  <td class="amount">$1,284.72</td>
+                  <td class="right"><a class="invoice-link" href="#">Preview</a></td>
+                </tr>
+                <tr>
+                  <td><span class="mono">INV-2026-060</span></td>
+                  <td>Jun 2026</td>
+                  <td><span class="badge paid">Paid</span></td>
+                  <td class="right">117.3M tokens</td>
+                  <td class="amount">$1,096.18</td>
+                  <td class="right"><a class="invoice-link" href="#">Download</a></td>
+                </tr>
+                <tr>
+                  <td><span class="mono">INV-2026-052</span></td>
+                  <td>May 2026</td>
+                  <td><span class="badge paid">Paid</span></td>
+                  <td class="right">92.8M tokens</td>
+                  <td class="amount">$874.60</td>
+                  <td class="right"><a class="invoice-link" href="#">Download</a></td>
+                </tr>
+                <tr>
+                  <td><span class="mono">INV-2026-044</span></td>
+                  <td>Apr 2026</td>
+                  <td><span class="badge paid">Paid</span></td>
+                  <td class="right">81.4M tokens</td>
+                  <td class="amount">$768.24</td>
+                  <td class="right"><a class="invoice-link" href="#">Download</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

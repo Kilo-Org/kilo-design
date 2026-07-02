@@ -1,0 +1,1113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kilo Cloud Billing Usage</title>
+  <style>
+    :root {
+      --background: #151515; /* --surface-background */
+      --foreground: #FAFAFA; /* --foreground-default */
+      --card: #202020; /* --surface-raised */
+      --popover: #333333; /* --surface-overlay */
+      --muted: #101010; /* --surface-inset */
+      --muted-foreground: #A3A3A3; /* --foreground-muted */
+      --primary: #F7F586; /* --brand-primary */
+      --primary-foreground: #1F1F1F; /* --brand-foreground */
+      --border: #FFFFFF1A; /* --border-default */
+      --input: #FFFFFF0A; /* --border-inputBg */
+      --ring: #F7F58659; /* --brand-primaryRing */
+    }
+
+    :root {
+      --surface-hover: #3A3A3A;
+      --surface-selected: #454545;
+      --border-strong: #FFFFFF2E;
+      --foreground-subtle: #7A7A7A;
+      --status-blue400: #60A5FA;
+      --status-teal400: #00D4C2;
+      --status-orange400: #FB923C;
+      --status-green400: #4ADE80;
+      --status-yellow400: #FBC51C;
+      --status-red400: #F87171;
+      --diff-add-surface: #1A2919;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--background);
+      color: var(--foreground);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.5;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 232px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 16px 12px;
+      background: var(--muted);
+      border-right: 1px solid var(--border);
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 6px 8px;
+      min-height: 36px;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-name {
+      display: block;
+      color: var(--foreground);
+      font-weight: 600;
+    }
+
+    .brand-context {
+      display: block;
+      color: var(--muted-foreground);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-group {
+      display: grid;
+      gap: 4px;
+    }
+
+    .nav-label {
+      padding: 0 8px 4px;
+      color: var(--foreground-subtle);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 34px;
+      padding: 7px 8px;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      border-radius: 8px;
+    }
+
+    .nav-link:hover {
+      color: var(--foreground);
+      background: var(--input);
+    }
+
+    .nav-link[aria-current="page"] {
+      color: var(--foreground);
+      background: var(--card);
+      box-shadow: inset 0 0 0 1px var(--border);
+    }
+
+    .count {
+      color: var(--foreground-subtle);
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .workspace-card {
+      margin-top: auto;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .workspace-name {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--foreground);
+      font-weight: 600;
+    }
+
+    .workspace-meta {
+      margin-top: 4px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .role-pill {
+      flex: 0 0 auto;
+      padding: 2px 7px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--primary);
+      background: var(--input);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .main {
+      min-width: 0;
+      padding: 20px 24px 32px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 44px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .crumb-current {
+      color: var(--foreground);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+    }
+
+    .button.primary {
+      color: var(--primary-foreground);
+      background: var(--primary);
+      font-weight: 600;
+    }
+
+    .button.primary:hover {
+      background: #E6E475;
+    }
+
+    .button.secondary {
+      color: var(--foreground);
+      background: var(--input);
+      border-color: var(--border);
+    }
+
+    .button.secondary:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-strong);
+    }
+
+    .page-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 20px 0 16px;
+    }
+
+    .heading-copy {
+      min-width: 0;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--foreground);
+      font-size: 24px;
+      font-weight: 650;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .page-subtitle {
+      margin: 6px 0 0;
+      color: var(--muted-foreground);
+      max-width: 720px;
+    }
+
+    .cycle-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--popover);
+      color: var(--foreground);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .mono {
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .budget-alert {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border: 1px solid color-mix(in srgb, var(--status-yellow400) 48%, transparent);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--status-yellow400) 10%, var(--card));
+    }
+
+    .alert-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--status-yellow400);
+      box-shadow: 0 0 0 5px color-mix(in srgb, var(--status-yellow400) 14%, transparent);
+    }
+
+    .alert-title {
+      color: var(--foreground);
+      font-weight: 600;
+    }
+
+    .alert-copy {
+      margin-top: 2px;
+      color: var(--muted-foreground);
+      font-size: 13px;
+    }
+
+    .alert-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .alert-link:hover {
+      text-decoration: underline;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .metric {
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .metric-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .metric-value {
+      margin-top: 10px;
+      color: var(--foreground);
+      font-size: 24px;
+      font-weight: 650;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .metric-detail {
+      margin-top: 6px;
+      color: var(--foreground-subtle);
+      font-size: 12px;
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 22px;
+      padding: 2px 7px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted-foreground);
+      background: var(--input);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .status-chip.success {
+      color: var(--status-green400);
+      background: color-mix(in srgb, var(--status-green400) 10%, transparent);
+      border-color: color-mix(in srgb, var(--status-green400) 30%, transparent);
+    }
+
+    .status-chip.warning {
+      color: var(--status-yellow400);
+      background: color-mix(in srgb, var(--status-yellow400) 9%, transparent);
+      border-color: color-mix(in srgb, var(--status-yellow400) 30%, transparent);
+    }
+
+    .status-chip.open {
+      color: var(--status-blue400);
+      background: color-mix(in srgb, var(--status-blue400) 10%, transparent);
+      border-color: color-mix(in srgb, var(--status-blue400) 30%, transparent);
+    }
+
+    .meter-track {
+      height: 7px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--input);
+    }
+
+    .meter-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--primary);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      color: var(--foreground);
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .panel-subtitle {
+      margin-top: 2px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .model-list {
+      display: grid;
+    }
+
+    .model-row {
+      display: grid;
+      grid-template-columns: minmax(160px, 1fr) minmax(170px, 1.2fr) 96px 90px;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .model-row:last-child {
+      border-bottom: 0;
+    }
+
+    .model-name {
+      color: var(--foreground);
+      font-weight: 600;
+      min-width: 0;
+    }
+
+    .model-context {
+      margin-top: 2px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .usage-bar {
+      display: grid;
+      gap: 6px;
+    }
+
+    .usage-track {
+      height: 8px;
+      border-radius: 999px;
+      background: var(--input);
+      overflow: hidden;
+    }
+
+    .usage-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--status-teal400);
+    }
+
+    .usage-fill.primary {
+      background: var(--primary);
+    }
+
+    .usage-fill.orange {
+      background: var(--status-orange400);
+    }
+
+    .usage-fill.blue {
+      background: var(--status-blue400);
+    }
+
+    .usage-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--foreground-subtle);
+      font-size: 12px;
+    }
+
+    .numeric {
+      color: var(--foreground);
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .muted-number {
+      color: var(--muted-foreground);
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .invoice-table th {
+      padding: 10px 14px;
+      color: var(--muted-foreground);
+      background: var(--popover);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .invoice-table td {
+      padding: 12px 14px;
+      color: var(--foreground);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .invoice-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .invoice-table .right {
+      text-align: right;
+    }
+
+    .invoice-id {
+      color: var(--foreground);
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .invoice-period {
+      color: var(--muted-foreground);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .table-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .table-link:hover {
+      text-decoration: underline;
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .invoice-panel {
+      grid-column: 1 / -1;
+    }
+
+    .budget-lines {
+      display: grid;
+      gap: 12px;
+      padding: 14px 16px 16px;
+    }
+
+    .budget-line {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .budget-label {
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .budget-value {
+      color: var(--foreground);
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .threshold-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 2px;
+    }
+
+    .threshold {
+      display: inline-flex;
+      min-height: 24px;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+      background: var(--input);
+      font-size: 12px;
+    }
+
+    .threshold.active {
+      color: var(--status-yellow400);
+      border-color: color-mix(in srgb, var(--status-yellow400) 34%, transparent);
+      background: color-mix(in srgb, var(--status-yellow400) 9%, transparent);
+    }
+
+    .run-snapshot {
+      display: grid;
+      gap: 10px;
+      padding: 14px 16px 16px;
+    }
+
+    .snapshot-row {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: baseline;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .snapshot-row:last-child {
+      border-bottom: 0;
+    }
+
+    .snapshot-label {
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .snapshot-copy {
+      min-width: 0;
+      color: var(--foreground);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .snapshot-value {
+      color: var(--foreground);
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1080px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .content-grid,
+      .metric-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .invoice-panel {
+        grid-column: auto;
+      }
+
+      .model-row {
+        grid-template-columns: minmax(160px, 1fr) minmax(170px, 1fr) 88px 82px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .main {
+        padding: 16px;
+      }
+
+      .topbar,
+      .page-heading {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .topbar-actions {
+        justify-content: flex-start;
+      }
+
+      .button {
+        min-height: 44px;
+      }
+
+      .cycle-chip {
+        align-self: flex-start;
+      }
+
+      .budget-alert {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .alert-link {
+        grid-column: 2;
+      }
+
+      .content-grid,
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .model-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .numeric,
+      .muted-number {
+        text-align: left;
+      }
+
+      .panel {
+        overflow-x: auto;
+      }
+
+      .invoice-table {
+        min-width: 620px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <div class="brand-row">
+        <div class="brand-mark" aria-hidden="true">K</div>
+        <div class="brand-copy">
+          <span class="brand-name">Kilo Cloud</span>
+          <span class="brand-context">acme-platform</span>
+        </div>
+      </div>
+
+      <nav class="nav-group" aria-label="Primary">
+        <div class="nav-label">Workspace</div>
+        <a class="nav-link" href="#"><span>Agent runs</span><span class="count">142</span></a>
+        <a class="nav-link" href="#"><span>Tool calls</span><span class="count">18.6k</span></a>
+        <a class="nav-link" href="#"><span>Changed files</span><span class="count">3.9k</span></a>
+        <a class="nav-link" href="#"><span>KiloClaw</span><span class="count">41</span></a>
+      </nav>
+
+      <nav class="nav-group" aria-label="Admin">
+        <div class="nav-label">Admin</div>
+        <a class="nav-link" href="#"><span>Team members</span><span class="count">24</span></a>
+        <a class="nav-link" href="#" aria-current="page"><span>Billing</span><span class="count">$4.8k</span></a>
+        <a class="nav-link" href="#"><span>Security</span><span class="count">ok</span></a>
+        <a class="nav-link" href="#"><span>Workspace settings</span></a>
+      </nav>
+
+      <div class="workspace-card">
+        <div class="workspace-name">
+          <span>Acme Platform</span>
+          <span class="role-pill">Owner</span>
+        </div>
+        <div class="workspace-meta">Team Pro subscription</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumbs" aria-label="Breadcrumb">
+          <span>Kilo Cloud</span>
+          <span>/</span>
+          <span>Acme Platform</span>
+          <span>/</span>
+          <span class="crumb-current">Billing usage</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="button secondary" type="button">Download usage CSV</button>
+          <button class="button primary" type="button">Update budget</button>
+        </div>
+      </header>
+
+      <section class="page-heading" aria-labelledby="page-title">
+        <div class="heading-copy">
+          <h1 id="page-title">Billing usage</h1>
+          <p class="page-subtitle">Acme Platform usage for the current billing cycle.</p>
+        </div>
+        <div class="cycle-chip"><span>Billing cycle</span><span class="mono">Jul 1-31, 2026</span></div>
+      </section>
+
+      <section class="budget-alert" aria-label="Budget alert">
+        <span class="alert-dot" aria-hidden="true"></span>
+        <div>
+          <div class="alert-title">Budget alert at 93%</div>
+          <div class="alert-copy">Acme Platform has used <span class="mono">$4,812.44</span> of the <span class="mono">$5,200.00</span> monthly workspace budget. Forecasted spend is <span class="mono">$5,944.10</span>.</div>
+        </div>
+        <a class="alert-link" href="#">Review high-cost runs</a>
+      </section>
+
+      <section class="metric-grid" aria-label="Monthly spend summary">
+        <article class="metric">
+          <div class="metric-label">
+            <span>Monthly spend</span>
+            <span class="status-chip warning">93%</span>
+          </div>
+          <div class="metric-value mono">$4,812.44</div>
+          <div class="meter-track" aria-hidden="true"><div class="meter-fill" style="width: 93%"></div></div>
+          <div class="metric-detail">Current usage against $5,200 budget</div>
+        </article>
+
+        <article class="metric">
+          <div class="metric-label">
+            <span>Agent runs</span>
+            <span class="status-chip success">active</span>
+          </div>
+          <div class="metric-value mono">142</div>
+          <div class="metric-detail">38 KiloClaw review runs included</div>
+        </article>
+
+        <article class="metric">
+          <div class="metric-label">
+            <span>Tool calls</span>
+            <span class="status-chip open">month</span>
+          </div>
+          <div class="metric-value mono">18,642</div>
+          <div class="metric-detail">Repo reads, patches, tests, browser checks</div>
+        </article>
+
+        <article class="metric">
+          <div class="metric-label">
+            <span>Changed files</span>
+            <span class="status-chip">tracked</span>
+          </div>
+          <div class="metric-value mono">3,914</div>
+          <div class="metric-detail">Across 12 connected repositories</div>
+        </article>
+      </section>
+
+      <div class="content-grid">
+        <section class="panel" aria-labelledby="model-breakdown-title">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title" id="model-breakdown-title">Model usage breakdown</div>
+              <div class="panel-subtitle">Cost allocation by model and Cloud workload</div>
+            </div>
+            <span class="status-chip">14.8M tokens</span>
+          </div>
+
+          <div class="model-list">
+            <div class="model-row">
+              <div>
+                <div class="model-name">Claude Sonnet 4</div>
+                <div class="model-context">Implementation runs, tests, file edits</div>
+              </div>
+              <div class="usage-bar">
+                <div class="usage-track" aria-hidden="true"><div class="usage-fill primary" style="width: 46%"></div></div>
+                <div class="usage-meta"><span>6.8M tokens</span><span>46%</span></div>
+              </div>
+              <div class="muted-number">78 runs</div>
+              <div class="numeric">$2,213.10</div>
+            </div>
+
+            <div class="model-row">
+              <div>
+                <div class="model-name">GPT-5 Codex</div>
+                <div class="model-context">Design generation, browser QA, audits</div>
+              </div>
+              <div class="usage-bar">
+                <div class="usage-track" aria-hidden="true"><div class="usage-fill" style="width: 31%"></div></div>
+                <div class="usage-meta"><span>4.6M tokens</span><span>31%</span></div>
+              </div>
+              <div class="muted-number">42 runs</div>
+              <div class="numeric">$1,491.84</div>
+            </div>
+
+            <div class="model-row">
+              <div>
+                <div class="model-name">Gemini 2.5 Pro</div>
+                <div class="model-context">Large repo search and planning</div>
+              </div>
+              <div class="usage-bar">
+                <div class="usage-track" aria-hidden="true"><div class="usage-fill blue" style="width: 17%"></div></div>
+                <div class="usage-meta"><span>2.5M tokens</span><span>17%</span></div>
+              </div>
+              <div class="muted-number">16 runs</div>
+              <div class="numeric">$817.62</div>
+            </div>
+
+            <div class="model-row">
+              <div>
+                <div class="model-name">Claude Haiku 3.5</div>
+                <div class="model-context">KiloClaw review and risk scoring</div>
+              </div>
+              <div class="usage-bar">
+                <div class="usage-track" aria-hidden="true"><div class="usage-fill orange" style="width: 6%"></div></div>
+                <div class="usage-meta"><span>0.9M tokens</span><span>6%</span></div>
+              </div>
+              <div class="muted-number">38 runs</div>
+              <div class="numeric">$289.88</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="side-stack">
+          <section class="panel" aria-labelledby="budget-title">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title" id="budget-title">Budget guardrail</div>
+                <div class="panel-subtitle">Workspace owner thresholds</div>
+              </div>
+              <span class="status-chip warning">alert sent</span>
+            </div>
+            <div class="budget-lines">
+              <div class="budget-line">
+                <span class="budget-label">Monthly budget</span>
+                <span class="budget-value">$5,200.00</span>
+              </div>
+              <div class="budget-line">
+                <span class="budget-label">Remaining</span>
+                <span class="budget-value">$387.56</span>
+              </div>
+              <div class="budget-line">
+                <span class="budget-label">Forecast over budget</span>
+                <span class="budget-value">$744.10</span>
+              </div>
+              <div class="threshold-row" aria-label="Budget thresholds">
+                <span class="threshold">50%</span>
+                <span class="threshold">75%</span>
+                <span class="threshold active">90%</span>
+                <span class="threshold">100%</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" aria-labelledby="usage-snapshot-title">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title" id="usage-snapshot-title">Usage snapshot</div>
+                <div class="panel-subtitle">Highest cost workspace activity</div>
+              </div>
+            </div>
+            <div class="run-snapshot">
+              <div class="snapshot-row">
+                <span class="snapshot-label">Run ID</span>
+                <span class="snapshot-copy mono">run_8J4KQ2</span>
+                <span class="snapshot-value">$186.42</span>
+              </div>
+              <div class="snapshot-row">
+                <span class="snapshot-label">Repository</span>
+                <span class="snapshot-copy">kilo-code</span>
+                <span class="snapshot-value">312 files</span>
+              </div>
+              <div class="snapshot-row">
+                <span class="snapshot-label">Tool calls</span>
+                <span class="snapshot-copy">read, patch, test, browser</span>
+                <span class="snapshot-value">742</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel invoice-panel" aria-labelledby="invoice-title">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title" id="invoice-title">Invoice history</div>
+              <div class="panel-subtitle">Receipts for Acme Platform workspace billing</div>
+            </div>
+            <span class="status-chip success">autopay on</span>
+          </div>
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th scope="col">Invoice</th>
+                <th scope="col">Period</th>
+                <th scope="col">Subscription</th>
+                <th scope="col" class="right">Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col" class="right">Receipt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="invoice-id">INV-2026-071</span></td>
+                <td>
+                  Jul 2026
+                  <div class="invoice-period">Current cycle</div>
+                </td>
+                <td>Team Pro + usage</td>
+                <td class="numeric">$4,812.44</td>
+                <td><span class="status-chip open">open</span></td>
+                <td class="right"><a class="table-link" href="#">Preview</a></td>
+              </tr>
+              <tr>
+                <td><span class="invoice-id">INV-2026-063</span></td>
+                <td>
+                  Jun 2026
+                  <div class="invoice-period">Jun 1-30</div>
+                </td>
+                <td>Team Pro + usage</td>
+                <td class="numeric">$4,386.20</td>
+                <td><span class="status-chip success">paid</span></td>
+                <td class="right"><a class="table-link" href="#">Download</a></td>
+              </tr>
+              <tr>
+                <td><span class="invoice-id">INV-2026-055</span></td>
+                <td>
+                  May 2026
+                  <div class="invoice-period">May 1-31</div>
+                </td>
+                <td>Team Pro + usage</td>
+                <td class="numeric">$3,972.08</td>
+                <td><span class="status-chip success">paid</span></td>
+                <td class="right"><a class="table-link" href="#">Download</a></td>
+              </tr>
+              <tr>
+                <td><span class="invoice-id">INV-2026-044</span></td>
+                <td>
+                  Apr 2026
+                  <div class="invoice-period">Apr 1-30</div>
+                </td>
+                <td>Team Pro + usage</td>
+                <td class="numeric">$3,214.77</td>
+                <td><span class="status-chip success">paid</span></td>
+                <td class="right"><a class="table-link" href="#">Download</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

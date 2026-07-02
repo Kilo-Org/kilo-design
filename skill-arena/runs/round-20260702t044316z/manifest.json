@@ -1,0 +1,52 @@
+{
+  "id": "round-20260702t044316z",
+  "label": "round-20260702t044316z",
+  "createdAt": "2026-07-02T04:43:16.370Z",
+  "updatedAt": "2026-07-02T04:47:36.884Z",
+  "source": "codex",
+  "prompt": "Design a Kilo Cloud agent run detail screen while the run is active. Include running steps, tool calls, changed files, elapsed time, token usage, and one permission request waiting for approval. Build only the product UI.",
+  "conditions": {
+    "no-skill": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t044316z/no-skill/output.html",
+      "logUrl": "/runs/round-20260702t044316z/no-skill/log.txt",
+      "startedAt": "2026-07-02T04:43:16.383Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T04:45:46.334Z",
+      "audit": null,
+      "message": "Output file is ready."
+    },
+    "frontend-design": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t044316z/frontend-design/output.html",
+      "logUrl": "/runs/round-20260702t044316z/frontend-design/log.txt",
+      "startedAt": "2026-07-02T04:43:16.372Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T04:47:36.884Z",
+      "audit": null,
+      "message": "Output file is ready."
+    },
+    "kilo-design-cloud": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t044316z/kilo-design-cloud/output.html",
+      "logUrl": "/runs/round-20260702t044316z/kilo-design-cloud/log.txt",
+      "startedAt": "2026-07-02T04:43:16.372Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T04:47:05.320Z",
+      "audit": {
+        "loadedRefs": [
+          "skills/kilo-design-cloud/SKILL.md",
+          "skills/kilo-design-cloud/overlay.md",
+          "skills/kilo-design-cloud/reference/brand.md",
+          "skills/kilo-design-cloud/reference/voice.md",
+          "skills/kilo-design-cloud/reference/token-architecture.md",
+          "src/tokens.cloud.ts"
+        ],
+        "missingRefs": [],
+        "missingDefinitions": [],
+        "missingUsage": []
+      },
+      "message": "Output file is ready."
+    }
+  }
+}

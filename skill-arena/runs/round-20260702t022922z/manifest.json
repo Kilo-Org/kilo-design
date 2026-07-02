@@ -1,0 +1,37 @@
+{
+  "id": "round-20260702t022922z",
+  "label": "round-20260702t022922z",
+  "createdAt": "2026-07-02T02:29:22.135Z",
+  "updatedAt": "2026-07-02T02:32:08.696Z",
+  "source": "codex",
+  "prompt": "Design a Kilo Cloud login screen for returning team members. Include email/password, SSO, workspace slug, and security status. Build only the product UI.",
+  "conditions": {
+    "no-skill": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t022922z/no-skill/output.html",
+      "logUrl": "/runs/round-20260702t022922z/no-skill/log.txt",
+      "startedAt": "2026-07-02T02:29:22.150Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T02:31:25.540Z",
+      "message": "Output file is ready."
+    },
+    "frontend-design": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t022922z/frontend-design/output.html",
+      "logUrl": "/runs/round-20260702t022922z/frontend-design/log.txt",
+      "startedAt": "2026-07-02T02:29:22.138Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T02:32:08.696Z",
+      "message": "Output file is ready."
+    },
+    "kilo-design-cloud": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t022922z/kilo-design-cloud/output.html",
+      "logUrl": "/runs/round-20260702t022922z/kilo-design-cloud/log.txt",
+      "startedAt": "2026-07-02T02:29:22.137Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T02:32:04.083Z",
+      "message": "Output file is ready."
+    }
+  }
+}

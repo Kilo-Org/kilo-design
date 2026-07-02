@@ -1,0 +1,52 @@
+{
+  "id": "round-20260702t035307z",
+  "label": "round-20260702t035307z",
+  "createdAt": "2026-07-02T03:53:07.591Z",
+  "updatedAt": "2026-07-02T03:57:16.419Z",
+  "source": "codex",
+  "prompt": "Design a Kilo Cloud model selector popover for an agent prompt composer. Include recommended model, speed/cost tradeoffs, disabled enterprise-only models, and current selection. Build only the product UI.",
+  "conditions": {
+    "no-skill": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t035307z/no-skill/output.html",
+      "logUrl": "/runs/round-20260702t035307z/no-skill/log.txt",
+      "startedAt": "2026-07-02T03:53:07.605Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T03:55:02.474Z",
+      "audit": null,
+      "message": "Output file is ready."
+    },
+    "frontend-design": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t035307z/frontend-design/output.html",
+      "logUrl": "/runs/round-20260702t035307z/frontend-design/log.txt",
+      "startedAt": "2026-07-02T03:53:07.593Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T03:56:36.854Z",
+      "audit": null,
+      "message": "Output file is ready."
+    },
+    "kilo-design-cloud": {
+      "status": "done",
+      "outputUrl": "/runs/round-20260702t035307z/kilo-design-cloud/output.html",
+      "logUrl": "/runs/round-20260702t035307z/kilo-design-cloud/log.txt",
+      "startedAt": "2026-07-02T03:53:07.592Z",
+      "exitCode": 0,
+      "finishedAt": "2026-07-02T03:57:16.418Z",
+      "audit": {
+        "loadedRefs": [
+          "skills/kilo-design-cloud/SKILL.md",
+          "skills/kilo-design-cloud/overlay.md",
+          "skills/kilo-design-cloud/reference/brand.md",
+          "skills/kilo-design-cloud/reference/voice.md",
+          "skills/kilo-design-cloud/reference/token-architecture.md",
+          "src/tokens.cloud.ts"
+        ],
+        "missingRefs": [],
+        "missingDefinitions": [],
+        "missingUsage": []
+      },
+      "message": "Output file is ready."
+    }
+  }
+}

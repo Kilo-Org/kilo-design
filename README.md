@@ -28,6 +28,8 @@ It is intentionally small: token source, generated artifacts, a local playground
 | `playground/` | Local token editor and specimen viewer | Human review tool only |
 | `skills/` | Draft product skill sources | Agent guidance under development |
 | `docs/adr/` | Decision records | Why decisions exist |
+| `skill-comparison/` | Static skill behavior comparison | First-pass specimens |
+| `skill-arena/` | Repeatable prompt-pass workflow | Skill evaluation harness |
 
 Product code does not live here. Product repos consume this repo's artifacts and skills from their own codebases.
 
@@ -93,6 +95,22 @@ Use it to:
 - regenerate committed artifacts from the saved source.
 
 Do not use playground specimens as product components, pattern recipes, or canonical examples.
+
+## 🏟️ Skill Arena
+
+The skill arena is a local mini app for regenerating one prompt across the three skill conditions.
+
+```bash
+node skill-arena/server.mjs
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8791
+```
+
+It shows stacked rounds of no-skill, frontend-design, and Kilo Cloud outputs, with a fixed prompt composer at the bottom. Each round writes HTML outputs and logs under `skill-arena/runs/`. There is also a `pnpm run skill-arena` script, but this machine currently needs `pnpm approve-builds` before `pnpm` will run workspace scripts because of the existing `sharp` approval guard.
 
 ## ☁️ Cloud Skill Pilot
 

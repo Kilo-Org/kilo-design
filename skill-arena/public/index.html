@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kilo Skill Arena</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="round-list" id="roundList"></main>
+
+<div class="preview" id="preview" hidden>
+  <div class="preview-panel" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+    <div class="preview-head">
+      <div>
+        <strong id="previewTitle"></strong>
+        <span id="previewStatus"></span>
+      </div>
+      <div class="preview-actions">
+        <a id="previewPage" target="_blank" rel="noreferrer">Page</a>
+        <button id="previewClose" type="button">Close</button>
+      </div>
+    </div>
+    <iframe id="previewFrame" title="Generated output preview"></iframe>
+  </div>
+</div>
+
+<form class="composer" id="composer">
+  <textarea id="promptInput" spellcheck="false" placeholder="Design a Kilo Cloud login page."></textarea>
+  <button id="stopGeneration" class="secondary" type="button" disabled>Stop</button>
+  <button id="regenerate" type="submit">Regenerate</button>
+  <span id="composerStatus" aria-live="polite"></span>
+</form>
+
+<script src="/app.js"></script>
+</body>
+</html>

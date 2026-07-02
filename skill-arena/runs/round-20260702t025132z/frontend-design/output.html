@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kilo Cloud Billing</title>
+  <style>
+    :root {
+      --ink: #111414;
+      --muted: #66706d;
+      --line: #d8dfdc;
+      --panel: #fbfcfa;
+      --page: #edf1ef;
+      --side: #101715;
+      --side-2: #18211f;
+      --mint: #22c77a;
+      --mint-dark: #14794c;
+      --blue: #286fe3;
+      --amber: #e8a923;
+      --red: #d94f3d;
+      --aqua: #19aeb3;
+      --violet: #7b61c9;
+      --shadow: 0 18px 50px rgba(21, 28, 26, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(17, 20, 20, 0.045) 1px, transparent 1px),
+        linear-gradient(rgba(17, 20, 20, 0.04) 1px, transparent 1px),
+        var(--page);
+      background-size: 28px 28px;
+      color: var(--ink);
+      font-family: "Aptos", "Avenir Next", "Gill Sans", "Helvetica Neue", sans-serif;
+      letter-spacing: 0;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background:
+        radial-gradient(circle at 20% 8%, rgba(34, 199, 122, 0.22), transparent 32%),
+        linear-gradient(180deg, var(--side), var(--side-2));
+      color: #e9f1ee;
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 2px 4px;
+    }
+
+    .mark {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      display: grid;
+      place-items: center;
+      background: #1f2c29;
+      box-shadow: inset 0 0 0 5px rgba(34, 199, 122, 0.1);
+    }
+
+    .mark svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .brand-name {
+      font-size: 17px;
+      font-weight: 780;
+      line-height: 1.1;
+    }
+
+    .workspace-pill {
+      color: #9fb2ad;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 4px;
+    }
+
+    .nav a {
+      color: #aab8b5;
+      text-decoration: none;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 10px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      border: 1px solid transparent;
+    }
+
+    .nav a.active {
+      color: #f7fffb;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .nav svg {
+      width: 17px;
+      height: 17px;
+      stroke-width: 1.8;
+      flex: 0 0 auto;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .sidebar-footer .label {
+      color: #8ea29d;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .owner {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 31px;
+      height: 31px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--mint);
+      color: #052417;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .owner strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .owner span {
+      color: #a9bab6;
+      display: block;
+      font-size: 12px;
+      margin-top: 1px;
+    }
+
+    .content {
+      padding: 22px 28px 34px;
+      min-width: 0;
+    }
+
+    .topbar {
+      min-height: 58px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .breadcrumbs strong {
+      color: var(--ink);
+      font-weight: 760;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .select,
+    .button {
+      height: 38px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(251, 252, 250, 0.82);
+      color: var(--ink);
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+      white-space: nowrap;
+    }
+
+    .button.primary {
+      background: var(--ink);
+      color: #f8fffb;
+      border-color: var(--ink);
+    }
+
+    .button svg,
+    .select svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .page-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 0.95;
+      font-weight: 830;
+      max-width: 680px;
+    }
+
+    .period {
+      color: var(--muted);
+      font-size: 14px;
+      text-align: right;
+      line-height: 1.45;
+      min-width: 170px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.22fr) minmax(250px, 0.78fr) minmax(280px, 1fr);
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .panel {
+      background: rgba(251, 252, 250, 0.9);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel.pad {
+      padding: 18px;
+    }
+
+    .kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 11px;
+      font-weight: 760;
+    }
+
+    .spend-card {
+      min-height: 228px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 16px;
+      position: relative;
+    }
+
+    .spend-card::after {
+      content: "";
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      width: 88px;
+      height: 88px;
+      border: 12px solid rgba(34, 199, 122, 0.17);
+      border-top-color: var(--mint);
+      border-right-color: var(--mint);
+      border-radius: 50%;
+      transform: rotate(27deg);
+    }
+
+    .spend-amount {
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .spend-amount .number {
+      font-size: clamp(42px, 5.8vw, 70px);
+      line-height: 0.88;
+      font-weight: 860;
+      font-family: "Aptos Display", "Avenir Next", "Gill Sans", sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .delta {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 7px;
+      color: var(--mint-dark);
+      background: rgba(34, 199, 122, 0.11);
+      border: 1px solid rgba(34, 199, 122, 0.3);
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-weight: 760;
+      font-size: 13px;
+    }
+
+    .spend-foot {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .mini-stat {
+      border-top: 1px solid var(--line);
+      padding-top: 11px;
+    }
+
+    .mini-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .mini-stat strong {
+      font-size: 16px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .budget {
+      min-height: 228px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .alert-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .alert-badge {
+      background: rgba(232, 169, 35, 0.15);
+      color: #8d5900;
+      border: 1px solid rgba(232, 169, 35, 0.38);
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .budget h2,
+    .breakdown h2,
+    .history h2 {
+      margin: 8px 0 0;
+      font-size: 21px;
+      line-height: 1.08;
+    }
+
+    .budget-copy {
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.42;
+      font-size: 14px;
+      max-width: 32ch;
+    }
+
+    .budget-meter {
+      display: grid;
+      gap: 8px;
+      align-self: end;
+    }
+
+    .meter-track {
+      height: 13px;
+      border-radius: 999px;
+      background: #dfe6e3;
+      overflow: hidden;
+      border: 1px solid rgba(17, 20, 20, 0.08);
+    }
+
+    .meter-fill {
+      width: 82%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--mint), var(--amber));
+      border-radius: inherit;
+    }
+
+    .meter-labels {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .team-card {
+      min-height: 228px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .team-card h2 {
+      margin: 8px 0 0;
+      font-size: 21px;
+      line-height: 1.08;
+    }
+
+    .account-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    .account-row:first-of-type {
+      border-top: 0;
+      padding-top: 2px;
+    }
+
+    .account-row span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .account-row strong {
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(340px, 0.95fr) minmax(500px, 1.35fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .breakdown {
+      padding: 18px;
+    }
+
+    .breakdown-head,
+    .history-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .total-tokens {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .total-tokens strong {
+      display: block;
+      font-size: 22px;
+    }
+
+    .total-tokens span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .model-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .model {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .model-swatch {
+      width: 11px;
+      height: 42px;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+
+    .model:nth-child(2) .model-swatch {
+      background: var(--mint);
+    }
+
+    .model:nth-child(3) .model-swatch {
+      background: var(--aqua);
+    }
+
+    .model:nth-child(4) .model-swatch {
+      background: var(--amber);
+    }
+
+    .model-name {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .model-name span:last-child {
+      color: var(--muted);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .usage-bar {
+      height: 9px;
+      border-radius: 999px;
+      background: #e8eeeb;
+      overflow: hidden;
+    }
+
+    .usage-fill {
+      height: 100%;
+      width: var(--w);
+      background: var(--c);
+      border-radius: inherit;
+    }
+
+    .model-cost {
+      min-width: 78px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .model-cost strong {
+      display: block;
+      font-size: 16px;
+    }
+
+    .model-cost span {
+      color: var(--muted);
+      display: block;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .history {
+      overflow: hidden;
+    }
+
+    .history-head {
+      padding: 18px 18px 0;
+      margin-bottom: 12px;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .invoice-table th,
+    .invoice-table td {
+      padding: 15px 18px;
+      text-align: left;
+      border-top: 1px solid var(--line);
+      vertical-align: middle;
+    }
+
+    .invoice-table th {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(241, 246, 243, 0.76);
+    }
+
+    .invoice-table td {
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .invoice-table tr:hover td {
+      background: #f7faf8;
+    }
+
+    .invoice-id {
+      font-weight: 830;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 5px 8px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .status.paid {
+      color: var(--mint-dark);
+      background: rgba(34, 199, 122, 0.12);
+    }
+
+    .status.open {
+      color: #8d5900;
+      background: rgba(232, 169, 35, 0.15);
+    }
+
+    .amount,
+    .right {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .download {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: #fff;
+      display: inline-grid;
+      place-items: center;
+      color: var(--ink);
+    }
+
+    .download svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (max-width: 1120px) {
+      .shell {
+        grid-template-columns: 82px minmax(0, 1fr);
+      }
+
+      .sidebar {
+        padding: 18px 12px;
+        align-items: center;
+      }
+
+      .brand-text,
+      .nav span,
+      .sidebar-footer {
+        display: none;
+      }
+
+      .nav a {
+        justify-content: center;
+        width: 46px;
+        padding: 0;
+      }
+
+      .metric-grid,
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        padding: 12px;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .brand-text {
+        display: block;
+      }
+
+      .nav {
+        grid-auto-flow: column;
+        overflow-x: auto;
+        max-width: calc(100vw - 118px);
+      }
+
+      .content {
+        padding: 16px 14px 28px;
+      }
+
+      .topbar,
+      .page-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .period {
+        text-align: left;
+      }
+
+      .spend-foot {
+        grid-template-columns: 1fr;
+      }
+
+      .invoice-table {
+        min-width: 720px;
+      }
+
+      .history {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M5 4h14v4H9v3h8v4H9v5H5V4Z" fill="#22c77a"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">Kilo Cloud</div>
+          <div class="workspace-pill">Northstar Labs</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12h7V4H4v8Zm9 8h7V4h-7v16ZM4 20h7v-6H4v6Z"/></svg>
+          <span>Overview</span>
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19V5m0 14h16M8 16V9m5 7V7m5 9v-5"/></svg>
+          <span>Usage</span>
+        </a>
+        <a href="#" class="active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 6h14M7 12h14M7 18h14M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          <span>Billing</span>
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v18m7-11H5m12 0a5 5 0 0 0-10 0m10 0a5 5 0 0 1-10 0"/></svg>
+          <span>Limits</span>
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m21 0v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg>
+          <span>Members</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="label">Owner</div>
+        <div class="owner">
+          <div class="avatar">AM</div>
+          <div>
+            <strong>Ari Morgan</strong>
+            <span>Workspace owner</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="breadcrumbs">
+          <span>Northstar Labs</span>
+          <span>/</span>
+          <strong>Billing usage</strong>
+        </div>
+        <div class="actions">
+          <button class="select" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 2v4m8-4v4M3 10h18M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg>
+            July 2026
+          </button>
+          <button class="button" type="button">Payment method</button>
+          <button class="button primary" type="button">Export CSV</button>
+        </div>
+      </header>
+
+      <section class="page-title" aria-labelledby="billing-title">
+        <h1 id="billing-title">Billing usage</h1>
+        <div class="period">
+          Billing cycle<br />
+          Jul 1-31, 2026
+        </div>
+      </section>
+
+      <section class="metric-grid" aria-label="Billing summary">
+        <article class="panel pad spend-card">
+          <div class="kicker">Monthly spend</div>
+          <div class="spend-amount">
+            <div class="number">$12,847.62</div>
+            <div class="delta">↓ 8.4% from June</div>
+          </div>
+          <div class="spend-foot">
+            <div class="mini-stat">
+              <span>Projected</span>
+              <strong>$15,680</strong>
+            </div>
+            <div class="mini-stat">
+              <span>Credits</span>
+              <strong>$1,200</strong>
+            </div>
+            <div class="mini-stat">
+              <span>Seats</span>
+              <strong>42</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel pad budget">
+          <div class="alert-row">
+            <div>
+              <div class="kicker">Budget alert</div>
+              <h2>82% of monthly budget used</h2>
+            </div>
+            <div class="alert-badge">Watch</div>
+          </div>
+          <p class="budget-copy">$12,847.62 of $15,600.00 has been consumed. Owner alerts trigger at 90%.</p>
+          <div class="budget-meter">
+            <div class="meter-track" aria-hidden="true">
+              <div class="meter-fill"></div>
+            </div>
+            <div class="meter-labels">
+              <span>$0</span>
+              <span>$15,600</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel pad team-card">
+          <div>
+            <div class="kicker">Workspace billing</div>
+            <h2>Company plan</h2>
+          </div>
+          <div class="account-row">
+            <span>Billing owner</span>
+            <strong>Ari Morgan</strong>
+          </div>
+          <div class="account-row">
+            <span>Tax region</span>
+            <strong>US-CA</strong>
+          </div>
+          <div class="account-row">
+            <span>Next invoice</span>
+            <strong>Aug 1</strong>
+          </div>
+        </article>
+      </section>
+
+      <section class="main-grid">
+        <article class="panel breakdown" aria-labelledby="model-usage-title">
+          <div class="breakdown-head">
+            <div>
+              <div class="kicker">Model usage breakdown</div>
+              <h2 id="model-usage-title">Spend by model</h2>
+            </div>
+            <div class="total-tokens">
+              <strong>418.7M</strong>
+              <span>tokens</span>
+            </div>
+          </div>
+
+          <div class="model-list">
+            <div class="model">
+              <div class="model-swatch"></div>
+              <div>
+                <div class="model-name">
+                  <span>Kilo Max</span>
+                  <span>42%</span>
+                </div>
+                <div class="usage-bar"><div class="usage-fill" style="--w: 42%; --c: var(--blue);"></div></div>
+              </div>
+              <div class="model-cost">
+                <strong>$5,396</strong>
+                <span>175.9M</span>
+              </div>
+            </div>
+
+            <div class="model">
+              <div class="model-swatch"></div>
+              <div>
+                <div class="model-name">
+                  <span>Kilo Code</span>
+                  <span>31%</span>
+                </div>
+                <div class="usage-bar"><div class="usage-fill" style="--w: 31%; --c: var(--mint);"></div></div>
+              </div>
+              <div class="model-cost">
+                <strong>$3,983</strong>
+                <span>129.8M</span>
+              </div>
+            </div>
+
+            <div class="model">
+              <div class="model-swatch"></div>
+              <div>
+                <div class="model-name">
+                  <span>Kilo Fast</span>
+                  <span>18%</span>
+                </div>
+                <div class="usage-bar"><div class="usage-fill" style="--w: 18%; --c: var(--aqua);"></div></div>
+              </div>
+              <div class="model-cost">
+                <strong>$2,312</strong>
+                <span>75.4M</span>
+              </div>
+            </div>
+
+            <div class="model">
+              <div class="model-swatch"></div>
+              <div>
+                <div class="model-name">
+                  <span>Kilo Embed</span>
+                  <span>9%</span>
+                </div>
+                <div class="usage-bar"><div class="usage-fill" style="--w: 9%; --c: var(--amber);"></div></div>
+              </div>
+              <div class="model-cost">
+                <strong>$1,156</strong>
+                <span>37.6M</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel history" aria-labelledby="invoice-history-title">
+          <div class="history-head">
+            <div>
+              <div class="kicker">Invoice history</div>
+              <h2 id="invoice-history-title">Recent invoices</h2>
+            </div>
+            <button class="button" type="button">View all</button>
+          </div>
+
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th class="right">Usage</th>
+                <th class="right">Amount</th>
+                <th class="right">PDF</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="invoice-id">INV-2026-0701</td>
+                <td>Jul 1, 2026</td>
+                <td><span class="status open">Open</span></td>
+                <td class="right">418.7M</td>
+                <td class="amount">$12,847.62</td>
+                <td class="right">
+                  <button class="download" type="button" aria-label="Download July invoice">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td class="invoice-id">INV-2026-0601</td>
+                <td>Jun 1, 2026</td>
+                <td><span class="status paid">Paid</span></td>
+                <td class="right">461.9M</td>
+                <td class="amount">$14,024.18</td>
+                <td class="right">
+                  <button class="download" type="button" aria-label="Download June invoice">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td class="invoice-id">INV-2026-0501</td>
+                <td>May 1, 2026</td>
+                <td><span class="status paid">Paid</span></td>
+                <td class="right">388.2M</td>
+                <td class="amount">$11,906.44</td>
+                <td class="right">
+                  <button class="download" type="button" aria-label="Download May invoice">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td class="invoice-id">INV-2026-0401</td>
+                <td>Apr 1, 2026</td>
+                <td><span class="status paid">Paid</span></td>
+                <td class="right">332.6M</td>
+                <td class="amount">$9,884.27</td>
+                <td class="right">
+                  <button class="download" type="button" aria-label="Download April invoice">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td class="invoice-id">INV-2026-0301</td>
+                <td>Mar 1, 2026</td>
+                <td><span class="status paid">Paid</span></td>
+                <td class="right">301.4M</td>
+                <td class="amount">$8,790.11</td>
+                <td class="right">
+                  <button class="download" type="button" aria-label="Download March invoice">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
