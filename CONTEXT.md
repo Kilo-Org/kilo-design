@@ -31,7 +31,7 @@ Illustrative UI inside the Token Playground that shows how token values behave i
 
 ### Product Skill Source
 
-A draft skill source per product family, stored under `skills/`. The current pilot source is `skills/kilo-design-cloud`; future candidates include `-landing`, `-mobile`, `-console`, and `-editor`. A product skill source contains that product's Product Overlay, internal agent references, and Pattern Recipes. A "family" is decided by theming contract (who owns the colors), not by which code library a surface imports.
+A draft skill source per product family, stored under `skills/`. The current pilot source is `skills/kilo-design`; future candidates include product overlays for Landing, Mobile, Console, and Editor. A product skill source contains that product's Product Overlay, internal agent references, and Pattern Recipes. A "family" is decided by theming contract (who owns the colors), not by which code library a surface imports.
 _Avoid_: "design plugin", "product pack".
 
 ### Host Sub-overlay
@@ -57,7 +57,7 @@ _Avoid_: a `DESIGN.md` file in a product repo (rules live only in the skill; nev
 
 ### Cloud Pilot Skill
 
-The first agent-facing adapter source, stored at `skills/kilo-design-cloud`. It proves the skill format with Cloud web before any standalone core skill or other product skill is created. It is not treated as published until the rollout explicitly says so.
+The first agent-facing adapter source, stored at `skills/kilo-design`. It proves the skill format with Cloud web before another product overlay is created. It is not treated as published until the rollout explicitly says so.
 
 ### Product Overlay
 

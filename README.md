@@ -15,7 +15,7 @@ It is intentionally small: token source, generated artifacts, a local playground
 | Tokens | Done | `tokens.json` is the source of truth. |
 | Generated artifacts | Done | `node build` writes product-targeted files under `src/`. |
 | Playground | Done | Local tool for editing tokens and previewing token behavior. |
-| Cloud skill | In progress | First agent-facing product skill lives in `skills/kilo-design-cloud/`. |
+| Cloud skill | In progress | First agent-facing product skill lives in `skills/kilo-design/`. |
 | Cloud proof | Next | Validate the skill against real Cloud UI work before wider rollout. |
 | Other products | Later | Landing, Editor, Console, Mobile wait until Cloud proves the shape. |
 
@@ -42,7 +42,7 @@ tokens.json
      -> src/tokens.cloud.ts
      -> src/tokens.extension-host-map.md
 
-skills/kilo-design-cloud
+skills/kilo-design
   -> tells agents how Cloud should use Kilo values, semantic roles, and shipped Cloud examples
 
 playground/
@@ -117,7 +117,7 @@ It shows stacked rounds of no-skill, frontend-design, and Kilo Cloud outputs, wi
 The first product skill source is:
 
 ```text
-skills/kilo-design-cloud/
+skills/kilo-design/
 ```
 
 It contains:
@@ -135,7 +135,7 @@ Use this order when sources disagree:
 
 1. `tokens.json`
 2. generated artifacts in `src/`
-3. product skill sources, starting with `skills/kilo-design-cloud/`
+3. product skill sources, starting with `skills/kilo-design/`
 4. pattern recipes with shipped product Canonical Examples
 5. nearby shipped product UI
 
