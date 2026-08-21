@@ -4,7 +4,7 @@ Static comparison playground for testing the same Cloud UI prompts under three c
 
 1. `01-no-skill`: baseline output with no design skill.
 2. `02-frontend-design`: output shaped by the generic `frontend-design` skill.
-3. `03-kilo-design-cloud`: output shaped by `skills/kilo-design-cloud`.
+3. `03-kilo-design-cloud`: output shaped by `skills/kilo-design`.
 
 Open `index.html` in a browser to compare the generated HTML files side by side.
 

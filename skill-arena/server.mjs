@@ -14,11 +14,11 @@ const port = Number(process.env.PORT || 8791);
 const activeRounds = new Map();
 const openStatuses = new Set(["queued", "running", "stopping"]);
 const kiloRequiredRefs = [
-  "skills/kilo-design-cloud/SKILL.md",
-  "skills/kilo-design-cloud/overlay.md",
-  "skills/kilo-design-cloud/reference/brand.md",
-  "skills/kilo-design-cloud/reference/voice.md",
-  "skills/kilo-design-cloud/reference/token-architecture.md",
+  "skills/kilo-design/SKILL.md",
+  "skills/kilo-design/overlay.md",
+  "skills/kilo-design/reference/brand.md",
+  "skills/kilo-design/reference/voice.md",
+  "skills/kilo-design/reference/token-architecture.md",
   "src/tokens.cloud.ts"
 ];
 const kiloRequiredUsageRoles = ["--background", "--foreground", "--card", "--primary", "--primary-foreground", "--border", "--ring"];
@@ -56,12 +56,12 @@ const conditions = [
       "Use the frontend-design skill only. Do not load the repository Kilo Cloud skill source or its references."
   },
   {
-    id: "kilo-design-cloud",
-    label: "kilo-design-cloud",
+    id: "kilo-design",
+    label: "kilo-design",
     seedDir: "03-kilo-design-cloud",
     execArgs: [],
     instruction:
-      "Use the local Kilo Cloud skill source at skills/kilo-design-cloud/SKILL.md. This arena pass is standalone generated HTML with no target Cloud source file, so follow the skill's Standalone Generation Mode before designing. Load the overlay, brand, voice, token architecture, src/tokens.cloud.ts, and any matching interaction reference or pattern recipe. The output should read as Kilo Cloud product UI through semantic Cloud roles, exact Cloud token values, Kilo primary action color, compact dark-first infrastructure-console structure, and real Cloud product nouns; do not make a generic SaaS screen with only Kilo labels."
+      "Use the local Kilo design skill source at skills/kilo-design/SKILL.md. This arena pass is standalone generated HTML with no target Cloud source file, so follow the skill's Standalone Generation Mode before designing. Load the overlay, brand, voice, token architecture, src/tokens.cloud.ts, and any matching interaction reference or pattern recipe. The output should read as Kilo Cloud product UI through semantic Cloud roles, exact Cloud token values, Kilo primary action color, compact dark-first infrastructure-console structure, and real Cloud product nouns; do not make a generic SaaS screen with only Kilo labels."
   }
 ];
 
@@ -153,7 +153,7 @@ function auditKiloRun({ logText, outputText }) {
 }
 
 function runAudit(condition, logText, outputText) {
-  if (condition.id !== "kilo-design-cloud") return { ok: true, summary: null, logText: "" };
+  if (condition.id !== "kilo-design") return { ok: true, summary: null, logText: "" };
   return auditKiloRun({ logText, outputText });
 }
 
@@ -286,7 +286,7 @@ function buildCodexPrompt({ condition, prompt, outputFile }) {
     "",
     `Condition: ${condition.label}`,
     condition.instruction,
-    ...(condition.id === "kilo-design-cloud"
+    ...(condition.id === "kilo-design"
       ? [
           "",
           "Arena audit requirements for this Kilo condition:",

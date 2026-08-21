@@ -1,5 +1,5 @@
 ---
-name: kilo-design-cloud
+name: kilo-design
 description: Kilo Cloud web UI overlay and pilot pattern recipes. Use when editing or reviewing Kilo Cloud UI paths such as apps/web/src/**, or when the Cloud repo path-scoped trigger requests Kilo design guidance.
 ---
 

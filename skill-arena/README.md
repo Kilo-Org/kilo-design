@@ -54,6 +54,6 @@ skill-arena/runs/round-20260702T011500z/kilo-design-cloud/output.html
 
 - `no-skill`: baseline prompt from an empty temp cwd, with extra isolation flags and explicit no-skill instructions.
 - `frontend-design`: generic frontend design skill.
-- `kilo-design-cloud`: Cloud pilot skill source at `skills/kilo-design-cloud/SKILL.md`, using the skill's standalone generation mode because arena outputs are self-contained HTML rather than edits to real Cloud source files.
+- `kilo-design`: Cloud pilot skill source at `skills/kilo-design/SKILL.md`, using the skill's standalone generation mode because arena outputs are self-contained HTML rather than edits to real Cloud source files.
 
-The `kilo-design-cloud` condition has a post-run audit. It must show reads for the Cloud skill, required references, and `src/tokens.cloud.ts`; its output must define and use the expected semantic token aliases. If the audit fails, the condition is marked failed while keeping the generated HTML and log visible for inspection.
+The `kilo-design` condition has a post-run audit. It must show reads for the Cloud skill, required references, and `src/tokens.cloud.ts`; its output must define and use the expected semantic token aliases. If the audit fails, the condition is marked failed while keeping the generated HTML and log visible for inspection.
