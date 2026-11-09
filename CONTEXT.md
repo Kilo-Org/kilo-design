@@ -58,6 +58,7 @@ _Avoid_: a `DESIGN.md` file in a product repo (rules live only in the skill; nev
 ### Cloud Pilot Skill
 
 The first agent-facing adapter source, stored at `skills/kilo-design`. It proves the skill format with Cloud web before another product overlay is created. It is not treated as published until the rollout explicitly says so.
+_Under review_: the Cloud-first ordering is open; see the Open list in `README.md`.
 
 ### Product Overlay
 
@@ -77,3 +78,4 @@ The gap between shipped product code and the canonical design system. Values can
 
 The brand yellow-green (`#F7F586`). In Kilo, primary and brand are the **same token** — the primary action color is the brand color, because the suite is dark-first and the yellow-green is the identity. Used for the one primary action per surface, plus atmospheric brand roles (logo tile, focus ring, glow). Scarcity is enforced by the `primary-actions` recipe, not by making the token neutral.
 _Avoid_: a neutral/gray primary; "accent" as a synonym for primary.
+_Under review_: the primary colour is open; see the Open list in `README.md`.

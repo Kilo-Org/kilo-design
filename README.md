@@ -4,9 +4,9 @@ Kilo's canonical design source for product UI and agent guidance.
 
 This repo keeps Kilo's UI decisions in one place so Cloud, Landing, Console, VS Code, JetBrains, CLI, and Mobile do not each invent their own design system.
 
-It is intentionally small: token source, generated artifacts, a local playground, ADRs, and draft product skills.
+It is intentionally small: token source, generated artifacts, a local playground, and draft product skills.
 
-> 🚧 This project is still in progress. The ADRs and `CONTEXT.md` are intentionally visible because the system is still being shaped; they explain current decisions, terminology, and rollout boundaries while the Cloud pilot proves the approach.
+> 🚧 This project is still in progress. The [Decisions](#decisions) section and `CONTEXT.md` are intentionally visible because the system is still being shaped; they explain current decisions, terminology, and rollout boundaries while the Cloud pilot proves the approach.
 
 ## Current Status
 
@@ -27,7 +27,6 @@ It is intentionally small: token source, generated artifacts, a local playground
 | `src/` | Generated token artifacts | Committed output from `node build` |
 | `playground/` | Local token editor and specimen viewer | Human review tool only |
 | `skills/` | Draft product skill sources | Agent guidance under development |
-| `docs/adr/` | Decision records | Why decisions exist |
 | `skill-comparison/` | Static skill behavior comparison | First-pass specimens |
 | `skill-arena/` | Repeatable prompt-pass workflow | Skill evaluation harness |
 
@@ -139,12 +138,30 @@ Use this order when sources disagree:
 4. pattern recipes with shipped product Canonical Examples
 5. nearby shipped product UI
 
+## Decisions
+
+These decisions still hold. Earlier decision records are in git history.
+
+- **Tokens are prescriptive; patterns are descriptive.** Token values define the target, and shipped code that disagrees is drift to migrate. Every pattern recipe must cite a canonical example in shipped code, never a mock, because recipes that point at ideals that do not exist lead agents to invent them.
+- **Standalone repo, pulled by pinned hash.** The system lives in its own repo so that no product monorepo owns it, and consumers pull a pinned commit, as skills already sync through `skills-lock.json`. No npm package, because registry and publish auth across three toolchains is too much upkeep, and no git submodule, because one was tried in `kilo-cloud` (PR #3507) and reverted days later (#3535).
+- **One hand-authored source, generated artifacts.** Values are edited in one source, `tokens.json`, and every product format is generated from it by `node build`. Generated files are never edited by hand.
+- **Products are grouped by who owns the colours.** A product family is set by its theming contract, not by the code library it imports: surfaces that adapt to one host's theme are hosts within a family, and sharing a component library does not merge two families.
+- **No `DESIGN.md` in product repos.** Design rules live only in the skill, and a product repo gets one path-scoped line in its existing `AGENTS.md` that points to the skill when UI files are edited. The trigger is never the word "design", because the old keyword-triggered `DESIGN.md` loaded design rules into unrelated backend tasks.
+- **Governance starts manual, then graduates.** The owner reviews design-touching PRs by hand until that becomes a bottleneck, then automated visual and drift checks become the first reviewer, and per-team champions follow once teams have stable ownership. Staying manual forever is a failure mode, not the plan.
+- **Manual version bumps, CI staleness check.** Consumers pick up changes through small manual bump PRs until that becomes a chore, then a Renovate-style bot opens them. CI fails if the generated artifacts are stale against `tokens.json`.
+
+### Open
+
+- The primary colour.
+- Light and dark modes.
+- The adoption order.
+
 ## ✅ Change Checklist
 
 When editing this repo:
 
 1. If token values change, edit `tokens.json`, then run `node build`.
-2. If artifact names or destinations change, update `build/`, CI, README, CONTEXT, ADRs, playground write-back, and product-skill references.
+2. If artifact names or destinations change, update `build/`, CI, README, CONTEXT, playground write-back, and product-skill references.
 3. If agent guidance changes, update the relevant product skill and keep recipes tied to shipped product code.
 4. Do not add publication or discovery instructions until the skill is ready to ship.
 5. If the change is planning/status only, update Linear instead of adding another repo plan.
