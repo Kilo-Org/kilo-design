@@ -6,7 +6,7 @@ This repo keeps Kilo's UI decisions in one place so Cloud, Landing, Console, VS 
 
 It is intentionally small: token source, generated artifacts, a local playground, and draft product skills.
 
-> 🚧 This project is still in progress. The [Decisions](#decisions) section and `CONTEXT.md` are intentionally visible because the system is still being shaped; they explain current decisions, terminology, and rollout boundaries while the Cloud pilot proves the approach.
+> 🚧 This project is still in progress. The [Decisions](#decisions) section is intentionally visible because the system is still being shaped; it explains current decisions and rollout boundaries while the Cloud pilot proves the approach.
 
 ## Current Status
 
@@ -161,7 +161,7 @@ These decisions still hold. Earlier decision records are in git history.
 When editing this repo:
 
 1. If token values change, edit `tokens.json`, then run `node build`.
-2. If artifact names or destinations change, update `build/`, CI, README, CONTEXT, playground write-back, and product-skill references.
+2. If artifact names or destinations change, update `build/`, CI, README, playground write-back, and product-skill references.
 3. If agent guidance changes, update the relevant product skill and keep recipes tied to shipped product code.
 4. Do not add publication or discovery instructions until the skill is ready to ship.
 5. If the change is planning/status only, update Linear instead of adding another repo plan.
