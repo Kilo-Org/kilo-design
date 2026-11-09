@@ -1,5 +1,5 @@
 // Shared token types + helpers for the playground.
-// The CANONICAL source is ../../tokens.json at the repo root (ADR 0002/0003).
+// The CANONICAL source is ../../tokens.json at the repo root (see Decisions in README.md).
 // We read it on the server and pass it to the client as initial state.
 
 export interface TypeRole {

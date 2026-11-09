@@ -22,13 +22,13 @@ The accepted direction is now smaller than the original plan:
 1. `tokens.json` is the source of truth for values.
 2. `node build` generates committed artifacts in `src/`.
 3. `playground/` is a local token authoring and specimen-preview tool.
-4. `skills/kilo-design-cloud/` is the first product skill source and proves the agent-guidance format.
+4. `skills/kilo-design/` is the first product skill source and proves the agent-guidance format.
 5. A standalone `kilo-design-core` runtime skill is deferred until a second product skill proves reuse.
 
-See ADR 0011 for the current skill-packaging decision.
+The adoption order is now open; see the Open list under Decisions in `README.md`.
 
 ## Superseded Ideas
 
-The original planning material discussed a broader immediate rollout: core skill first, multiple product skills, long phase lists, and older artifact names. Those details are superseded by the current README, ADRs, and Linear plan.
+The original planning material discussed a broader immediate rollout: core skill first, multiple product skills, long phase lists, and older artifact names. Those details are superseded by the current README and Linear plan.
 
 The original long-form plan remains recoverable in git history if needed. Keeping only this summary in the working tree reduces stale guidance for future agents.
