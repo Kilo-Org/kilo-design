@@ -1,4 +1,4 @@
-/* Desktop · kilo-desktop main b6e3be7c (plugins/shell, workbench, chat; "bordercalypse"). Ported from docs/explorations/accent-strategy.html */
+/* Desktop · kilo-desktop main b6e3be7c (plugins/shell, workbench, chat; "bordercalypse"). */
 .desk{background:var(--sidebar);font-size:13px;color:var(--fg);display:grid;grid-template-columns:256px 1fr;
   --hairline:color-mix(in srgb,var(--fg) 15%,transparent);--st-hover:color-mix(in srgb,var(--fg) 4%,transparent);--st-sel:color-mix(in srgb,var(--fg) 7%,transparent);--st-sel2:color-mix(in srgb,var(--fg) 10%,transparent)}
 .desk .mono{font-family:"Source Code Pro",ui-monospace,monospace}

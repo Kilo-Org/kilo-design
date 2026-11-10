@@ -15,17 +15,18 @@ Kilo Cloud is dark-first, precise, calm, technical, and compact. It should feel 
 `tokens.json` defines the source values:
 
 ```text
-color.brand.primary = #F7F586
-color.brand.foreground = #1F1F1F
+color.dark.act-bg = #ededed
+color.dark.act-fg = #111111
+brand.logo = #FFDD00   (logo only, never an action color)
 ```
 
-In daily Cloud work, say `primary action token`, not `#F7F586`, unless editing token source or generated artifact docs.
+In daily Cloud work, say `primary action token`, not a hex value, unless editing token source or generated artifact docs.
 
 In standalone generated HTML, define the semantic primary role from these values:
 
 ```text
---primary = #F7F586
---primary-foreground = #1F1F1F
+--primary = #ededed
+--primary-foreground = #111111
 ```
 
 ## Product Signals

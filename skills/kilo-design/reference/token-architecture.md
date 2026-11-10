@@ -5,12 +5,12 @@ The design-system core for products is the token source and generated artifacts,
 ## Layers
 
 1. `tokens.json` stores raw/source values.
-2. `src/tokens.landing.css`, `src/tokens.cloud.ts`, and `src/tokens.extension-host-map.md` expose values per target.
+2. `src/tokens.css` exposes those values as CSS variables, in dark and light.
 3. Cloud maps generated values to semantic UI roles in `apps/web/src/app/globals.css`.
 4. Recipes tell agents which semantic roles to use for repeated Cloud patterns.
 5. Component tokens wait until repeated drift proves they are needed.
 
-The playground sits outside this product-consumption path. It previews and edits token values, but Cloud implementation decisions still come from Cloud code, semantic roles, and recipes.
+The `north-star/` app sits outside this product-consumption path. It shows the tokens and target screens, but Cloud implementation decisions still come from Cloud code, semantic roles, and recipes.
 
 ## Agent Rules
 
@@ -22,11 +22,7 @@ The playground sits outside this product-consumption path. It previews and edits
 
 ## Product Artifact Names
 
-| Product surface | Generated artifact |
-| --- | --- |
-| Cloud | `src/tokens.cloud.ts` |
-| Landing | `src/tokens.landing.css` |
-| VS Code, JetBrains, CLI/ANSI | `src/tokens.extension-host-map.md` |
+Every surface reads one generated artifact: `src/tokens.css`.
 
 ## Naming Discipline
 

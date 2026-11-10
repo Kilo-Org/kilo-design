@@ -2,35 +2,34 @@
 
 Kilo's canonical design source for product UI and agent guidance.
 
-This repo keeps Kilo's UI decisions in one place so Cloud, Landing, Console, VS Code, JetBrains, CLI, and Mobile do not each invent their own design system.
+This repo keeps Kilo's UI decisions in one place so Desktop, Cloud, Mobile, VS Code and the other Kilo surfaces do not each invent their own design system.
 
-It is intentionally small: token source, generated artifacts, a local playground, and draft product skills, plus explorations of the open decisions.
+It is intentionally small: one token source, one generated stylesheet, one app that shows the language, and a draft product skill.
 
-> 🚧 This project is still in progress. The [Decisions](#decisions) section is intentionally visible because the system is still being shaped; it explains current decisions and rollout boundaries while the Cloud pilot proves the approach.
+> 🚧 This project is still in progress. The language is being defined from Kilo Desktop first; no product consumes these tokens yet.
 
 ## Current Status
 
 | Area | Status | Notes |
 | --- | --- | --- |
-| Tokens | Done | `tokens.json` is the source of truth. |
-| Generated artifacts | Done | `node build` writes product-targeted files under `src/`. |
-| Playground | Done | Local tool for editing tokens and previewing token behavior. |
-| Cloud skill | In progress | First agent-facing product skill lives in `skills/kilo-design/`. |
-| Cloud proof | Next | Validate the skill against real Cloud UI work before wider rollout. |
-| Other products | Later | Landing, Editor, Console, Mobile wait until Cloud proves the shape. |
+| Tokens | Done | `tokens.json` is the only place values are written. Dark and light. |
+| Generated stylesheet | Done | `node build` writes `src/tokens.css`. |
+| Language app | Done | `north-star/` shows foundations, components and product screens from the tokens. |
+| VS Code surface | Next | Not in the app yet. The host editor owns its colours, so it needs its own study. |
+| Desktop adoption | Next | Desktop is the first product to take its theme from this repo. |
+| Cloud, Mobile | Later | Follow Desktop. |
+| Cloud skill | Paused | `skills/kilo-design/` predates the current tokens. Its file references are current; its guidance is not reviewed. |
 
 ## Repository Model
 
 | Surface | What it is | Authority |
 | --- | --- | --- |
-| `tokens.json` | Hand-authored design token source | Canonical values |
-| `src/` | Generated token artifacts | Committed output from `node build` |
-| `playground/` | Local token editor and specimen viewer | Human review tool only |
-| `skills/` | Draft product skill sources | Agent guidance under development |
+| `tokens.json` | Hand-authored design token source, dark and light | Canonical values |
+| `src/tokens.css` | Generated CSS variables | Committed output from `node build` |
+| `north-star/` | Local Vite + React app: Foundations, Components, and target screens for Desktop, Cloud and Mobile | Reference for people and agents; reads only the tokens |
+| `skills/` | Draft product skill source | Agent guidance, paused |
 | `skill-comparison/` | Static skill behavior comparison | First-pass specimens |
 | `skill-arena/` | Repeatable prompt-pass workflow | Skill evaluation harness |
-| `north-star/` | Local Vite + React app with target designs per surface on the B · Mono theme | Exploration only; colours are not read from `tokens.json` |
-| `docs/explorations/` | Self-contained HTML design studies | Exploration only; not decisions |
 
 Product code does not live here. Product repos consume this repo's artifacts and skills from their own codebases.
 
@@ -39,63 +38,39 @@ Product code does not live here. Product repos consume this repo's artifacts and
 ```text
 tokens.json
   -> node build
-     -> src/tokens.landing.css
-     -> src/tokens.cloud.ts
-     -> src/tokens.extension-host-map.md
-
-skills/kilo-design
-  -> tells agents how Cloud should use Kilo values, semantic roles, and shipped Cloud examples
-
-playground/
-  -> edits and previews tokens locally
-  -> is not a component library or canonical product UI
+     -> src/tokens.css
+        -> north-star/ (every screen and the component page)
+  -> north-star/ Foundations page (reads the JSON directly)
 ```
 
-The important boundary: tokens define values; product skills explain how agents should use those values inside one product surface.
+`north-star/` holds no token values of its own. To change a colour, edit `tokens.json` and run `node build`.
 
-## 📦 Generated Artifacts
+## 📦 Tokens
 
-Run from the repo root:
+Colour roles live under `color.dark` and `color.light`, and every role must exist in both. A value written as `{other-role}` is an alias. Each role becomes a CSS variable of the same name, for example `color.dark.act-bg` becomes `--act-bg`.
 
 ```bash
 node build
 ```
 
-This regenerates:
+This regenerates `src/tokens.css`. Dark is the default; set `data-mode="light"` or `data-mode="dark"` on any element to switch. The generated file is committed and never edited by hand. CI fails if it drifts from `tokens.json`.
 
-| Artifact | Consumer | Format |
-| --- | --- | --- |
-| `src/tokens.landing.css` | Landing browser surfaces | OKLCH CSS variables |
-| `src/tokens.cloud.ts` | Cloud TypeScript consumers | Hex values and flattened CSS variable names |
-| `src/tokens.extension-host-map.md` | VS Code, JetBrains, CLI/ANSI | Host mapping notes |
-
-Generated files are committed, but never edited by hand. CI should fail if they drift from `tokens.json`.
-
-## 🧪 Token Playground
-
-<img width="3288" height="2024" alt="Screenshot 2026-07-01 at 12 30 59@2x" src="https://github.com/user-attachments/assets/9834f2c2-58ae-4945-a743-4cb5ca2981c6" />
-
-The playground is the local authoring surface for tokens.
+## 🧭 Language App
 
 ```bash
 pnpm install
-pnpm run playground
+pnpm run dev
 ```
 
-Then open:
+Then open `http://localhost:8732`. Press **L** to switch dark and light.
 
-```text
-http://localhost:8731
-```
+| Section | Shows |
+| --- | --- |
+| Foundations | Every colour role in both modes, contrast ratios, type, radius and spacing |
+| Components | One target per component, next to what Desktop, Cloud and Mobile ship today |
+| Kilo Desktop, Kilo Cloud, Kilo Mobile | Target screens per product |
 
-Use it to:
-
-- edit `tokens.json`;
-- preview color, type, spacing, and radius changes;
-- save token changes with recovery via `Undo last save`;
-- regenerate committed artifacts from the saved source.
-
-Do not use playground specimens as product components, pattern recipes, or canonical examples.
+How to add a screen or a surface: `north-star/README.md`.
 
 ## 🏟️ Skill Arena
 
@@ -113,32 +88,18 @@ http://127.0.0.1:8791
 
 It shows stacked rounds of no-skill, frontend-design, and Kilo Cloud outputs, with a fixed prompt composer at the bottom. Each round writes HTML outputs and logs under `skill-arena/runs/`. There is also a `pnpm run skill-arena` script, but this machine currently needs `pnpm approve-builds` before `pnpm` will run workspace scripts because of the existing `sharp` approval guard.
 
-## ☁️ Cloud Skill Pilot
+## ☁️ Cloud Skill
 
-The first product skill source is:
-
-```text
-skills/kilo-design/
-```
-
-It contains:
-
-- `SKILL.md`: router, run order, token contract;
-- `overlay.md`: Cloud-specific product guidance;
-- `reference/`: token architecture, product judgment, voice, brand, and interaction quality;
-- `patterns/cloud-web/`: first Cloud recipes for primary actions and tabs.
-
-The Cloud skill is the pilot. There is no standalone `kilo-design-core` runtime skill yet. Extract shared guidance only after a second product skill proves real reuse.
+`skills/kilo-design/` is a draft skill for Kilo Cloud's web app, written before the current tokens. It is paused until the language is settled. It will be rewritten from the tokens and the Components page, not patched.
 
 ## ⚖️ Authority Model
 
 Use this order when sources disagree:
 
 1. `tokens.json`
-2. generated artifacts in `src/`
-3. product skill sources, starting with `skills/kilo-design/`
-4. pattern recipes with shipped product Canonical Examples
-5. nearby shipped product UI
+2. `src/tokens.css`
+3. the Components page in `north-star/`
+4. nearby shipped product UI
 
 ## Decisions
 
@@ -152,18 +113,21 @@ These decisions still hold. Earlier decision records are in git history.
 - **Governance starts manual, then graduates.** The owner reviews design-touching PRs by hand until that becomes a bottleneck, then automated visual and drift checks become the first reviewer, and per-team champions follow once teams have stable ownership. Staying manual forever is a failure mode, not the plan.
 - **Manual version bumps, CI staleness check.** Consumers pick up changes through small manual bump PRs until that becomes a chore, then a Renovate-style bot opens them. CI fails if the generated artifacts are stale against `tokens.json`.
 
+- **Primary actions are neutral.** The primary button uses the foreground colour (`act-bg`). The yellow `#FFDD00` appears only in the logo. Yellow on white is about 1.35:1, so it cannot carry text or small marks in light mode.
+- **Dark and light.** Every colour role has a value in both modes, and the build fails if one is missing. Desktop already ships both.
+- **Desktop first.** The language is defined from Kilo Desktop, and Desktop adopts it before the other products.
+
 ### Open
 
-- The primary colour. Candidate: B · Mono, with `#FFDD00` only in the logo; see `north-star/` and `docs/explorations/accent-strategy.html`.
-- Light and dark modes. `north-star/` mocks both.
-- The adoption order.
+- Role names. They are the short names the north-star screens used (`fg2`, `act-bg`, `ink`). Rename before a product depends on them.
+- `subtle` text is under 4.5:1 on `bg` in both modes. See the Contrast table on the Foundations page.
+- How VS Code takes part, given the host owns its colours.
 
 ## ✅ Change Checklist
 
 When editing this repo:
 
-1. If token values change, edit `tokens.json`, then run `node build`.
-2. If artifact names or destinations change, update `build/`, CI, README, playground write-back, and product-skill references.
-3. If agent guidance changes, update the relevant product skill and keep recipes tied to shipped product code.
-4. Do not add publication or discovery instructions until the skill is ready to ship.
-5. If the change is planning/status only, update Linear instead of adding another repo plan.
+1. If token values change, edit `tokens.json`, then run `node build` and commit `src/tokens.css`.
+2. Never write a colour, radius or shadow value into `north-star/`. Add a role to `tokens.json` instead.
+3. If the artifact name or location changes, update `build/`, CI, this README, `north-star/src/main.tsx`, and the skill references.
+4. If the change is planning or status only, update Linear instead of adding a repo plan.

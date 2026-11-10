@@ -15,5 +15,7 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 .design{position:absolute;left:50%;top:50%;transform-origin:center}
 .cap{position:absolute;font:500 12px/1 Inter;color:var(--muted)}
 .dropin{position:absolute;border:0;border-radius:12px;box-shadow:var(--shadow);background:var(--bg)}
+.pagefill{position:absolute;inset:0;overflow:auto;background:var(--sidebar)}
+.pagefill .dropin{border-radius:0;box-shadow:none}
 .empty{color:var(--muted);padding:40px;text-align:center}
 .bar>.seg:last-child{margin-left:auto}
