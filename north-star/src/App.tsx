@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { surfaces, type Surface } from "./registry";
 import { Stage } from "./shell/Stage";
 import { ScreenView, type Mode } from "./shell/ScreenView";
@@ -36,8 +36,14 @@ function useMode() {
 export function App() {
   const [[surfaceId, screenId], go] = useHashRoute();
   const [mode, setMode] = useMode();
+  // Three sections: each "page" surface is its own section, and the product surfaces share one, Screens.
+  const pages = surfaces.filter((s) => s.layout === "page");
+  const products = surfaces.filter((s) => s.layout !== "page");
+  const lastProduct = useRef(products[0]?.id);
   const surface = surfaces.find((s) => s.id === surfaceId) ?? surfaces[0];
-  const tabs = surface?.layout === "tabs" && surface.screens.length > 0;
+  const inScreens = !!surface && surface.layout !== "page";
+  if (inScreens) lastProduct.current = surface.id;
+  const tabs = surface && surface.layout !== "gallery" && surface.screens.length > 1;
   const screen = surface?.screens.find((s) => s.id === screenId) ?? surface?.screens[0];
 
   return (
@@ -45,7 +51,12 @@ export function App() {
       <KiloDefs />
       <header className="bar" role="toolbar" aria-label="North star controls">
         <KiloTile size={22} />
-        <Seg value={surface?.id} options={surfaces.map((s) => [s.id, s.title])} onChange={(id) => go(id)} />
+        <Seg
+          value={inScreens ? "screens" : surface?.id}
+          options={[...pages.map((s): [string, string] => [s.id, s.title]), ...(products.length ? [["screens", "Screens"] as [string, string]] : [])]}
+          onChange={(id) => go(id === "screens" ? lastProduct.current : id)}
+        />
+        {inScreens && <Seg value={surface.id} options={products.map((s) => [s.id, s.title])} onChange={(id) => go(id)} />}
         {tabs && screen && <Seg value={screen.id} options={surface.screens.map((s) => [s.id, s.title])} onChange={(id) => go(surface.id, id)} />}
         {surface && <span className="bar-cap" title={surface.caption}>{surface.caption}</span>}
         <Seg value={mode} options={[["dark", "Dark"], ["light", "Light"]]} onChange={(m) => setMode(m as Mode)} />
@@ -57,6 +68,10 @@ export function App() {
           <p className="empty">No screens in surfaces/{surface.id}/screens yet.</p>
         ) : surface.layout === "gallery" ? (
           <Gallery surface={surface} mode={mode} />
+        ) : surface.layout === "page" ? (
+          <div className="pagefill">
+            <ScreenView key={screen.id} screen={screen} mode={mode} />
+          </div>
         ) : (
           <Stage w={screen.frame.w} h={screen.frame.h}>
             <ScreenView key={screen.id} screen={screen} mode={mode} />

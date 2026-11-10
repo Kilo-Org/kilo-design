@@ -8,8 +8,8 @@ export type SurfaceMeta = {
   order: number;
   /** Size of one screen in design pixels. Screens may override. */
   frame: Frame;
-  /** tabs: one screen at a time (windows). gallery: all screens side by side (phones). */
-  layout: "tabs" | "gallery";
+  /** tabs: one screen at a time, scaled to fit (windows). gallery: all screens side by side (phones). page: one screen at a time, full width, scrolls. */
+  layout: "tabs" | "gallery" | "page";
 };
 
 /** surfaces/<id>/screens/<Name>.tsx exports `meta: ScreenMeta` and a default component. */

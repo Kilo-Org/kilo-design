@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+import "../../src/tokens.css";
 import "./shell/theme.css";
 import "./shell/shell.css";
 import { App } from "./App";

@@ -5,8 +5,5 @@
   "main": "index.js",
   "scripts": {
     "build": "node ."
-  },
-  "dependencies": {
-    "culori": "^4.0.1"
   }
 }

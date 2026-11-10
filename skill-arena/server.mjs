@@ -5,6 +5,7 @@ import { copyFile, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveColor } from "../build/index.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
@@ -19,21 +20,21 @@ const kiloRequiredRefs = [
   "skills/kilo-design/reference/brand.md",
   "skills/kilo-design/reference/voice.md",
   "skills/kilo-design/reference/token-architecture.md",
-  "src/tokens.cloud.ts"
+  "src/tokens.css"
 ];
 const kiloRequiredUsageRoles = ["--background", "--foreground", "--card", "--primary", "--primary-foreground", "--border", "--ring"];
 const kiloSemanticTokenMap = [
-  ["--background", "--surface-background"],
-  ["--foreground", "--foreground-default"],
-  ["--card", "--surface-raised"],
-  ["--popover", "--surface-overlay"],
-  ["--muted", "--surface-inset"],
-  ["--muted-foreground", "--foreground-muted"],
-  ["--primary", "--brand-primary"],
-  ["--primary-foreground", "--brand-foreground"],
-  ["--border", "--border-default"],
-  ["--input", "--border-inputBg"],
-  ["--ring", "--brand-primaryRing"]
+  ["--background", "bg"],
+  ["--foreground", "fg"],
+  ["--card", "card"],
+  ["--popover", "popover"],
+  ["--muted", "muted-fill"],
+  ["--muted-foreground", "muted"],
+  ["--primary", "act-bg"],
+  ["--primary-foreground", "act-fg"],
+  ["--border", "border"],
+  ["--input", "input"],
+  ["--ring", "ring"]
 ];
 let cachedKiloSemanticTokens = null;
 
@@ -61,7 +62,7 @@ const conditions = [
     seedDir: "03-kilo-design-cloud",
     execArgs: [],
     instruction:
-      "Use the local Kilo design skill source at skills/kilo-design/SKILL.md. This arena pass is standalone generated HTML with no target Cloud source file, so follow the skill's Standalone Generation Mode before designing. Load the overlay, brand, voice, token architecture, src/tokens.cloud.ts, and any matching interaction reference or pattern recipe. The output should read as Kilo Cloud product UI through semantic Cloud roles, exact Cloud token values, Kilo primary action color, compact dark-first infrastructure-console structure, and real Cloud product nouns; do not make a generic SaaS screen with only Kilo labels."
+      "Use the local Kilo design skill source at skills/kilo-design/SKILL.md. This arena pass is standalone generated HTML with no target Cloud source file, so follow the skill's Standalone Generation Mode before designing. Load the overlay, brand, voice, token architecture, src/tokens.css, and any matching interaction reference or pattern recipe. The output should read as Kilo Cloud product UI through semantic Cloud roles, exact Cloud token values, Kilo primary action color, compact dark-first infrastructure-console structure, and real Cloud product nouns; do not make a generic SaaS screen with only Kilo labels."
   }
 ];
 
@@ -98,19 +99,16 @@ async function readJson(file) {
 function kiloSemanticTokens() {
   if (cachedKiloSemanticTokens) return cachedKiloSemanticTokens;
 
-  const tokenArtifact = readFileSync(path.join(repoRoot, "src/tokens.cloud.ts"), "utf8");
-  cachedKiloSemanticTokens = kiloSemanticTokenMap.map(([role, tokenVar]) => {
-    const match = tokenArtifact.match(new RegExp(`"${escapeRegExp(tokenVar)}"\\s*:\\s*"([^"]+)"`));
-    if (!match) throw new Error(`Missing ${tokenVar} in src/tokens.cloud.ts`);
-    return { role, tokenVar, value: match[1] };
-  });
+  // Cloud ships dark only, so the arena audits against the dark roles.
+  const roles = JSON.parse(readFileSync(path.join(repoRoot, "tokens.json"), "utf8")).color.dark;
+  cachedKiloSemanticTokens = kiloSemanticTokenMap.map(([role, tokenVar]) => ({ role, tokenVar, value: resolveColor(roles, tokenVar) }));
 
   return cachedKiloSemanticTokens;
 }
 
 function kiloTokenPromptBlock() {
   return [
-    "Required Kilo Cloud token aliases from src/tokens.cloud.ts:",
+    "Required Kilo Cloud token aliases from tokens.json (dark roles):",
     "```css",
     ":root {",
     ...kiloSemanticTokens().map(({ role, tokenVar, value }) => `  ${role}: ${value}; /* ${tokenVar} */`),
@@ -292,7 +290,7 @@ function buildCodexPrompt({ condition, prompt, outputFile }) {
           "Arena audit requirements for this Kilo condition:",
           `- Before writing output, read these exact files: ${kiloRequiredRefs.join(", ")}.`,
           "- The final run is audited. If those reads are missing from the log, the condition fails.",
-          "- Define the semantic CSS aliases below exactly, using the values from src/tokens.cloud.ts.",
+          "- Define the semantic CSS aliases below exactly, using the values from src/tokens.css.",
           "- Use var(...) references for the semantic aliases in the CSS. Do not only define them.",
           "",
           kiloTokenPromptBlock()

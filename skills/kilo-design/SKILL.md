@@ -16,15 +16,14 @@ This is the first agent-facing adapter for the Kilo design system. It covers Kil
 5. Load at most one matching recipe unless the task clearly spans multiple patterns.
 6. If no recipe exists, use the overlay plus current Cloud code and report a coverage gap.
 7. Keep broad product cleanup out of focused tasks.
-8. Do not use playground specimen UI as a Cloud Canonical Example.
+8. Do not use `north-star/` screens as a Cloud Canonical Example; they are targets, not shipped code.
 
 Completion criterion: the answer or change names the loaded overlay/recipe, follows real Cloud code, and does not normalize unrelated UI.
 
 ## Token Contract
 
-- Cloud's generated token artifact is `src/tokens.cloud.ts`.
+- The generated token artifact is `src/tokens.css`, built from `tokens.json`.
 - Cloud UI code maps token values through `apps/web/src/app/globals.css` and semantic roles such as `--primary`, `--background`, and `--ring`.
-- Do not use `src/tokens.landing.css` or `src/tokens.extension-host-map.md` as Cloud UI sources.
 
 ## Recipe Router
 
@@ -52,7 +51,7 @@ Load these before designing:
 5. `reference/interaction-quality.md` when the surface includes forms, auth, overlays, responsive behavior, loading, disabled, error, or success states
 6. One matching pattern recipe when available
 
-Allowed read-only product artifact: `src/tokens.cloud.ts` when exact token values are needed.
+Allowed read-only product artifact: `src/tokens.css` when exact token values are needed.
 
 Generated standalone HTML should:
 
@@ -68,7 +67,7 @@ Generated standalone HTML should:
 - Do not recreate a Cloud `DESIGN.md`.
 - Do not migrate every hardcoded blue button unless the task is `primary-actions` implementation.
 - Do not invent recipes without a real Canonical Example in shipped Cloud code.
-- Do not copy UI structures from `playground/`; it previews token behavior only.
+- Do not copy UI structures from `north-star/`; it shows targets, not shipped Cloud code.
 
 ## Reference Map
 

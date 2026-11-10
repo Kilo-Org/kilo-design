@@ -1,20 +1,22 @@
 # Kilo north star
 
-Target designs for every Kilo surface, on one theme: **B · Mono**. Primary actions use the foreground color; `#FFDD00` appears only in the logo. Ported from `docs/explorations/accent-strategy.html`.
+The Kilo design language in one app: **Foundations** (the tokens), **Components** (one target per component), and target screens for every Kilo product. Primary actions use the foreground color; `#FFDD00` appears only in the logo.
+
+Every value comes from the repo's `tokens.json` through the generated `src/tokens.css`. This app defines no token values.
 
 ```sh
 pnpm --dir north-star dev      # http://localhost:8732
 pnpm --dir north-star build    # typecheck + static build to north-star/dist
 ```
 
-Routes are hashes: `#/desktop/permission`, `#/cloud/credits`, `#/mobile`. Press **L** to switch dark/light.
+Routes are hashes: `#/foundations`, `#/components`, `#/desktop/permission`, `#/cloud/credits`, `#/mobile`. Press **L** to switch dark/light.
 
 ## Layout
 
 ```
 src/
   registry.ts                 discovers surfaces and screens; no manual list
-  shell/                      page chrome, mono theme tokens, Stage (scale-to-fit)
+  shell/                      page chrome, Stage (scale-to-fit); no token values
   surfaces/<surface>/
     index.ts                  surface meta + imports the surface CSS
     <surface>.css             surface styles (prefixed: d- desktop, c- cloud, m- mobile)
@@ -38,7 +40,7 @@ export default function SettingsPanel() {
 }
 ```
 
-Use the theme roles (`--act-bg`, `--ink`, `--soft-bg`, `--bubble-bg`, `--send-bg`, `--live`, …) from `shell/theme.css`, never raw yellow.
+Use the roles from `tokens.json` (`--act-bg`, `--ink`, `--soft-bg`, `--bubble-bg`, `--send-bg`, `--live`, …), never a raw value. If a role is missing, add it to `tokens.json` and run `node build`.
 
 **HTML drop-in** (a self-contained mock exported from another repo or tool). It renders in an iframe at the surface frame size. Optional head tags:
 
@@ -50,7 +52,7 @@ Use the theme roles (`--act-bg`, `--ink`, `--soft-bg`, `--bubble-bg`, `--send-bg
 <meta name="north-star:source" content="kilo-cloud apps/web usage">
 ```
 
-The app sets `<html data-mode="dark|light">` inside the iframe, so a drop-in can theme off `[data-mode=light]`.
+The app injects `src/tokens.css` into the iframe and sets `<html data-mode="dark|light">`, so a drop-in uses the same `var(--role)` names as the React screens and needs no colors of its own.
 
 ## Add a surface
 
@@ -63,10 +65,10 @@ import "./<id>.css";
 export const surface: SurfaceMeta = {
   title: "Kilo Landing",
   caption: "kilo-landing main · 1440 × 900",
-  order: 4,
+  order: 6,
   frame: { w: 1440, h: 900 },
-  layout: "tabs", // "gallery" shows every screen side by side, like the phones
+  layout: "tabs", // "gallery" shows every screen side by side, like the phones; "page" is a full-width scrolling page
 };
 ```
 
-Then add screens. The surface appears in the Surface switcher automatically.
+Then add screens. A `"tabs"` or `"gallery"` surface appears under **Screens** automatically; a `"page"` surface becomes its own top-level section.

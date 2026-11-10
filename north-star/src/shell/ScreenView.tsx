@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { Screen } from "../registry";
+import tokensCss from "../../../src/tokens.css?inline";
 
 export type Mode = "dark" | "light";
 
@@ -17,13 +18,21 @@ function HtmlScreen({ screen, mode }: { screen: Extract<Screen, { kind: "html" }
     if (doc) doc.documentElement.dataset.mode = mode;
   };
   useEffect(sync, [mode]);
+  const onLoad = () => {
+    sync();
+    // Key presses inside the frame never reach the app, so pass them up (the L mode shortcut).
+    ref.current?.contentDocument?.addEventListener("keydown", (e) => {
+      if (!(e.target as Element).closest?.("input,textarea")) dispatchEvent(new KeyboardEvent("keydown", { key: e.key }));
+    });
+  };
   return (
     <iframe
       ref={ref}
       className="dropin"
       title={screen.title}
-      srcDoc={screen.html}
-      onLoad={sync}
+      // Drop-ins get the same generated tokens as the React screens.
+      srcDoc={screen.html.replace(/<head[^>]*>/i, (head) => `${head}<style>${tokensCss}</style>`)}
+      onLoad={onLoad}
       style={{ inset: 0, width: "100%", height: "100%" }}
     />
   );

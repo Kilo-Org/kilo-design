@@ -26,7 +26,7 @@ Use this order when sources disagree:
 
 Token values are prescriptive. Shipped Cloud code that disagrees with `tokens.json` is Drift.
 
-The playground is not in the authority order for Cloud implementation. Its specimens can help spot token problems, but they are not product code and must not be cited as Canonical Examples.
+The `north-star/` app is not in the authority order for Cloud implementation. Its screens show targets, but they are not product code and must not be cited as Canonical Examples.
 
 ## Coverage Gaps
 
