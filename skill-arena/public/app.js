@@ -261,6 +261,12 @@ async function createRound(prompt) {
 
 el("promptInput").value = state.draftPrompt;
 
+el("promptInput").addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" || (!event.metaKey && !event.ctrlKey)) return;
+  event.preventDefault();
+  el("composer").requestSubmit();
+});
+
 el("composer").addEventListener("submit", async (event) => {
   event.preventDefault();
   if (state.running) return;
