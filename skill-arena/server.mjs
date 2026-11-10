@@ -38,11 +38,10 @@ const kiloSemanticTokenMap = [
 ];
 let cachedKiloSemanticTokens = null;
 
-const conditions = [
+const allConditions = [
   {
     id: "no-skill",
     label: "No skill",
-    seedDir: "01-no-skill",
     isolated: true,
     execArgs: ["--ignore-user-config", "--ignore-rules"],
     instruction:
@@ -51,7 +50,6 @@ const conditions = [
   {
     id: "frontend-design",
     label: "frontend-design",
-    seedDir: "02-frontend-design",
     execArgs: [],
     instruction:
       "Use the frontend-design skill only. Do not load the repository Kilo Cloud skill source or its references."
@@ -59,12 +57,15 @@ const conditions = [
   {
     id: "kilo-design",
     label: "kilo-design",
-    seedDir: "03-kilo-design-cloud",
+    // Off: skills/kilo-design was removed until the language is settled. To bring it back,
+    // point this instruction and kiloRequiredRefs at the new skill and delete this flag.
+    disabled: true,
     execArgs: [],
     instruction:
       "Use the local Kilo design skill source at skills/kilo-design/SKILL.md. This arena pass is standalone generated HTML with no target Cloud source file, so follow the skill's Standalone Generation Mode before designing. Load the overlay, brand, voice, token architecture, src/tokens.css, and any matching interaction reference or pattern recipe. The output should read as Kilo Cloud product UI through semantic Cloud roles, exact Cloud token values, Kilo primary action color, compact dark-first infrastructure-console structure, and real Cloud product nouns; do not make a generic SaaS screen with only Kilo labels."
   }
 ];
+const conditions = allConditions.filter((condition) => !condition.disabled);
 
 function sendJson(res, status, data) {
   res.writeHead(status, { "content-type": "application/json; charset=utf-8" });
@@ -628,11 +629,6 @@ const server = createServer(async (req, res) => {
   const deleteRoundMatch = url.pathname.match(/^\/api\/rounds\/([^/]+)$/);
   if (req.method === "DELETE" && deleteRoundMatch) {
     await handleDeleteRound(decodeURIComponent(deleteRoundMatch[1]), res);
-    return;
-  }
-
-  if ((req.method === "GET" || req.method === "HEAD") && url.pathname.startsWith("/skill-comparison/")) {
-    await serveFile(req, res, path.join(repoRoot, "skill-comparison"), url.pathname.replace("/skill-comparison/", ""));
     return;
   }
 
