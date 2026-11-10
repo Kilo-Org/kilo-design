@@ -8,8 +8,6 @@ importers:
 
   .: {}
 
-  build: {}
-
   north-star:
     dependencies:
       lucide-react:

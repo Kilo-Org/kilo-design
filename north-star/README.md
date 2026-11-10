@@ -2,7 +2,7 @@
 
 The Kilo design language in one app: **Foundations** (the tokens), **Components** (one target per component), and target screens for every Kilo product. Primary actions use the foreground color; `#FFDD00` appears only in the logo.
 
-Every value comes from the repo's `tokens.json` through the generated `src/tokens.css`. This app defines no token values.
+Every value comes from the repo's `tokens.json`, which the app turns into CSS variables when it starts (`tokens-css.ts`, wired in `vite.config.ts`). This app defines no token values.
 
 ```sh
 pnpm --dir north-star dev      # http://localhost:8732
@@ -40,7 +40,7 @@ export default function SettingsPanel() {
 }
 ```
 
-Use the roles from `tokens.json` (`--act-bg`, `--ink`, `--soft-bg`, `--bubble-bg`, `--send-bg`, `--live`, …), never a raw value. If a role is missing, add it to `tokens.json` and run `node build`.
+Use the roles from `tokens.json` (`--act-bg`, `--ink`, `--soft-bg`, `--bubble-bg`, `--send-bg`, `--live`, …), never a raw value. If a role is missing, add it to `tokens.json` in both modes.
 
 **HTML drop-in** (a self-contained mock exported from another repo or tool). It renders in an iframe at the surface frame size. Optional head tags:
 
@@ -52,7 +52,7 @@ Use the roles from `tokens.json` (`--act-bg`, `--ink`, `--soft-bg`, `--bubble-bg
 <meta name="north-star:source" content="kilo-cloud apps/web usage">
 ```
 
-The app injects `src/tokens.css` into the iframe and sets `<html data-mode="dark|light">`, so a drop-in uses the same `var(--role)` names as the React screens and needs no colors of its own.
+The app injects the token variables into the iframe and sets `<html data-mode="dark|light">`, so a drop-in uses the same `var(--role)` names as the React screens and needs no colors of its own.
 
 ## Add a surface
 

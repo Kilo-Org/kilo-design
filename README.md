@@ -4,7 +4,7 @@ Kilo's canonical design source for product UI. Agent guidance will be written fr
 
 This repo keeps Kilo's UI decisions in one place so Desktop, Cloud, Mobile, VS Code and the other Kilo surfaces do not each invent their own design system.
 
-It is intentionally small: one token source, one generated stylesheet, and one app that shows the language.
+It is intentionally small: one token file and one app that shows the language.
 
 > 🚧 This project is still in progress. The language is being defined from Kilo Desktop first; no product consumes these tokens yet.
 
@@ -14,7 +14,6 @@ It is intentionally small: one token source, one generated stylesheet, and one a
 | --- | --- | --- |
 | Colour tokens | Done | `tokens.json` is the only place values are written. Dark and light. Role names may still change. |
 | Type, radius, spacing tokens | Drafted | Defined in `tokens.json`, but the screens in `north-star/` still hard-code these values. |
-| Generated stylesheet | Done | `node build` writes `src/tokens.css`. |
 | Language app | Done | `north-star/` shows foundations, components and product screens from the tokens. |
 | VS Code surface | Next | Not in the app yet. The host editor owns its colours, so it needs its own study. |
 | Desktop adoption | Next | Desktop is the first product to take its theme from this repo. |
@@ -51,33 +50,20 @@ It is intentionally small: one token source, one generated stylesheet, and one a
 | Surface | What it is | Authority |
 | --- | --- | --- |
 | `tokens.json` | Hand-authored design token source, dark and light | Canonical values |
-| `src/tokens.css` | Generated CSS variables | Committed output from `node build` |
 | `north-star/` | Local Vite + React app: Foundations, Components, and target screens for Desktop, Cloud and Mobile | Reference for people and agents; reads only the tokens |
 | `skill-arena/` | Repeatable prompt-pass workflow | Skill evaluation harness; its Kilo condition is off until a new skill exists |
 
 Product code does not live here. Product repos consume this repo's artifacts from their own codebases.
 
-## 🔁 How The Pieces Connect
-
-```text
-tokens.json
-  -> node build
-     -> src/tokens.css
-        -> north-star/ (every screen and the component page)
-  -> north-star/ Foundations page (reads the JSON directly)
-```
-
-`north-star/` holds no token values of its own. To change a colour, edit `tokens.json` and run `node build`.
-
 ## 📦 Tokens
 
-Colour roles live under `color.dark` and `color.light`, and every role must exist in both. A value written as `{other-role}` is an alias. Each role becomes a CSS variable of the same name, for example `color.dark.act-bg` becomes `--act-bg`.
+`tokens.json` is the only file that holds values, and there is no build step. People and agents read it directly.
 
-```bash
-node build
-```
+Colour roles live under `color.dark` and `color.light`, and every role must exist in both. A value written as `{other-role}` is an alias.
 
-This regenerates `src/tokens.css`. Dark is the default; set `data-mode="light"` or `data-mode="dark"` on any element to switch. The generated file is committed and never edited by hand. CI fails if it drifts from `tokens.json`.
+The app in `north-star/` turns the file into CSS variables when it starts: each role becomes a variable of the same name, so `color.dark.act-bg` becomes `--act-bg`. Dark is the default, and `data-mode="light"` or `data-mode="dark"` on any element switches. Save `tokens.json` while the app is running and it reloads.
+
+The app refuses to start or build if a role is missing in one mode or an alias points nowhere. CI runs that build on every pull request.
 
 ## 🧭 Language App
 
@@ -117,9 +103,8 @@ It shows stacked rounds of no-skill and frontend-design outputs, with a fixed pr
 Use this order when sources disagree:
 
 1. `tokens.json`
-2. `src/tokens.css`
-3. the Components page in `north-star/`
-4. nearby shipped product UI
+2. the Components page in `north-star/`
+3. nearby shipped product UI
 
 ## Decisions
 
@@ -127,11 +112,11 @@ These decisions still hold. Earlier decision records are in git history.
 
 - **Tokens and the Components page are the target.** Token values and the target column of the Components page define where products are going, and shipped code that disagrees is drift to migrate. Each target records which shipped product it was taken from, so it is never an invented ideal.
 - **Standalone repo, pulled by pinned hash.** The system lives in its own repo so that no product monorepo owns it, and consumers pull a pinned commit. No npm package, because registry and publish auth across three toolchains is too much upkeep, and no git submodule, because one was tried in `kilo-cloud` (PR #3507) and reverted days later (#3535).
-- **One hand-authored source, generated artifacts.** Values are edited in one source, `tokens.json`, and every product format is generated from it by `node build`. Today that is one CSS file; Mobile and VS Code will need their own generated formats. Generated files are never edited by hand.
+- **One hand-authored source, nothing generated yet.** Values are edited in one file, `tokens.json`, and nothing derived from it is committed. When a product needs its own format, such as a CSS file for Desktop, it is generated from `tokens.json` and never edited by hand. That format is decided with the product's developer at adoption.
 - **Products are grouped by who owns the colours.** A product family is set by its theming contract, not by the code library it imports: surfaces that adapt to one host's theme are hosts within a family, and sharing a component library does not merge two families.
 - **No `DESIGN.md` in product repos.** Design rules live only in this repo's agent guidance, and a product repo gets one path-scoped line in its existing `AGENTS.md` that points to it when UI files are edited. The trigger is never the word "design", because the old keyword-triggered `DESIGN.md` loaded design rules into unrelated backend tasks.
 - **Governance starts manual, then graduates.** The design owner reviews design-touching PRs by hand until that becomes a bottleneck, then automated visual and drift checks become the first reviewer, and per-team champions follow once teams have stable ownership. Staying manual forever is a failure mode, not the plan.
-- **Manual version bumps, CI staleness check.** Consumers pick up changes through small manual bump PRs until that becomes a chore, then a Renovate-style bot opens them. CI fails if the generated artifacts are stale against `tokens.json`.
+- **Manual version bumps.** Consumers pick up changes through small manual bump PRs until that becomes a chore, then a Renovate-style bot opens them. CI fails if `tokens.json` is invalid.
 - **Primary actions are neutral.** The primary button uses the foreground colour (`act-bg`). The yellow `#FFDD00` appears only in the logo. Yellow on white is about 1.35:1, so it cannot carry text or small marks in light mode.
 - **Dark and light.** Every colour role has a value in both modes, and the build fails if one is missing. Desktop already ships both.
 - **Desktop first.** The language is defined from Kilo Desktop, and Desktop adopts it before the other products.
@@ -149,7 +134,7 @@ These decisions still hold. Earlier decision records are in git history.
 
 When editing this repo:
 
-1. If token values change, edit `tokens.json`, then run `node build` and commit `src/tokens.css`.
+1. If token values change, edit `tokens.json`. Nothing else needs to be run or committed.
 2. Never write a colour, radius or shadow value into `north-star/`. Add a role to `tokens.json` instead.
-3. If the artifact name or location changes, update `build/`, CI, this README, `north-star/src/main.tsx` and `skill-arena/server.mjs`.
+3. If the shape of `tokens.json` changes, update `north-star/tokens-css.ts`, the Foundations page and `skill-arena/server.mjs`.
 4. If the change is planning or status only, update Linear instead of adding a repo plan.
