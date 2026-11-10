@@ -4,7 +4,7 @@ Kilo's canonical design source for product UI and agent guidance.
 
 This repo keeps Kilo's UI decisions in one place so Cloud, Landing, Console, VS Code, JetBrains, CLI, and Mobile do not each invent their own design system.
 
-It is intentionally small: token source, generated artifacts, a local playground, and draft product skills.
+It is intentionally small: token source, generated artifacts, a local playground, and draft product skills, plus explorations of the open decisions.
 
 > 🚧 This project is still in progress. The [Decisions](#decisions) section is intentionally visible because the system is still being shaped; it explains current decisions and rollout boundaries while the Cloud pilot proves the approach.
 
@@ -29,6 +29,8 @@ It is intentionally small: token source, generated artifacts, a local playground
 | `skills/` | Draft product skill sources | Agent guidance under development |
 | `skill-comparison/` | Static skill behavior comparison | First-pass specimens |
 | `skill-arena/` | Repeatable prompt-pass workflow | Skill evaluation harness |
+| `north-star/` | Local Vite + React app with target designs per surface on the B · Mono theme | Exploration only; colours are not read from `tokens.json` |
+| `docs/explorations/` | Self-contained HTML design studies | Exploration only; not decisions |
 
 Product code does not live here. Product repos consume this repo's artifacts and skills from their own codebases.
 
@@ -152,8 +154,8 @@ These decisions still hold. Earlier decision records are in git history.
 
 ### Open
 
-- The primary colour.
-- Light and dark modes.
+- The primary colour. Candidate: B · Mono, with `#FFDD00` only in the logo; see `north-star/` and `docs/explorations/accent-strategy.html`.
+- Light and dark modes. `north-star/` mocks both.
 - The adoption order.
 
 ## ✅ Change Checklist

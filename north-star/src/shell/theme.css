@@ -1,0 +1,58 @@
+/* ==========================================================================
+   Kilo north-star theme: B · Mono. Desktop neutrals lead, every surface follows.
+   Yellow (#FFDD00) appears only in the logo. Ported from
+   docs/explorations/accent-strategy.html with the other strategies removed.
+   ========================================================================== */
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:Inter,system-ui,sans-serif;font-size:13px;line-height:1.45}
+svg.lucide{flex:none;width:16px;height:16px}
+.s3 svg.lucide,svg.lucide.s3{width:12px;height:12px}
+svg.lucide.s14{width:14px;height:14px}
+svg.lucide.s18{width:18px;height:18px}
+svg.lucide.s20{width:20px;height:20px}
+svg.lucide.s22{width:22px;height:22px}
+svg.lucide.s24{width:24px;height:24px}
+.spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin,.pix i,.shimmer{animation:none}}
+
+.k{--Y:#FFDD00;--Yfg:#1F1F1F;color:var(--fg)}
+.k[data-mode=dark]{
+  --stage:#0a0a0a;--stage-line:rgba(255,255,255,.03);
+  --sidebar:#0e0e0e;--bg:#111111;--card:#181818;--raised:#262626;--composer:#1f1f1f;--popover:#2b2b2b;
+  --hover:rgba(212,212,212,.05);--hover-strong:rgba(212,212,212,.08);--muted-fill:#333333;
+  --fg:#d4d4d4;--fg-strong:#fafafa;--fg2:#c4c4c4;--muted:#a3a3a3;--subtle:#737373;
+  --border:rgba(255,255,255,.1);--border-subtle:rgba(255,255,255,.06);--input:rgba(255,255,255,.1);
+  --success:#4ade80;--destructive:#f87171;--info:#60a5fa;
+  --warn:#fbbf24;--warn-bg:rgba(251,191,36,.09);--warn-bd:rgba(251,191,36,.28);
+  --add:#9BCD97;--add-bg:#1A2919;--del:#FC533A;--del-bg:#42120B;
+  --syn-kw:#FF9AE2;--syn-str:#ECF58C;--syn-num:#F2B36B;--syn-fn:#93E9F6;--syn-ty:#00CEB9;--syn-pr:#9CDCFE;--syn-co:#7A7A7A;
+  --shadow:0 30px 80px -20px rgba(0,0,0,.85),0 0 0 1px rgba(0,0,0,.6);--win-bd:rgba(255,255,255,.12);
+  --act-bg:#ededed;--act-fg:#111;--act-hover:#fff;--ink:#ededed;--ink-fg:#111;--soft-bg:rgba(255,255,255,.08);--soft-fg:var(--fg);--bubble-bg:var(--raised);--bubble-fg:var(--fg-strong);--ring:rgba(237,237,237,.5);
+}
+.k[data-mode=light]{
+  --stage:#e8e8e6;--stage-line:rgba(0,0,0,.04);
+  --sidebar:#f4f4f4;--bg:#ffffff;--card:#ffffff;--raised:#f5f5f5;--composer:#ffffff;--popover:#ffffff;
+  --hover:#f5f5f5;--hover-strong:#efefef;--muted-fill:#f5f5f5;
+  --fg:#0a0a0a;--fg-strong:#000;--fg2:#262626;--muted:#737373;--subtle:#a3a3a3;
+  --border:#e5e5e5;--border-subtle:rgba(229,229,229,.6);--input:#e5e5e5;
+  --success:#166534;--destructive:#9f1239;--info:#1e40af;
+  --warn:#92400e;--warn-bg:#FFF8D6;--warn-bd:#F3D76A;
+  --add:#166534;--add-bg:#e8f6ec;--del:#b91c1c;--del-bg:#fdecec;
+  --syn-kw:#a626a4;--syn-str:#5c6b00;--syn-num:#b45309;--syn-fn:#0e7490;--syn-ty:#0f766e;--syn-pr:#1d4ed8;--syn-co:#8a8a8a;
+  --shadow:0 30px 80px -24px rgba(0,0,0,.28),0 0 0 1px rgba(0,0,0,.06);--win-bd:rgba(0,0,0,.12);
+  --act-bg:#0a0a0a;--act-fg:#fff;--act-hover:#262626;--ink:#0a0a0a;--ink-fg:#fff;--soft-bg:#efefef;--soft-fg:#0a0a0a;--bubble-bg:var(--raised);--bubble-fg:var(--fg);--ring:rgba(10,10,10,.45);
+}
+/* Accent roles
+   act primary button · ink links/done dot/active border · soft badges/chips · bubble user message
+   send send button · live "agent is working" · check checkbox checked · ring focus */
+.k{--act-bd:var(--act-bg);--send-bg:var(--act-bg);--send-fg:var(--act-fg);--send-bd:var(--act-bd);--soft-bd:transparent;--live:var(--info);--check-bg:var(--act-bg);--check-fg:var(--act-fg);--chart-hi:var(--ink)}
+
+/* Shared mock primitives */
+.win{position:absolute;overflow:hidden;border-radius:12px;box-shadow:var(--shadow);border:1px solid var(--win-bd)}
+.lights{display:flex;gap:8px}
+.lights i{width:12px;height:12px;border-radius:99px;background:#ff5f57;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2)}
+.lights i:nth-child(2){background:#febc2e}.lights i:nth-child(3){background:#28c840}
+.kmark{display:block;flex:none}
+.kmark rect{fill:var(--Y)}
