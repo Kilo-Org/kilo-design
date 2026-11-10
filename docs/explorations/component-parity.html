@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="en" data-mode="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kilo component parity — Desktop · Cloud · Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+/* B · Mono: neutral primary, yellow only on the logo. Values from Desktop's Kilo theme. */
+:root{
+  --font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --brand:#FFDD00;
+  --r-xs:4px;--r-sm:6px;--r-md:8px;--r-lg:10px;--r-xl:14px;
+}
+[data-mode=dark]{
+  --shell:#0e0e0e;--bg:#111111;--pane:#181818;--raised:#1f1f1f;--pop:#2b2b2b;
+  --fg:#d4d4d4;--fg-strong:#ededed;--muted:#a3a3a3;--subtle:#737373;--fill:#333333;
+  --line:rgba(255,255,255,.10);--line-subtle:rgba(255,255,255,.06);
+  --hover:rgba(255,255,255,.04);--sel:rgba(255,255,255,.07);--sel2:rgba(255,255,255,.10);
+  --input-bg:rgba(255,255,255,.03);--ring:#a3a3a3;
+  --primary:#ededed;--on-primary:#111111;
+  --danger:#f87171;--success:#4ade80;--warning:#fbbf24;--info:#60a5fa;
+  --shadow:0 10px 30px -10px rgba(0,0,0,.7);--scrim:rgba(0,0,0,.5);
+}
+[data-mode=light]{
+  --shell:#f4f4f4;--bg:#ffffff;--pane:#ffffff;--raised:#f7f7f7;--pop:#ffffff;
+  --fg:#0a0a0a;--fg-strong:#0a0a0a;--muted:#737373;--subtle:#a3a3a3;--fill:#f0f0f0;
+  --line:#e5e5e5;--line-subtle:#efefef;
+  --hover:rgba(0,0,0,.04);--sel:rgba(0,0,0,.06);--sel2:rgba(0,0,0,.09);
+  --input-bg:transparent;--ring:#737373;
+  --primary:#0a0a0a;--on-primary:#ffffff;
+  --danger:#be123c;--success:#15803d;--warning:#b45309;--info:#1d4ed8;
+  --shadow:0 10px 30px -12px rgba(0,0,0,.25);--scrim:rgba(0,0,0,.18);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--shell);color:var(--fg);font:400 13px/20px var(--font);-webkit-font-smoothing:antialiased}
+svg.lucide{width:14px;height:14px;stroke-width:2;flex:none}
+.wrap{max-width:1240px;margin:0 auto;padding:32px 28px 96px}
+a{color:inherit}
+h1,h2,h3{margin:0;color:var(--fg-strong)}
+.eyebrow{font:600 11px/14px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono)}
+.mutedtxt{color:var(--muted)}
+
+/* ---------- top ---------- */
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:28px}
+.brandrow{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.logo{width:26px;height:26px;border-radius:7px;background:var(--brand);display:grid;place-items:center;color:#111;font:700 13px var(--mono)}
+.top h1{font:600 26px/1.15 var(--font);letter-spacing:-.015em}
+.top p{max-width:720px;color:var(--muted);font-size:14px;line-height:22px;margin:10px 0 0}
+.toolbar{display:flex;gap:8px;position:sticky;top:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 36px}
+.stat{background:var(--pane);border:1px solid var(--line);border-radius:var(--r-xl);padding:16px}
+.stat b{display:block;font:600 24px/1.1 var(--font);color:var(--fg-strong);margin-top:6px}
+.stat span{color:var(--muted);font-size:12px}
+section{margin-top:48px}
+section>h2{font:600 18px/1.25 var(--font);letter-spacing:-.01em;margin:6px 0 4px}
+section>p.lede{color:var(--muted);margin:0 0 18px;max-width:780px}
+
+/* ---------- foundations ---------- */
+.found{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.fcard{background:var(--pane);border:1px solid var(--line);border-radius:var(--r-xl);padding:16px}
+.fcard h3{font:600 13px/20px var(--font);margin-bottom:10px}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sw{font-size:11px;line-height:14px;color:var(--muted)}
+.sw i{display:block;height:34px;border-radius:var(--r-md);border:1px solid var(--line);margin-bottom:5px}
+.typerow{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--line-subtle)}
+.typerow:last-child{border:0}
+.typerow small{color:var(--muted);font:500 11px var(--mono)}
+.radii{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.radii div{text-align:center;font:500 11px var(--mono);color:var(--muted)}
+.radii i{display:block;width:40px;height:40px;border:1.5px solid var(--fg);margin-bottom:6px}
+.heights{display:flex;gap:8px;align-items:flex-end;margin-top:14px}
+.heights div{width:44px;border:1px dashed var(--line);border-radius:4px;display:grid;place-items:center;font:500 10px var(--mono);color:var(--muted)}
+.rules{margin:0;padding-left:16px;color:var(--fg)}
+.rules li{margin:4px 0}
+
+/* ---------- matrix ---------- */
+.mxwrap{background:var(--pane);border:1px solid var(--line);border-radius:var(--r-xl);overflow:hidden}
+.mxfilter{display:flex;gap:6px;padding:10px;border-bottom:1px solid var(--line)}
+table.mx{width:100%;border-collapse:collapse}
+.mx th{font:500 12px/16px var(--font);color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--raised);position:sticky;top:0}
+.mx td{padding:9px 12px;border-bottom:1px solid var(--line-subtle);vertical-align:top}
+.mx tr.grp td{background:var(--raised);font:600 11px/14px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 12px}
+.mx tr:not(.grp):hover td{background:var(--hover)}
+.mx td.name a{font-weight:500;color:var(--fg-strong);text-decoration:none}
+.mx td.name a:hover{text-decoration:underline}
+.cell{display:flex;gap:8px;align-items:flex-start}
+.cnt{flex:none;min-width:30px;height:20px;padding:0 6px;border-radius:999px;display:inline-grid;place-items:center;font:600 11px var(--mono)}
+.cnt.ok{background:color-mix(in srgb,var(--success) 14%,transparent);color:var(--success)}
+.cnt.drift{background:color-mix(in srgb,var(--warning) 16%,transparent);color:var(--warning)}
+.cnt.none{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
+.cnt.na{background:var(--sel);color:var(--muted)}
+.cell span{color:var(--muted);font-size:12px;line-height:17px}
+.srcb{font:500 11px/16px var(--mono);color:var(--fg);white-space:nowrap}
+.legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:12px;margin:12px 2px 14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend .sep{width:1px;height:14px;background:var(--line)}
+/* pip grid */
+.pip{display:inline-block;width:10px;height:10px;border-radius:2px;flex:none}
+.pip.ok{background:var(--success)}
+.pip.drift{background:var(--warning)}
+.pip.none{background:transparent;box-shadow:inset 0 0 0 1.5px var(--danger)}
+.pip.na{background:transparent;box-shadow:inset 0 0 0 1.5px var(--subtle)}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pcard{background:var(--pane);border:1px solid var(--line);border-radius:var(--r-xl);padding:16px}
+.pcard .pt{display:flex;justify-content:space-between;align-items:baseline}
+.pcard .pt b{font:600 14px var(--font);color:var(--fg-strong)}
+.pcard .big{font:600 32px/1 var(--font);color:var(--fg-strong);margin:12px 0 4px;letter-spacing:-.02em}
+.pcard .big small{font:500 13px var(--font);color:var(--muted);letter-spacing:0;margin-left:6px}
+.stack{display:flex;height:8px;border-radius:999px;overflow:hidden;gap:2px;margin:12px 0 10px}
+.stack i{display:block}
+.stack .ok{background:var(--success)}.stack .drift{background:var(--warning)}.stack .none{background:var(--danger)}.stack .na{background:var(--sel2)}
+.pcard .kv{display:flex;gap:14px;font-size:12px;color:var(--muted)}
+.pcard .kv span{display:inline-flex;align-items:center;gap:5px}
+.pcard .kv b{color:var(--fg-strong);font-weight:600}
+.pg{display:grid;grid-template-columns:minmax(150px,1.2fr) repeat(3,1fr) 64px}
+.pg>div{padding:7px 12px;border-bottom:1px solid var(--line-subtle);display:flex;align-items:center;min-height:34px}
+.pg .gh{background:var(--raised);font:500 12px var(--font);color:var(--muted);position:sticky;top:0;z-index:1}
+.pg .grp{grid-column:1/-1;background:var(--raised);font:600 11px/14px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pg .nm a{font-weight:500;color:var(--fg-strong);text-decoration:none}
+.pg .nm a:hover{text-decoration:underline}
+.pg .pc{gap:3px;flex-wrap:wrap;cursor:default;position:relative}
+.pg .pc .n{font:500 11px var(--mono);color:var(--subtle);margin-left:6px}
+.pg .pc.many .pip{width:6px;height:6px;border-radius:1px}
+.pg .rowhover{background:var(--hover)}
+.who{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:5px;font:600 10px var(--mono);background:var(--sel);color:var(--fg-strong);margin-right:2px}
+.who.on{background:var(--fg-strong);color:var(--bg)}
+.hint{position:fixed;pointer-events:none;z-index:50;background:var(--fg-strong);color:var(--bg);font-size:12px;line-height:16px;padding:6px 10px;border-radius:var(--r-md);max-width:280px;display:none}
+/* render matrix: each product's shipped tokens, scoped per cell */
+.th-d{--b:#111;--s:#181818;--rs:#1f1f1f;--pp:#2b2b2b;--f:#ededed;--tx:#d4d4d4;--mu:#a3a3a3;--ln:rgba(255,255,255,.1);--in:rgba(255,255,255,.1);--ib:rgba(255,255,255,.03);--pr:#ffdd00;--pk:#ffdd00;--op:#1f1f1f;--as:#1f1f1f;--oas:#ededed;--sw:#ffdd00;--sl:rgba(255,255,255,.07);--fl:#333;--r:10px;--rc:14px;--h:32px;--dg:#f87171;--wn:#fbbf24;--ok:#4ade80;--if:#60a5fa;--ff:"Inter",sans-serif;--fm:"Source Code Pro",ui-monospace,monospace;--fz:13px}
+[data-mode=light] .th-d{--b:#fff;--s:#fff;--rs:#f4f4f4;--pp:#fff;--f:#0a0a0a;--tx:#0a0a0a;--mu:#737373;--ln:#e5e5e5;--in:#e5e5e5;--ib:transparent;--pk:#737373;--as:#f4f4f4;--oas:#0a0a0a;--sw:#737373;--sl:rgba(0,0,0,.07);--fl:#f5f5f5;--dg:#9f1239;--wn:#92400e;--ok:#166534;--if:#1e40af}
+.th-c{--b:#151515;--s:#202020;--rs:#202020;--pp:#333;--f:#fafafa;--tx:#fafafa;--mu:#a3a3a3;--ln:rgba(255,255,255,.1);--in:rgba(255,255,255,.18);--ib:rgba(255,255,255,.04);--pr:#FFDD00;--pk:#FFDD00;--op:#1f1f1f;--as:#FFDD00;--oas:#1f1f1f;--sw:#FFDD00;--sl:#454545;--fl:#3a3a3a;--r:8px;--rc:14px;--h:36px;--dg:#ef4444;--wn:#fdd94a;--ok:#86efac;--if:#60a5fa;--ff:"Inter",sans-serif;--fm:"Roboto Mono",ui-monospace,monospace;--fz:13px}
+.th-m{--b:#0e0e10;--s:#17171a;--rs:#1f1f24;--pp:#1f1f24;--f:#f2f0eb;--tx:#f2f0eb;--mu:#8a8680;--ln:rgba(255,255,255,.07);--in:rgba(255,255,255,.35);--ib:rgba(255,255,255,.04);--pr:#ffdd00;--pk:#ffdd00;--op:#1a1a10;--as:#ffdd00;--oas:#1a1a10;--sw:#647214;--sl:#1f1f24;--fl:#44444a;--r:7px;--rc:14px;--h:40px;--dg:#f28b7a;--wn:#f2b05f;--ok:#5fcb8e;--if:#60a5fa;--ff:-apple-system,"SF Pro Text",system-ui,sans-serif;--fm:"JetBrains Mono",monospace;--fz:13px}
+[data-mode=light] .th-m{--b:#fbfaf5;--s:#fff;--rs:#f0eee6;--pp:#fff;--f:#14130f;--tx:#14130f;--mu:#6f6a61;--ln:rgba(20,15,10,.09);--in:rgba(20,15,10,.45);--ib:#fff;--pr:#4f5a10;--pk:#4f5a10;--op:#fff;--sw:#4f5a10;--sl:#f0eee6;--fl:#e6e3da;--dg:#b0483a;--wn:#956011;--ok:#24784a;--if:#2260eb}
+.th-t{--b:var(--bg);--s:var(--pane);--rs:var(--raised);--pp:var(--pop);--f:var(--fg-strong);--tx:var(--fg);--mu:var(--muted);--ln:var(--line);--in:var(--line);--ib:var(--input-bg);--pr:var(--primary);--pk:var(--primary);--op:var(--on-primary);--as:var(--raised);--oas:var(--fg-strong);--sw:var(--primary);--sl:var(--sel);--fl:var(--fill);--r:10px;--rc:14px;--h:32px;--dg:var(--danger);--wn:var(--warning);--ok:var(--success);--if:var(--info);--ff:var(--font);--fm:var(--mono);--fz:13px}
+.rg{display:grid;grid-template-columns:minmax(120px,.7fr) repeat(4,minmax(0,1fr));gap:0 10px;padding:0 12px}
+.rg>.gh{position:sticky;top:0;z-index:2;background:var(--pane);padding:10px 2px;font:500 12px var(--font);color:var(--muted);border-bottom:1px solid var(--line)}
+.rg>.gh small{display:block;font:500 10px var(--mono);color:var(--subtle)}
+.rg>.grp{grid-column:1/-1;font:600 11px/14px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:18px 2px 6px}
+.rg>.nm{display:flex;align-items:center;padding:8px 2px;font-weight:500}
+.rg>.nm a{color:var(--fg-strong);text-decoration:none}.rg>.nm a:hover{text-decoration:underline}
+.cw{padding:8px 0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cw.rowhover .rc{box-shadow:0 0 0 1px var(--ring)}
+.rc{height:104px;border-radius:10px;background:var(--b);color:var(--tx);font:400 var(--fz)/1.4 var(--ff);display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;overflow:hidden;position:relative;border:1px solid var(--line-subtle);flex-wrap:wrap;align-content:center}
+.rc .lucide{width:14px;height:14px}
+.rc.tgt{border:1.5px solid var(--fg-strong)}
+.rc.miss{background:repeating-linear-gradient(45deg,transparent 0 7px,var(--hover) 7px 14px);border:1px dashed color-mix(in srgb,var(--danger) 50%,transparent);color:var(--danger);font:500 11px var(--mono)}
+.rc.na{color:var(--subtle);font:500 11px var(--mono)}
+.pl{display:flex;align-items:center;gap:3px;min-height:12px;flex-wrap:wrap}
+.pl .n{font:500 11px var(--mono);color:var(--subtle);margin-left:4px}
+.pl.many .pip{width:6px;height:6px;border-radius:1px}
+.pl .src{font:500 11px var(--mono);color:var(--muted)}
+.z{zoom:.72}.z6{zoom:.6}
+.xb{height:var(--h);padding:0 12px;border-radius:var(--r);display:inline-flex;align-items:center;gap:6px;font-weight:500;font-size:12px;background:var(--pr);color:var(--op);white-space:nowrap;flex:none}
+.xb.o{background:var(--ib);color:var(--f);box-shadow:inset 0 0 0 1px var(--in)}
+.xb.g{background:none;color:var(--f)}
+.xb.s{background:var(--sl);color:var(--f)}
+.xb.d{background:var(--dg);color:#fff}
+.xb.ic{width:var(--h);padding:0;justify-content:center}
+.xb.sm{height:26px;padding:0 9px;font-size:11px}
+.xi{height:var(--h);border-radius:var(--r);box-shadow:inset 0 0 0 1px var(--in);background:var(--ib);padding:0 10px;display:flex;align-items:center;gap:6px;color:var(--f);width:170px;font-size:12px;flex:none}
+.xi .ph,.mu{color:var(--mu)}
+.xi .lucide{color:var(--mu)}
+.xp{background:var(--pp);border-radius:var(--r);box-shadow:0 8px 20px -8px rgba(0,0,0,.5),0 0 0 1px var(--ln);padding:3px;width:170px}
+.xm{height:24px;display:flex;align-items:center;gap:6px;padding:0 7px;border-radius:calc(var(--r) - 3px);font-size:12px;color:var(--f)}
+.xm .lucide{color:var(--mu)}
+.xm.on{background:var(--sl)}
+.xm .ck{margin-left:auto;display:flex}
+.xcard{background:var(--s);border-radius:var(--rc);box-shadow:0 0 0 1px var(--ln);padding:10px 12px;font-size:11px}
+.xcard b{color:var(--f);display:block;font-weight:600;font-size:12px}
+.fm{font-family:var(--fm)}
+.xbadge{height:20px;padding:0 8px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;background:var(--sl);color:var(--f)}
+.xsheet{position:absolute;left:14px;right:14px;bottom:-1px;background:var(--pp);border-radius:12px 12px 0 0;box-shadow:0 0 0 1px var(--ln),0 -8px 20px -10px rgba(0,0,0,.4);padding:5px 0 0}
+.xsheet .gr{width:28px;height:4px;border-radius:2px;background:var(--fl);margin:0 auto 5px}
+.xsheet .op{height:26px;display:flex;align-items:center;padding:0 12px;border-top:1px solid var(--ln);font-size:12px;color:var(--f)}
+.xsheet .op .lucide{margin-left:auto}
+.col{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.xbar{height:4px;width:170px;border-radius:999px;background:var(--fl);overflow:hidden}.xbar i{display:block;height:100%;width:62%;background:var(--pk);border-radius:999px}
+.xsk{height:9px;border-radius:5px;background:var(--sl);animation:pulse 1.6s infinite}
+.xcb{width:16px;height:16px;border-radius:4px;display:inline-grid;place-items:center;flex:none}
+.xcb .lucide{width:11px!important;height:11px!important;stroke-width:3}
+.xrd{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--c);display:inline-grid;place-items:center;flex:none}
+.xrd.on::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--c)}
+.xsw{border-radius:999px;position:relative;flex:none}
+.xsw::after{content:"";position:absolute;top:2px;right:2px;bottom:2px;aspect-ratio:1;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.xsw.off::after{right:auto;left:2px}
+.ch{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--f)}
+.xg4{display:grid;grid-template-columns:repeat(4,3px);gap:1.5px}.xg4 i{width:3px;height:3px;background:var(--f);animation:pxa 1.2s infinite}.xg4 i:nth-child(3n){animation-delay:.3s}
+.dots{display:flex;gap:3px}.dots i{width:6px;height:6px;border-radius:50%;background:#9ca3af;animation:pxa 1s infinite}.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+.px3{display:grid;grid-template-columns:repeat(3,4px);gap:2px}.px3 i{width:4px;height:4px;border-radius:1px;background:var(--f);animation:pxa 1.2s infinite}.px3 i:nth-child(2n){animation-delay:.2s}.px3 i:nth-child(5){animation-delay:.5s}
+.tl{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mu);height:22px;width:200px}
+.tl .p{font:500 11px var(--fm);color:var(--f)}
+.tl .ld{flex:1;height:1px;background:var(--ln)}
+@media (max-width:900px){.rg{grid-template-columns:1fr}}
+
+/* scannability: prose hidden by default */
+body:not(.detail) .spec .rule,body:not(.detail) .notes,body:not(.detail) section>p.lede,body:not(.detail) .top p,body:not(.detail) .fcard p.mutedtxt{display:none}
+body:not(.detail) .stage{margin-bottom:16px}
+
+/* ---------- specimens ---------- */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.spec{background:var(--pane);border:1px solid var(--line);border-radius:var(--r-xl);display:flex;flex-direction:column;scroll-margin-top:20px}
+.spec.wide{grid-column:1/-1}
+.spec>header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 0}
+.spec h3{font:600 14px/20px var(--font)}
+.tag{font:500 11px var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+.spec .rule{margin:4px 16px 0;color:var(--muted)}
+.stage{margin:14px 16px;padding:20px;border-radius:var(--r-lg);background:var(--bg);border:1px solid var(--line-subtle);display:flex;flex-direction:column;gap:16px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.lbl{font:500 11px var(--mono);color:var(--subtle);min-width:72px}
+.notes{margin:auto 16px 14px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12px;line-height:18px}
+.notes dt{color:var(--subtle);font:500 11px/18px var(--mono)}
+.notes dd{margin:0;color:var(--fg)}
+.spec:target{outline:2px solid var(--ring);outline-offset:2px}
+
+/* ---------- canonical components ---------- */
+.btn{--h:32px;height:var(--h);padding:0 10px;display:inline-flex;align-items:center;gap:6px;border-radius:var(--r-lg);border:1px solid transparent;font:500 13px/1 var(--font);color:var(--fg-strong);background:none;cursor:pointer;white-space:nowrap}
+.btn.xs{--h:24px;padding:0 8px;font-size:12px;border-radius:var(--r-md)}
+.btn.sm{--h:28px;font-size:12px;border-radius:var(--r-md)}
+.btn.lg{--h:36px;padding:0 14px}
+.btn.primary{background:var(--primary);color:var(--on-primary)}
+.btn.primary.hover{background:color-mix(in srgb,var(--primary) 85%,var(--bg))}
+.btn.secondary{background:var(--sel);}
+.btn.secondary.hover{background:var(--sel2)}
+.btn.outline{border-color:var(--line);background:var(--input-bg)}
+.btn.outline.hover{background:var(--hover)}
+.btn.ghost.hover{background:var(--hover)}
+.btn.destructive{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger)}
+.btn.destructive-solid{background:var(--danger);color:#fff}
+[data-mode=dark] .btn.destructive-solid{color:#1a0a0a}
+.btn.link{padding:0;height:auto;text-decoration:underline;text-underline-offset:3px;color:var(--fg-strong)}
+.btn.focus,.focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--ring) 45%,transparent);border-color:var(--ring)}
+.btn[disabled],.dis{opacity:.5;pointer-events:none}
+.btn.icon{width:var(--h);padding:0;justify-content:center}
+.btn.round{border-radius:999px}
+.spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.input{height:32px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--input-bg);padding:0 10px;display:flex;align-items:center;gap:8px;color:var(--fg-strong);min-width:220px}
+.input .ph{color:var(--subtle)}
+.input.err{border-color:var(--danger);box-shadow:0 0 0 3px color-mix(in srgb,var(--danger) 22%,transparent)}
+.input.filled{background:var(--hover);border-color:transparent}
+.input.filled .lucide{color:var(--muted)}
+.input .kbd{margin-left:auto}
+.textarea{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--input-bg);padding:8px 10px;min-height:76px;width:100%;color:var(--fg-strong);position:relative}
+.textarea .count{position:absolute;right:10px;bottom:6px;font:500 11px var(--mono);color:var(--subtle)}
+.field{display:flex;flex-direction:column;gap:6px;min-width:240px}
+.field label{font:500 12px/16px var(--font);color:var(--fg-strong)}
+.field .help{font-size:12px;color:var(--muted)}
+.field .error{font-size:12px;color:var(--danger);display:flex;gap:5px;align-items:center}
+.field .error .lucide{width:12px;height:12px}
+
+.trigger{justify-content:space-between;min-width:200px;cursor:pointer}
+.trigger .lucide{color:var(--muted)}
+.menu{background:var(--pop);border-radius:var(--r-lg);box-shadow:var(--shadow),0 0 0 1px var(--line);padding:4px;min-width:200px;color:var(--fg-strong)}
+.mi{height:28px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:var(--r-md);font-size:13px}
+.mi .lucide{color:var(--muted)}
+.mi.active{background:var(--sel)}
+.mi .r{margin-left:auto;color:var(--muted);font-size:12px}
+.mi .chk{margin-left:auto;color:var(--fg-strong)}
+.mi.danger,.mi.danger .lucide{color:var(--danger)}
+.msep{height:1px;background:var(--line);margin:4px -4px}
+.mlabel{font:500 11px/14px var(--font);color:var(--muted);padding:6px 8px 4px}
+.msearch{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;border-bottom:1px solid var(--line);margin:-4px -4px 4px;color:var(--subtle)}
+.mempty{padding:12px 8px;color:var(--muted);font-size:12px;text-align:center}
+
+.cb{width:16px;height:16px;border-radius:var(--r-xs);border:1px solid color-mix(in srgb,var(--fg) 35%,transparent);display:inline-grid;place-items:center;flex:none}
+.cb.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.cb.on .lucide{width:12px;height:12px;stroke-width:3}
+.cb.mixed{background:var(--primary);border-color:var(--primary)}
+.cb.mixed::after{content:"";width:8px;height:2px;background:var(--on-primary);border-radius:1px}
+.rd{width:16px;height:16px;border-radius:50%;border:1px solid color-mix(in srgb,var(--fg) 35%,transparent);display:inline-grid;place-items:center;flex:none}
+.rd.on{border-color:var(--primary)}
+.rd.on::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary)}
+.choice{display:flex;align-items:center;gap:8px;color:var(--fg-strong)}
+.sw2{width:32px;height:18px;border-radius:999px;background:var(--fill);position:relative;flex:none}
+.sw2::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--bg);box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s}
+[data-mode=dark] .sw2::after{background:var(--fg)}
+.sw2.on{background:var(--primary)}
+.sw2.on::after{left:16px;background:var(--on-primary)}
+.sw2.sm{width:24px;height:14px}.sw2.sm::after{width:10px;height:10px}.sw2.sm.on::after{left:12px}
+
+.seg{display:inline-flex;background:var(--sel);border-radius:var(--r-lg);padding:3px;gap:2px}
+.seg span{height:26px;padding:0 12px;display:grid;place-items:center;border-radius:var(--r-md);color:var(--muted);font-weight:500}
+.seg span.on{background:var(--bg);color:var(--fg-strong);box-shadow:0 1px 2px rgba(0,0,0,.15),0 0 0 1px var(--line)}
+
+.badge{height:20px;padding:0 8px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;font:500 12px/1 var(--font);background:var(--sel);color:var(--fg-strong)}
+.badge .lucide{width:12px;height:12px}
+.badge.outline{background:none;box-shadow:inset 0 0 0 1px var(--line)}
+.badge.success{background:color-mix(in srgb,var(--success) 13%,transparent);color:var(--success)}
+.badge.warning{background:color-mix(in srgb,var(--warning) 15%,transparent);color:var(--warning)}
+.badge.danger{background:color-mix(in srgb,var(--danger) 13%,transparent);color:var(--danger)}
+.badge.info{background:color-mix(in srgb,var(--info) 13%,transparent);color:var(--info)}
+.badge.count{min-width:20px;justify-content:center;padding:0 6px;font-family:var(--mono);font-size:11px}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.kbd{height:20px;min-width:20px;padding:0 5px;border-radius:var(--r-sm);background:var(--sel);display:inline-grid;place-items:center;font:500 11px var(--font);color:var(--muted)}
+.bar{height:4px;border-radius:999px;background:var(--sel2);overflow:hidden;width:220px}
+.bar i{display:block;height:100%;background:var(--fg-strong);border-radius:999px}
+.steps{display:flex;gap:4px;width:220px}.steps i{flex:1;height:4px;border-radius:999px;background:var(--sel2)}.steps i.on{background:var(--fg-strong)}
+.skel{background:var(--sel);border-radius:var(--r-md);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.5}}
+@media (prefers-reduced-motion:reduce){.skel,.spin,.shimmer,.px i{animation:none!important}}
+.tip{position:relative;display:inline-flex;flex-direction:column;align-items:center}
+.tip .t{position:absolute;bottom:calc(100% + 8px);background:var(--fg-strong);color:var(--bg);font-size:12px;line-height:16px;padding:5px 10px;border-radius:var(--r-md);white-space:nowrap;display:flex;gap:8px;align-items:center}
+.tip .t .kbd{background:color-mix(in srgb,var(--bg) 20%,transparent);color:var(--bg);height:16px;min-width:16px;font-size:10px}
+.tip .t::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border:5px solid transparent;border-top-color:var(--fg-strong)}
+
+.card{background:var(--pane);border-radius:var(--r-xl);box-shadow:0 0 0 1px var(--line);width:100%}
+.card .ch{padding:16px 16px 4px}.card .ch b{color:var(--fg-strong);font-weight:600;font-size:14px}.card .ch p{margin:2px 0 0;color:var(--muted)}
+.card .cc{padding:12px 16px}
+.card .cf{padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;background:color-mix(in srgb,var(--fg) 2%,transparent);border-radius:0 0 var(--r-xl) var(--r-xl)}
+.overlay{background:var(--scrim);border-radius:var(--r-lg);padding:28px;display:grid;place-items:center}
+.dialog{background:var(--bg);border-radius:var(--r-xl);box-shadow:var(--shadow),0 0 0 1px var(--line);width:360px}
+.dialog .dh{padding:16px 16px 0;display:flex;justify-content:space-between}
+.dialog .dh b{font-size:16px;line-height:24px;font-weight:500;color:var(--fg-strong)}
+.dialog .db{padding:4px 16px 16px;color:var(--muted)}
+.dialog .df{padding:12px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;background:color-mix(in srgb,var(--fg) 3%,transparent);border-radius:0 0 var(--r-xl) var(--r-xl)}
+.sheetdemo{display:flex;height:200px;border-radius:var(--r-lg);overflow:hidden;background:var(--scrim)}
+.sheetdemo .page{flex:1}
+.sheetdemo .panel{width:260px;background:var(--pop);box-shadow:var(--shadow);border-left:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:10px}
+.palette{width:440px;background:var(--pop);border-radius:var(--r-xl);box-shadow:var(--shadow),0 0 0 1px var(--line);padding:4px}
+.palette .msearch{height:44px;font-size:14px;padding:0 12px}
+.tabs{display:flex;gap:18px;border-bottom:1px solid var(--line);width:100%}
+.tabs span{padding:8px 0;color:var(--muted);font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs span.on{color:var(--fg-strong);border-color:var(--fg-strong)}
+.tabs span .badge{margin-left:6px;height:18px}
+.disc{width:100%}
+.disc .dr{display:flex;align-items:center;gap:8px;height:32px;padding:0 6px;border-radius:var(--r-md);color:var(--fg-strong);font-weight:500}
+.disc .dr .lucide{color:var(--muted);transition:transform .15s}
+.disc .dr.open .lucide.chev{transform:rotate(90deg)}
+.disc .db{margin:2px 0 8px 13px;padding:4px 0 4px 14px;border-left:1px solid var(--line);color:var(--muted)}
+table.tbl{width:100%;border-collapse:collapse}
+.tbl th{height:36px;text-align:left;font:500 12px var(--font);color:var(--muted);border-bottom:1px solid var(--line);padding:0 8px}
+.tbl td{height:40px;padding:0 8px;border-bottom:1px solid var(--line-subtle);color:var(--fg-strong)}
+.tbl tr.h td{background:var(--hover)}.tbl tr.s td{background:var(--sel)}
+.tbl .num{text-align:right;font-family:var(--mono);font-size:12px}
+.lr{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-md);min-height:44px;width:100%}
+.lr+.lr{border-top:1px solid var(--line-subtle);border-radius:0}
+.tile{width:28px;height:28px;border-radius:var(--r-md);background:var(--sel);display:grid;place-items:center;flex:none;color:var(--fg)}
+.lr .tx{flex:1;min-width:0}.lr .tx b{display:block;font-weight:500;color:var(--fg-strong)}.lr .tx small{display:block;color:var(--muted);font-size:12px;line-height:16px}
+.lr .val{font:500 12px var(--mono);color:var(--muted)}
+.lr>.lucide{color:var(--subtle)}
+.side{width:240px;background:var(--shell);border-radius:var(--r-lg);padding:8px;border:1px solid var(--line-subtle)}
+.ni{height:32px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:var(--r-md);color:var(--fg)}
+.ni .lucide{color:var(--muted)}
+.ni.hover{background:var(--hover)}
+.ni.on{background:var(--sel);color:var(--fg-strong);font-weight:500}.ni.on .lucide{color:var(--fg-strong)}
+.ni .badge{margin-left:auto}
+.glabel{height:28px;display:flex;align-items:center;padding:0 8px;font-size:12px;color:var(--muted)}
+.hdr{width:100%;height:44px;display:flex;align-items:center;gap:10px;padding:0 8px;background:var(--bg);border-radius:var(--r-md)}
+.crumb{display:flex;align-items:center;gap:6px;color:var(--muted)}.crumb b{color:var(--fg-strong);font-weight:500}
+.crumb .lucide{width:12px;height:12px}
+.hdr .acts{margin-left:auto;display:flex;gap:4px}
+.toast{width:340px;background:var(--pop);border-radius:var(--r-lg);box-shadow:var(--shadow),0 0 0 1px var(--line);padding:12px;display:flex;gap:10px;align-items:flex-start}
+.toast b{display:block;color:var(--fg-strong);font-weight:500}
+.toast small{color:var(--muted);font-size:12px}
+.toast .x{margin-left:auto;color:var(--subtle)}
+.toast>.lucide{width:16px;height:16px;margin-top:2px}
+.callout{display:flex;gap:10px;padding:10px 12px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--pane);width:100%;align-items:flex-start}
+.callout>.lucide{width:16px;height:16px;margin-top:2px;color:var(--muted)}
+.callout b{display:block;color:var(--fg-strong);font-weight:500}
+.callout p{margin:0;color:var(--muted)}
+.callout .acts{margin-left:auto;display:flex;gap:6px;align-self:center}
+.callout.info{border-color:color-mix(in srgb,var(--info) 30%,transparent);background:color-mix(in srgb,var(--info) 7%,var(--pane))}.callout.info>.lucide{color:var(--info)}
+.callout.success{border-color:color-mix(in srgb,var(--success) 30%,transparent);background:color-mix(in srgb,var(--success) 7%,var(--pane))}.callout.success>.lucide{color:var(--success)}
+.callout.warning{border-color:color-mix(in srgb,var(--warning) 32%,transparent);background:color-mix(in srgb,var(--warning) 8%,var(--pane))}.callout.warning>.lucide{color:var(--warning)}
+.callout.danger{border-color:color-mix(in srgb,var(--danger) 30%,transparent);background:color-mix(in srgb,var(--danger) 7%,var(--pane))}.callout.danger>.lucide{color:var(--danger)}
+.banner{width:100%;height:36px;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:var(--r-md);background:color-mix(in srgb,var(--warning) 14%,var(--pane));color:var(--fg-strong);font-weight:500}
+.banner .lucide{color:var(--warning)}
+.banner .btn{margin-left:auto}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:16px;width:100%}
+.empty .tile{width:40px;height:40px;border-radius:var(--r-lg)}
+.empty .tile .lucide{width:18px;height:18px;color:var(--muted)}
+.empty b{color:var(--fg-strong);font-weight:500;font-size:13px}
+.empty p{margin:-6px 0 4px;color:var(--muted);max-width:280px}
+.code{width:100%;border-radius:var(--r-lg);border:1px solid var(--line-subtle);overflow:hidden;background:color-mix(in srgb,var(--fill) 25%,var(--bg))}
+.code .chd{height:30px;display:flex;align-items:center;padding:0 6px 0 12px;border-bottom:1px solid var(--line-subtle);font:500 11px var(--mono);color:var(--muted);background:color-mix(in srgb,var(--fill) 35%,var(--bg))}
+.code .chd .btn{margin-left:auto}
+.code pre{margin:0;padding:12px 14px;font:500 12px/19px var(--mono);color:var(--fg-strong);overflow:auto}
+.k{color:var(--muted)}.s{color:var(--success)}.n{color:var(--info)}
+.prose{color:var(--fg);font-size:14px;line-height:22px;max-width:560px}
+.prose h4{font:600 16px/24px var(--font);color:var(--fg-strong);margin:0 0 6px}
+.prose p{margin:0 0 10px}
+.prose ul{margin:0 0 10px;padding-left:20px}
+.prose code{font:500 .86em var(--mono);background:var(--sel);padding:1px 5px;border-radius:var(--r-sm);color:var(--fg-strong)}
+.prose a{color:var(--fg-strong);text-decoration:underline;text-underline-offset:2px}
+.prose blockquote{margin:0;padding-left:12px;border-left:2px solid var(--line);color:var(--muted)}
+.diff{width:100%;border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;font:500 12px/20px var(--mono)}
+.diff .dfh{height:32px;display:flex;align-items:center;gap:8px;padding:0 10px;border-bottom:1px solid var(--line);font-family:var(--font);color:var(--fg-strong);font-weight:500}
+.diff .dl{display:flex}.diff .dl i{width:40px;text-align:right;padding-right:10px;color:var(--subtle);font-style:normal;flex:none}
+.diff .dl span{white-space:pre;color:var(--fg)}
+.diff .add{background:color-mix(in srgb,var(--success) 10%,transparent)}.diff .add span::before{content:"+ ";color:var(--success)}
+.diff .del{background:color-mix(in srgb,var(--danger) 10%,transparent)}.diff .del span::before{content:"- ";color:var(--danger)}
+.diff .ctx span::before{content:"  "}
+.dstat{font:500 12px var(--mono)}.dstat .a{color:var(--success)}.dstat .d{color:var(--danger)}
+
+/* agent */
+.thread{max-width:620px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:14px;font-size:14px;line-height:22px}
+.um{align-self:flex-end;max-width:80%;background:var(--raised);box-shadow:inset 0 0 0 1px var(--line-subtle);color:var(--fg-strong);padding:8px 14px;border-radius:var(--r-xl)}
+.umeta{align-self:flex-end;display:flex;gap:6px;align-items:center;color:var(--subtle);font-size:12px;margin-top:-8px}
+.am{color:var(--fg);padding:0 4px}
+.am p{margin:0 0 8px}
+.actbar{display:flex;gap:2px;margin-left:-4px}
+.actbar .btn{color:var(--muted)}
+.tr{display:flex;align-items:center;gap:8px;height:26px;color:var(--muted);font-size:13px;padding:0 4px;border-radius:var(--r-sm)}
+.tr .obj{font:500 12px var(--mono);color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr .lead{flex:1;height:1px;background:var(--line-subtle);min-width:20px}
+.tr .chev{color:var(--subtle)}
+.tr.fail,.tr.fail .lucide:first-child{color:var(--danger)}
+.tr.wait .lucide:first-child{color:var(--warning)}
+.tr.cancel{opacity:.55}.tr.cancel .obj{text-decoration:line-through}
+.tbody{margin:0 0 4px 11px;padding:6px 0 6px 14px;border-left:1px solid var(--line)}
+.shimmer{background:linear-gradient(90deg,var(--muted) 0%,var(--fg-strong) 50%,var(--muted) 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 2s linear infinite}
+@keyframes sh{from{background-position:200% 0}to{background-position:-200% 0}}
+.px{display:grid;grid-template-columns:repeat(3,4px);gap:2px}
+.px i{width:4px;height:4px;border-radius:1px;background:var(--fg-strong);animation:pxa 1.2s infinite}
+.px i:nth-child(2n){animation-delay:.2s}.px i:nth-child(3n){animation-delay:.4s}.px i:nth-child(5){animation-delay:.6s}
+@keyframes pxa{50%{opacity:.2}}
+.working{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}
+.working .t{font:500 12px var(--mono);color:var(--subtle)}
+.fold{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;height:26px;padding:0 4px}
+.fold .line{flex:1;height:1px;background:var(--line-subtle)}
+.composer{width:100%;max-width:620px;margin:0 auto;background:var(--raised);border-radius:16px;box-shadow:0 0 0 1px var(--line),0 12px 28px -18px rgba(0,0,0,.4);padding:8px}
+.composer.focus{box-shadow:0 0 0 1px color-mix(in srgb,var(--fg) 30%,transparent),0 12px 28px -18px rgba(0,0,0,.4)}
+.composer .attach{display:flex;gap:8px;padding:4px 4px 8px}
+.composer .inp{min-height:44px;padding:6px 8px;color:var(--subtle);font-size:14px}
+.composer .tb{display:flex;align-items:center;gap:4px}
+.composer .tb .sp{flex:1}
+.chip{height:28px;padding:0 8px;border-radius:var(--r-md);display:inline-flex;align-items:center;gap:6px;color:var(--fg);font-weight:500;font-size:12px}
+.chip.hover{background:var(--hover)}
+.chip .lucide{color:var(--muted)}
+.chip .lucide.cd{width:12px;height:12px}
+.send{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--primary);color:var(--on-primary);flex:none}
+.send.idle{background:var(--sel2);color:var(--subtle)}
+.send.stop{background:var(--fg-strong)}
+.send.stop i{width:9px;height:9px;border-radius:2px;background:var(--bg)}
+.ring{width:16px;height:16px}
+.att{width:56px;height:56px;border-radius:var(--r-md);background:linear-gradient(135deg,#6b7280,#374151);position:relative;flex:none}
+.att .rm{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--fg-strong);color:var(--bg);display:grid;place-items:center}
+.att .rm .lucide{width:10px;height:10px;stroke-width:3}
+.att.up::after{content:"";position:absolute;inset:0;border-radius:inherit;background:rgba(0,0,0,.45)}
+.att.up .spin{position:absolute;inset:0;margin:auto;color:#fff;z-index:1;width:16px;height:16px}
+.fchip{height:56px;width:180px;border-radius:var(--r-md);box-shadow:inset 0 0 0 1px var(--line);background:var(--pane);display:flex;align-items:center;gap:8px;padding:0 10px;position:relative}
+.fchip .tx b{display:block;font:500 12px/16px var(--font);color:var(--fg-strong)}.fchip .tx small{font:500 11px var(--mono);color:var(--subtle)}
+.fchip.err{box-shadow:inset 0 0 0 1px var(--danger)}
+.fchip .rm{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--fg-strong);color:var(--bg);display:grid;place-items:center}
+.fchip .rm .lucide{width:10px;height:10px;stroke-width:3}
+.perm{width:100%;max-width:620px;margin:0 auto;background:var(--raised);border-radius:16px;box-shadow:0 0 0 1px var(--line),0 12px 28px -18px rgba(0,0,0,.4);padding:16px;display:flex;flex-direction:column;gap:12px}
+.perm .ph{display:flex;gap:10px;align-items:flex-start}
+.perm .ph>.lucide{width:16px;height:16px;color:var(--warning);margin-top:3px}
+.perm .ph b{display:block;font-size:15px;line-height:22px;font-weight:500;color:var(--fg-strong)}
+.perm .ph p{margin:0;color:var(--muted)}
+.pat{border:1px solid var(--line);border-radius:var(--r-lg);padding:9px 12px;font:500 12px var(--mono);color:var(--fg-strong);background:var(--bg)}
+.perm .pf{display:flex;justify-content:flex-end;gap:8px;align-items:center}
+.perm .pf .hint{margin-right:auto;color:var(--subtle);font-size:12px;display:flex;gap:6px;align-items:center}
+.qopt{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-lg);box-shadow:inset 0 0 0 1px var(--line);color:var(--fg-strong)}
+.qopt.on{box-shadow:inset 0 0 0 1px var(--fg-strong);background:var(--hover)}
+.qopt small{display:block;color:var(--muted);font-size:12px;line-height:16px}
+.qopt .kbd{margin-left:auto}
+.srow{display:flex;gap:8px;align-items:flex-start;padding:6px 10px;border-radius:var(--r-md);width:260px}
+.srow.on{background:var(--sel)}
+.srow.hover{background:var(--hover)}
+.srow .st{margin-top:3px;color:var(--muted)}
+.srow .tx{flex:1;min-width:0}
+.srow .tx b{display:block;font-weight:500;color:var(--fg-strong);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srow .tx small{display:block;color:var(--muted);font-size:12px;line-height:16px}
+.srow .tm{font:500 11px/20px var(--mono);color:var(--subtle)}
+.status{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;width:100%}
+.status div{display:flex;gap:8px;align-items:center;color:var(--fg-strong)}
+.status small{color:var(--muted);font-size:12px;margin-left:auto}
+.c-warn{color:var(--warning)}.c-danger{color:var(--danger)}.c-muted{color:var(--muted)}.c-subtle{color:var(--subtle)}.c-success{color:var(--success)}
+.todo{display:flex;flex-direction:column;gap:2px;width:100%;max-width:360px}
+.todo div{display:flex;gap:8px;align-items:center;height:26px;color:var(--fg-strong)}
+.todo .g{width:14px;height:14px;border-radius:3px;border:1px solid color-mix(in srgb,var(--fg) 35%,transparent);display:grid;place-items:center;flex:none}
+.todo .g.done{background:var(--fg-strong);border-color:var(--fg-strong);color:var(--bg)}.todo .g.done .lucide{width:10px;height:10px;stroke-width:3}
+.todo .done-t{color:var(--muted);text-decoration:line-through}
+.todo .g.fail{border-color:var(--danger);color:var(--danger)}.todo .g.fail .lucide{width:10px;height:10px;stroke-width:3}
+.todo .g.run{border:0}
+.ctxpop{width:240px;background:var(--pop);border-radius:var(--r-lg);box-shadow:var(--shadow),0 0 0 1px var(--line);padding:12px;display:flex;flex-direction:column;gap:8px}
+.ctxpop .row{justify-content:space-between}
+.qd{display:flex;align-items:center;gap:6px;color:var(--subtle);font-size:12px;align-self:flex-end;margin-top:-8px}
+.stopped{font-size:12px;color:var(--subtle);padding:0 4px}
+
+/* mobile mini */
+.phone{width:230px;border-radius:28px;border:1px solid var(--line);background:var(--bg);overflow:hidden;position:relative;height:250px;flex:none}
+.phone .scr{position:absolute;inset:0;background:var(--scrim)}
+.phone .bs{position:absolute;left:0;right:0;bottom:0;background:var(--pop);border-radius:16px 16px 0 0;padding:6px 0 10px}
+.phone .grab{width:36px;height:5px;border-radius:3px;background:var(--sel2);margin:2px auto 8px}
+.phone .bsh{display:flex;justify-content:space-between;align-items:center;padding:0 14px 8px;border-bottom:1px solid var(--line-subtle);font-family:-apple-system,var(--font)}
+.phone .bsh b{font-size:14px;color:var(--fg-strong)}
+.phone .bsh span{font-size:13px;color:var(--muted)}
+.phone .opt{height:44px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--line-subtle);color:var(--fg-strong);font:500 14px -apple-system,var(--font)}
+.phone .opt .lucide{margin-left:auto;width:16px;height:16px}
+.leftout{columns:2;column-gap:24px}
+.leftout li{break-inside:avoid;margin:0 0 8px;color:var(--fg)}
+.leftout li span{color:var(--muted)}
+@media (max-width:900px){.grid,.found,.board{grid-template-columns:1fr}.leftout{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top">
+  <div>
+    <div class="brandrow"><div class="logo">K</div><span class="eyebrow">Kilo design · component parity</span></div>
+    <h1>One component per job</h1>
+    <div class="row" style="margin-top:10px;gap:6px"><span class="badge">Desktop</span><span class="badge">Cloud web</span><span class="badge">Mobile</span><span class="badge outline">B · Mono</span><span class="badge outline">Best of three</span></div>
+    <p>Today the three products ship the same jobs with different parts: six select-like controls in Desktop, three in Cloud, six in Mobile. This page shows what each product has today, and the one target design for every component that earns a place. The target is the best of the three for each component. Colors follow <b>B · Mono</b>: primary actions are neutral, and the yellow appears only on the logo. Mobile keeps the same roles, variants, states and tokens, and uses native iOS behavior where that fits better.</p>
+  </div>
+  <div class="toolbar">
+    <button class="btn ghost sm" id="detBtn"><i data-lucide="align-left"></i><span>Show notes</span></button>
+    <button class="btn outline sm" id="modeBtn"><i data-lucide="sun"></i><span>Light</span></button>
+  </div>
+</div>
+
+
+<!-- ============ FOUNDATIONS ============ -->
+<section id="foundations">
+  <span class="eyebrow">01</span>
+  <h2>Shared foundations</h2>
+  <p class="lede">Every specimen below uses these values. They come from Desktop's Kilo theme. The other two products are already close: all three use radii of about 8, 10 and 14, and they agree on the neutral "selected" fill for navigation.</p>
+  <div class="found">
+    <div class="fcard">
+      <h3>Color roles · B · Mono</h3>
+      <div class="swatches">
+        <div class="sw"><i style="background:var(--primary)"></i>primary</div>
+        <div class="sw"><i style="background:var(--bg)"></i>background</div>
+        <div class="sw"><i style="background:var(--raised)"></i>raised</div>
+        <div class="sw"><i style="background:var(--pop)"></i>popover</div>
+        <div class="sw"><i style="background:var(--sel)"></i>selected</div>
+        <div class="sw"><i style="background:var(--muted)"></i>muted text</div>
+        <div class="sw"><i style="background:var(--line)"></i>border</div>
+        <div class="sw"><i style="background:var(--brand)"></i>brand · logo only</div>
+        <div class="sw"><i style="background:var(--success)"></i>success</div>
+        <div class="sw"><i style="background:var(--warning)"></i>warning</div>
+        <div class="sw"><i style="background:var(--danger)"></i>danger</div>
+        <div class="sw"><i style="background:var(--info)"></i>info</div>
+      </div>
+    </div>
+    <div class="fcard">
+      <h3>Type</h3>
+      <div class="typerow"><span style="font:600 24px/1.2 var(--font);color:var(--fg-strong)">Title</span><small>24 / 600</small></div>
+      <div class="typerow"><span style="font:600 16px/1.3 var(--font);color:var(--fg-strong)">Heading</span><small>16 / 600</small></div>
+      <div class="typerow"><span style="font-size:14px">Chat and body</span><small>14 / 400</small></div>
+      <div class="typerow"><span>UI text (default)</span><small>13 / 400–500</small></div>
+      <div class="typerow"><span style="font-size:12px;font-weight:500">Label</span><small>12 / 500</small></div>
+      <div class="typerow"><span class="eyebrow">Eyebrow</span><small>mono 11 caps</small></div>
+      <div class="typerow"><span class="mono" style="font-size:12px">src/app.ts</span><small>mono 12</small></div>
+      <p class="mutedtxt" style="margin:8px 0 0;font-size:12px">Inter on web, SF Pro on iOS. One mono everywhere: JetBrains Mono. Today Desktop uses Source Code Pro and Cloud uses Roboto Mono, and Mobile mixes JetBrains Mono with Menlo.</p>
+    </div>
+    <div class="fcard">
+      <h3>Shape, size, states</h3>
+      <div class="radii">
+        <div><i style="border-radius:4px"></i>4</div><div><i style="border-radius:6px"></i>6</div><div><i style="border-radius:8px"></i>8</div><div><i style="border-radius:10px"></i>10</div><div><i style="border-radius:14px"></i>14</div><div><i style="border-radius:999px"></i>full</div>
+      </div>
+      <div class="heights"><div style="height:24px">24</div><div style="height:28px">28</div><div style="height:32px">32</div><div style="height:36px">36</div><div style="height:44px">44 iOS</div></div>
+      <ul class="rules" style="margin-top:12px">
+        <li><b>Focus:</b> 3px neutral ring at 45%.</li>
+        <li><b>Hover:</b> foreground at 4%. <b>Selected:</b> 7%.</li>
+        <li><b>Disabled:</b> 50% opacity.</li>
+        <li><b>Error:</b> red border and ring, plus a message.</li>
+        <li><b>iOS:</b> pressed is 80% opacity, with a 44pt minimum touch target.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MATRIX ============ -->
+<section id="matrix">
+  <span class="eyebrow">02</span>
+  <h2>Parity matrix</h2>
+  <p class="lede">Each cell renders that product's version as shipped (Cloud is dark-only). Squares under it = number of implementations.</p>
+  <div class="board" id="board"></div>
+  <div class="legend">
+    <span><i class="pip ok"></i>Matches target</span>
+    <span><i class="pip drift"></i>Duplicate / different look</span>
+    <span><i class="pip none"></i>Missing</span>
+    <span><i class="pip na"></i>iOS native</span>
+    <span class="sep"></span>
+    <span><span class="pip" style="box-shadow:inset 0 0 0 1.5px var(--fg-strong)"></span>Target, B · Mono</span>
+  </div>
+  <div class="mxwrap">
+    <div class="mxfilter">
+      <button class="btn sm secondary" data-f="all">All</button>
+      <button class="btn sm ghost" data-f="drift">Duplicates</button>
+      <button class="btn sm ghost" data-f="none">Missing</button>
+      <button class="btn sm ghost" data-f="agree">Aligned</button>
+      <span style="flex:1"></span>
+      <button class="btn sm ghost" id="sortBtn"><i data-lucide="arrow-down-wide-narrow"></i><span>Sort by duplicates</span></button>
+    </div>
+    <div class="rg" id="pg"></div>
+  </div>
+</section>
+
+<!-- ============ PRIMITIVES ============ -->
+<section>
+  <span class="eyebrow">03</span>
+  <h2>Primitives</h2>
+  <p class="lede">The small controls that every screen uses.</p>
+  <div class="grid">
+
+  <article class="spec wide" id="button"><header><h3>Button</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">Six variants and four sizes. Use at most one primary button per surface. Link is a button variant, not a separate component.</p>
+    <div class="stage">
+      <div class="row"><span class="lbl">variant</span><button class="btn primary">Allow once</button><button class="btn secondary">Secondary</button><button class="btn outline">Outline</button><button class="btn ghost">Ghost</button><button class="btn destructive">Delete</button><button class="btn link">Learn more</button></div>
+      <div class="row"><span class="lbl">size</span><button class="btn primary xs">xs 24</button><button class="btn primary sm">sm 28</button><button class="btn primary">md 32</button><button class="btn primary lg">lg 36</button></div>
+      <div class="row"><span class="lbl">state</span><button class="btn outline">Rest</button><button class="btn outline hover">Hover</button><button class="btn outline focus">Focus</button><button class="btn outline" disabled>Disabled</button><button class="btn primary"><i data-lucide="loader-circle" class="spin"></i>Saving</button><button class="btn destructive-solid">Delete forever</button></div>
+    </div>
+    <dl class="notes"><dt>Mobile</dt><dd>Same variants. The minimum height is 44pt, and pressed is 80% opacity. Solid destructive appears only as the final step of a confirmation.</dd><dt>Retire</dt><dd>Cloud's legacy 15-variant <code class="mono">components/Button.tsx</code>. In Desktop, the model-selector trigger styles and raw <code class="mono">&lt;button&gt;</code> elements. In Mobile, FAB and ActionButton become Button sizes.</dd></dl>
+  </article>
+
+  <article class="spec" id="icon-button"><header><h3>Icon button</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">A square ghost button at 24, 28 or 32. On web it always has a tooltip, and every icon button has an accessible label.</p>
+    <div class="stage">
+      <div class="row"><button class="btn ghost icon xs"><i data-lucide="copy"></i></button><button class="btn ghost icon sm"><i data-lucide="copy"></i></button><button class="btn ghost icon"><i data-lucide="copy"></i></button><button class="btn ghost icon hover"><i data-lucide="more-horizontal"></i></button><button class="btn outline icon"><i data-lucide="plus"></i></button><button class="btn outline icon round sm"><i data-lucide="arrow-down"></i></button></div>
+      <div class="row" style="padding-top:36px;padding-left:48px"><span class="tip"><span class="t">Copy message <span class="kbd">⌘C</span></span><button class="btn ghost icon focus"><i data-lucide="copy"></i></button></span></div>
+    </div>
+    <dl class="notes"><dt>Mobile</dt><dd>A 44pt hit box around a 20pt glyph, with no tooltip. One component replaces six hand-built versions.</dd></dl>
+  </article>
+
+  <article class="spec" id="input"><header><h3>Input</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">32px high, 10px radius, with a hairline border. Focus and error use the shared ring.</p>
+    <div class="stage">
+      <div class="row"><div class="input"><span class="ph">Session name</span></div><div class="input focus">kilo-desktop</div></div>
+      <div class="row"><div class="input err">https://</div><div class="input dis"><span class="ph">Disabled</span></div></div>
+    </div>
+    <dl class="notes"><dt>Mobile</dt><dd>44pt high, and 16pt text so iOS doesn't zoom into the field.</dd></dl>
+  </article>
+
+  <article class="spec" id="search"><header><h3>Search field</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">A filled Input variant: no border, a leading search icon, a clear button, and an optional shortcut.</p>
+    <div class="stage">
+      <div class="row"><div class="input filled" style="min-width:280px"><i data-lucide="search"></i><span class="ph">Search sessions</span><span class="kbd">⌘K</span></div></div>
+      <div class="row"><div class="input filled focus" style="min-width:280px;background:var(--sel)"><i data-lucide="search"></i>refactor auth<i data-lucide="x-circle" style="margin-left:auto"></i></div></div>
+    </div>
+    <dl class="notes"><dt>Mobile</dt><dd>One style, 10pt radius and 36pt high, instead of today's ten search bars in three styles.</dd></dl>
+  </article>
+
+  <article class="spec" id="textarea"><header><h3>Textarea</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">Same border, fill and states as Input. It grows with its content. The character counter appears only near the limit.</p>
+    <div class="stage">
+      <div class="textarea">Review the auth middleware and list anything that skips the session check.<span class="count">412 / 500</span></div>
+    </div>
+    <dl class="notes"><dt>Mobile</dt><dd>A shared Textarea component replaces about 11 raw multiline fields. The chat composer is a separate component.</dd></dl>
+  </article>
+
+  <article class="spec" id="field"><header><h3>Form field</h3><span class="tag">from Mobile + Desktop</span></header>
+    <p class="rule">The label sits above the control, then help text, then the error. The space for the error is reserved so the layout doesn't jump when it appears.</p>
+    <div class="stage">
+      <div class="row" style="align-items:flex-start;gap:20px">
+        <div class="field"><label>Branch</label><div class="input">main</div><span class="help">The agent works in a new worktree.</span></div>
+        <div class="field"><label>Webhook URL</label><div class="input err">htp://</div><span class="error"><i data-lucide="alert-circle"></i>Enter a valid URL</span></div>
+      </div>
+    </div>
+    <dl class="notes"><dt>Cloud</dt><dd>Needs this component. Today fields are put together by hand, with three different reds for errors.</dd></dl>
+  </article>
+
+  <article class="spec wide" id="select"><header><h3>Select</h3><span class="tag">from Desktop · Mobile picker sheet</span></header>
+    <p class="rule">Use Select to pick one value from a short, fixed list. The trigger looks like an Input with a chevron. The menu uses the shared popover surface, and the chosen item has a check on the right. If the list needs search, use Combobox.</p>
+    <div class="stage">
+      <div class="row" style="align-items:flex-start;gap:28px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span class="lbl">closed</span>
+          <div class="input trigger">Auto-approve edits<i data-lucide="chevron-down"></i></div>
+          <span class="lbl">sm 28</span>
+          <div class="input trigger" style="height:28px;font-size:12px;min-width:160px">Last 7 days<i data-lucide="chevron-down"></i></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span class="lbl">open</span>
+          <div class="input trigger focus">Auto-approve edits<i data-lucide="chevron-up"></i></div>
+          <div class="menu"><div class="mi">Ask every time</div><div class="mi active">Auto-approve edits<i data-lucide="check" class="chk"></i></div><div class="mi">Auto-approve all</div><div class="msep"></div><div class="mi dis">Read-only (admin)</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span class="lbl">mobile · picker sheet</span>
+          <div class="phone"><div class="scr"></div><div class="bs"><div class="grab"></div><div class="bsh"><span>Cancel</span><b>Approvals</b><span style="opacity:0">Done</span></div><div class="opt">Ask every time</div><div class="opt">Auto-approve edits<i data-lucide="check"></i></div><div class="opt">Auto-approve all</div></div></div>
+        </div>
+      </div>
+    </div>
+    <dl class="notes"><dt>Today</dt><dd>Desktop has six select-like controls, Cloud has three (including a native <code class="mono">&lt;select&gt;</code> in 8 files), and Mobile has six mechanisms (picker sheets, MenuSheet, two action-sheet APIs, and inline radio lists).</dd><dt>Mobile</dt><dd>One mechanism: a picker sheet with a grabber and check rows, which matches today's <code class="mono">PickerSheet</code>.</dd></dl>
+  </article>
+
+  <article class="spec" id="combobox"><header><h3>Combobox</h3><span class="tag">from Cloud + Desktop</span></header>
+    <p class="rule">For long or searchable lists such as repos, branches and models. A search row sits on top, groups have labels, and an empty state shows when nothing matches. The trigger is the same as Select.</p>
+    <div class="stage">
+      <div class="menu" style="width:280px"><div class="msearch"><i data-lucide="search"></i>kilo</div><div class="mlabel">Recent</div><div class="mi active"><i data-lucide="git-branch"></i>Kilo-Org/kilo-desktop<i data-lucide="check" class="chk"></i></div><div class="mi"><i data-lucide="git-branch"></i>Kilo-Org/kilo-cloud</div><div class="mlabel">All</div><div class="mi"><i data-lucide="git-branch"></i>Kilo-Org/kilo-design</div></div>
+    </div>
+    <dl class="notes"><dt>Mobile</dt><dd>A picker sheet with the search field pinned at the top.</dd></dl>
+  </article>
+
+  <article class="spec" id="checkbox"><header><h3>Checkbox</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">16px with a 4px radius. Checked is always the primary fill, which is neutral under Mono. Today Desktop alternates between two checked colors.</p>
+    <div class="stage"><div class="row" style="gap:18px"><span class="choice"><span class="cb"></span>Off</span><span class="choice"><span class="cb on"><i data-lucide="check"></i></span>On</span><span class="choice"><span class="cb mixed"></span>Mixed</span><span class="choice"><span class="cb focus"></span>Focus</span><span class="choice dis"><span class="cb on"><i data-lucide="check"></i></span>Disabled</span></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>No box. In a list, selection shows as a trailing check on the row.</dd></dl>
+  </article>
+
+  <article class="spec" id="radio"><header><h3>Radio</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">16px ring with an 8px dot in the primary color. For choices that need a description, use a choice row or card.</p>
+    <div class="stage"><div class="row" style="gap:18px"><span class="choice"><span class="rd on"></span>Unified</span><span class="choice"><span class="rd"></span>Split</span><span class="choice"><span class="rd focus"></span>Focus</span><span class="choice dis"><span class="rd"></span>Disabled</span></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>Check rows, the same as the picker sheet.</dd></dl>
+  </article>
+
+  <article class="spec" id="switch"><header><h3>Switch</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">32×18, with a 24×14 small size. When on, the track uses the primary color. Use a switch only for settings that take effect immediately.</p>
+    <div class="stage"><div class="row" style="gap:18px"><span class="sw2"></span><span class="sw2 on"></span><span class="sw2 sm on"></span><span class="sw2 on focus"></span><span class="sw2 dis"></span></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>The native iOS switch, with its on-track tinted to the primary color. Cloud's 44×24 yellow switch goes.</dd></dl>
+  </article>
+
+  <article class="spec" id="segmented"><header><h3>Segmented control</h3><span class="tag">from Mobile</span></header>
+    <p class="rule">Switches between views of the same content. The track is muted and the selected segment is raised. Use Tabs, not this, for page sections.</p>
+    <div class="stage"><div class="row"><div class="seg"><span class="on">Sessions</span><span>To-dos</span></div><div class="seg"><span>Day</span><span class="on">Week</span><span>Month</span></div></div></div>
+    <dl class="notes"><dt>Replaces</dt><dd>Desktop's ToggleGroup and pill-style Tabs, Cloud's yellow RadioButtonGroup, and three tab-style controls in Mobile.</dd></dl>
+  </article>
+
+  <article class="spec" id="badge"><header><h3>Badge</h3><span class="tag">Desktop shape · Cloud tones</span></header>
+    <p class="rule">A 20px pill. One neutral style, one outline style, and four status tones on tinted fills. Count is a mono variant.</p>
+    <div class="stage">
+      <div class="row"><span class="badge">Beta</span><span class="badge outline">Draft</span><span class="badge success"><span class="dot"></span>Merged</span><span class="badge warning"><span class="dot"></span>Needs input</span><span class="badge danger"><span class="dot"></span>Failed</span><span class="badge info"><span class="dot"></span>Scheduled</span><span class="badge count">12</span></div>
+      <div class="row"><span class="dstat"><span class="a">+128</span> <span class="d">−42</span></span><span class="mutedtxt" style="font-size:12px">Diff stat: one component, replacing two in Desktop.</span></div>
+    </div>
+    <dl class="notes"><dt>Mobile</dt><dd>The same tones. One Badge component replaces about 25 hand-built pills.</dd></dl>
+  </article>
+
+  <article class="spec" id="kbd"><header><h3>Keyboard shortcut</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">A 20px muted key cap with one glyph per key. It appears in menus, tooltips and the command palette.</p>
+    <div class="stage"><div class="row"><span class="kbd">⌘</span><span class="kbd">K</span><span class="mutedtxt">·</span><span class="kbd">⇧</span><span class="kbd">⌘</span><span class="kbd">P</span><span class="mutedtxt">·</span><span class="kbd">Esc</span></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>Not applicable.</dd></dl>
+  </article>
+
+  <article class="spec" id="spinner"><header><h3>Spinner</h3><span class="tag">from Desktop · native on iOS</span></header>
+    <p class="rule">One spinner for generic loading, at 12, 14 or 16, in the current text color. The agent's working state has its own indicator (see <a href="#working">Working indicator</a>).</p>
+    <div class="stage"><div class="row" style="gap:16px"><i data-lucide="loader-circle" class="spin" style="width:12px;height:12px"></i><i data-lucide="loader-circle" class="spin"></i><i data-lucide="loader-circle" class="spin" style="width:16px;height:16px"></i><span class="row mutedtxt" style="gap:6px"><i data-lucide="loader-circle" class="spin"></i>Loading branches…</span></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>The native activity indicator, with a static glyph when Reduce Motion is on. Cloud has six spinners today.</dd></dl>
+  </article>
+
+  <article class="spec" id="progress"><header><h3>Progress</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">A 4px track filled with the foreground color. Use segments for steps. A ring is used only for the context meter.</p>
+    <div class="stage"><div class="row"><span class="lbl">bar</span><div class="bar"><i style="width:62%"></i></div></div><div class="row"><span class="lbl">steps</span><div class="steps"><i class="on"></i><i class="on"></i><i></i><i></i></div></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>Needs this component. The bar is the same.</dd></dl>
+  </article>
+
+  <article class="spec" id="skeleton"><header><h3>Skeleton</h3><span class="tag">from Mobile</span></header>
+    <p class="rule">Muted blocks that pulse slowly, and stay still when Reduce Motion is on. They should match the shape of the content they stand in for.</p>
+    <div class="stage"><div style="display:flex;flex-direction:column;gap:8px;width:280px"><div class="skel" style="height:12px;width:60%"></div><div class="skel" style="height:12px"></div><div class="skel" style="height:12px;width:80%"></div></div></div>
+    <dl class="notes"><dt>Today</dt><dd>All three products have a skeleton; only Mobile respects Reduce Motion.</dd></dl>
+  </article>
+
+  <article class="spec" id="tooltip"><header><h3>Tooltip</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">Inverted: foreground background with background text, 8px radius, an arrow, and an optional shortcut. Text only, never interactive.</p>
+    <div class="stage"><div class="row" style="padding-top:34px;padding-left:40px;gap:80px"><span class="tip"><span class="t">New session</span><button class="btn ghost icon"><i data-lucide="square-pen"></i></button></span><span class="tip"><span class="t">Search <span class="kbd">⌘K</span></span><button class="btn ghost icon"><i data-lucide="search"></i></button></span></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>Not applicable. Use visible labels instead. Cloud also drops native <code class="mono">title=</code> tooltips.</dd></dl>
+  </article>
+
+  </div>
+</section>
+
+<!-- ============ STRUCTURE ============ -->
+<section>
+  <span class="eyebrow">04</span>
+  <h2>Structure and overlays</h2>
+  <p class="lede">Containers, navigation, layers and feedback.</p>
+  <div class="grid">
+
+  <article class="spec" id="card"><header><h3>Card</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">14px radius, surface fill and a hairline edge, with no shadow. Padding is 16. The footer is optional and tinted.</p>
+    <div class="stage"><div class="card"><div class="ch"><b>Kilo Pass</b><p>Monthly credits for every product.</p></div><div class="cc"><div class="bar" style="width:100%"><i style="width:38%"></i></div><p class="mutedtxt" style="margin:8px 0 0;font-size:12px">$19.20 of $50 used</p></div><div class="cf"><button class="btn ghost sm">Details</button><button class="btn outline sm">Manage</button></div></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>Needs this component. One Card replaces 69 hand-built cards in three radius families. Chat cards in Cloud move from 8px to 14px.</dd></dl>
+  </article>
+
+  <article class="spec" id="dialog"><header><h3>Dialog</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">Centered, on a light scrim. It has a title, a muted description, and a tinted footer with buttons on the right. The confirming action goes last.</p>
+    <div class="stage" style="padding:0"><div class="overlay"><div class="dialog"><div class="dh"><b>Delete session?</b><button class="btn ghost icon sm"><i data-lucide="x"></i></button></div><div class="db">This removes the transcript and its worktree. You can’t undo this.</div><div class="df"><button class="btn outline sm">Cancel</button><button class="btn destructive-solid sm">Delete</button></div></div></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>Destructive confirmations use the native sheet with stacked full-width buttons. Simple confirmations use a system alert.</dd></dl>
+  </article>
+
+  <article class="spec" id="sheet"><header><h3>Sheet</h3><span class="tag">from Desktop · native on iOS</span></header>
+    <p class="rule">A side panel for detail or secondary tasks that keep the page visible. It slides from the right and uses the popover surface.</p>
+    <div class="stage" style="padding:0"><div class="sheetdemo"><div class="page"></div><div class="panel"><div class="row" style="justify-content:space-between"><b style="color:var(--fg-strong)">Usage detail</b><i data-lucide="x" class="c-muted"></i></div><div class="skel" style="height:10px;width:70%"></div><div class="skel" style="height:10px"></div><div class="skel" style="height:60px"></div></div></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>A native bottom sheet with a grabber. Cloud's custom DrawerStack, which draws a raw black scrim, is replaced by this.</dd></dl>
+  </article>
+
+  <article class="spec" id="menu"><header><h3>Menu</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">One action menu, opened from ⋯ or by right-click. It has 28px items, icons on the left, shortcuts or checks on the right, separators, and danger items. Popovers use the same surface.</p>
+    <div class="stage"><div class="row" style="align-items:flex-start;gap:20px"><div class="menu" style="width:220px"><div class="mi"><i data-lucide="pencil"></i>Rename<span class="r">F2</span></div><div class="mi active"><i data-lucide="pin"></i>Pin<span class="r">⌘P</span></div><div class="mi"><i data-lucide="folder"></i>Move to<i data-lucide="chevron-right" class="chk" style="color:var(--muted)"></i></div><div class="msep"></div><div class="mi danger"><i data-lucide="trash-2"></i>Delete</div></div></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>Long-press and ⋯ open the same menu sheet. Today the menu uses three different mechanisms.</dd></dl>
+  </article>
+
+  <article class="spec" id="popover"><header><h3>Popover</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">The same surface as Menu: popover fill, hairline edge, shadow and 10px radius. Width is 280 by default. Use it for small forms and detail views, not for actions.</p>
+    <div class="stage"><div class="ctxpop" style="width:280px"><b style="color:var(--fg-strong)">Context window</b><div class="bar" style="width:100%"><i style="width:72%"></i></div><div class="row"><span class="mutedtxt">Used</span><span class="mono" style="font-size:12px">144K / 200K</span></div><button class="btn outline sm" style="align-self:flex-start">Compact now</button></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>Content that would go in a popover opens in a bottom sheet instead.</dd></dl>
+  </article>
+
+  <article class="spec" id="command"><header><h3>Command palette</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">⌘K opens one searchable list of actions and destinations, grouped, with shortcuts on the right. Items have the same density as Menu.</p>
+    <div class="stage"><div class="palette"><div class="msearch"><i data-lucide="search"></i>Search or run a command</div><div class="mlabel">Actions</div><div class="mi active"><i data-lucide="square-pen"></i>New session<span class="r"><span class="kbd">⌘N</span></span></div><div class="mi"><i data-lucide="git-branch"></i>Switch branch</div><div class="mlabel">Sessions</div><div class="mi"><i data-lucide="message-square"></i>Refactor auth middleware</div></div></div>
+    <dl class="notes"><dt>Cloud</dt><dd>Cloud ships a <code class="mono">CommandDialog</code> but doesn't use it anywhere. This palette is the target for it.</dd><dt>Mobile</dt><dd>Not applicable.</dd></dl>
+  </article>
+
+  <article class="spec" id="tabs"><header><h3>Tabs</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">Line tabs for page sections, with a 2px foreground underline on the active tab and an optional count. View switchers use Segmented control instead.</p>
+    <div class="stage"><div class="tabs"><span class="on">Overview</span><span>Changes<span class="badge count">8</span></span><span>Checks</span><span>Logs</span></div></div>
+    <dl class="notes"><dt>Today</dt><dd>Desktop and Cloud each ship four tab looks. Desktop's pane tab strip is a canvas-only part and isn't covered here.</dd></dl>
+  </article>
+
+  <article class="spec" id="disclosure"><header><h3>Disclosure</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">A row with a chevron that rotates 90° when open. The body is indented under a 1px left rule. The tool row, reasoning and work groups all use this same component.</p>
+    <div class="stage"><div class="disc"><div class="dr"><i data-lucide="chevron-right" class="chev"></i>Advanced settings</div><div class="dr open"><i data-lucide="chevron-right" class="chev"></i>Environment variables</div><div class="db">3 variables · inherited from profile <b style="color:var(--fg-strong)">default</b></div></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>One component replaces <code class="mono">CollapsibleSection</code> and nine hand-built versions.</dd></dl>
+  </article>
+
+  <article class="spec" id="table"><header><h3>Table</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">36px header with muted labels, 40px rows, hover and selected fills, and right-aligned mono numbers. This is the dense layout. Cloud's 48px rows go.</p>
+    <div class="stage"><table class="tbl"><thead><tr><th>Model</th><th>Requests</th><th class="num">Cost</th></tr></thead><tbody><tr><td>Claude Opus</td><td>1,204</td><td class="num">$84.10</td></tr><tr class="h"><td>GPT-5</td><td>862</td><td class="num">$41.32</td></tr><tr class="s"><td>Gemini 3</td><td>311</td><td class="num">$9.05</td></tr></tbody></table></div>
+    <dl class="notes"><dt>Mobile</dt><dd>Use value list rows (see List row) instead of a table.</dd></dl>
+  </article>
+
+  <article class="spec" id="list-row"><header><h3>List row</h3><span class="tag">from Mobile</span></header>
+    <p class="rule">One row, four trailing slots: chevron (navigate), switch (toggle), value (read-only), or check (choose). The leading slot takes an optional 28px icon tile.</p>
+    <div class="stage" style="gap:0"><div class="lr"><span class="tile"><i data-lucide="bell"></i></span><span class="tx"><b>Notifications</b><small>Push, email</small></span><i data-lucide="chevron-right"></i></div><div class="lr"><span class="tile"><i data-lucide="volume-2"></i></span><span class="tx"><b>Sounds</b></span><span class="sw2 on"></span></div><div class="lr"><span class="tx"><b>Plan</b></span><span class="val">Kilo Pass</span></div><div class="lr"><span class="tx"><b>English</b></span><i data-lucide="check" style="color:var(--fg-strong)"></i></div></div>
+    <dl class="notes"><dt>Web</dt><dd>Desktop's Item and Cloud's settings rows follow this. Cloud has no list row component today.</dd></dl>
+  </article>
+
+  <article class="spec" id="nav-item"><header><h3>Sidebar navigation</h3><span class="tag">already aligned</span></header>
+    <p class="rule">32px items, a muted icon, a group label, and a hover fill. Active is the neutral selected fill with medium weight, never yellow. Desktop and Cloud already match this.</p>
+    <div class="stage"><div class="side"><div class="ni on"><i data-lucide="house"></i>Home</div><div class="ni hover"><i data-lucide="bot"></i>Agents<span class="badge count">3</span></div><div class="ni"><i data-lucide="bar-chart-3"></i>Usage</div><div class="glabel">Account</div><div class="ni"><i data-lucide="settings"></i>Settings</div></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>The tab bar. Active is foreground, inactive is muted, and labels are mono caps. This already matches.</dd></dl>
+  </article>
+
+  <article class="spec" id="header"><header><h3>Page header</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">No border. A breadcrumb or title on the left, ghost actions on the right, and one optional primary action. Desktop is 44px high and Cloud's top bar drops from 56 to match.</p>
+    <div class="stage"><div class="hdr"><button class="btn ghost icon sm"><i data-lucide="panel-left"></i></button><span class="crumb">kilo-desktop<i data-lucide="chevron-right"></i><b>Refactor auth middleware</b></span><span class="badge outline" style="margin-left:4px">Beta</span><span class="acts"><button class="btn ghost icon sm"><i data-lucide="share"></i></button><button class="btn ghost icon sm"><i data-lucide="more-horizontal"></i></button></span></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>The screen header: a large title on list roots, and a 15pt semibold title with a back chevron on pushed screens. Sheets use Cancel and Done.</dd></dl>
+  </article>
+
+  <article class="spec" id="toast"><header><h3>Toast</h3><span class="tag">already aligned</span></header>
+    <p class="rule">Popover surface, a 16px status icon, a title and an optional description, and dismiss. All three products already use Sonner.</p>
+    <div class="stage"><div class="toast"><i data-lucide="check-circle-2" class="c-success"></i><div><b>Pull request opened</b><small>#4182 on kilo-desktop</small></div><i data-lucide="x" class="x"></i></div><div class="toast"><i data-lucide="x-circle" class="c-danger"></i><div><b>Couldn’t push branch</b><small>Remote rejected the update.</small></div><button class="btn outline xs" style="margin-left:auto">Retry</button></div></div>
+    <dl class="notes"><dt>Change</dt><dd>Only the forced dark theme in Cloud. Toasts follow the color mode.</dd></dl>
+  </article>
+
+  <article class="spec wide" id="callout"><header><h3>Callout and banner</h3><span class="tag">tones from Mobile + Cloud tokens</span></header>
+    <p class="rule">One inline Callout with five tones: neutral, info, success, warning and danger. Each tone is a tinted fill with a matching edge, an icon, a title, and optional actions. Full-width app messages, such as offline or billing, use a Banner: a single 36px row.</p>
+    <div class="stage">
+      <div class="callout"><i data-lucide="info"></i><div><b>Workspace is read-only</b><p>You’re viewing a shared session.</p></div></div>
+      <div class="callout info"><i data-lucide="info"></i><div><b>New models available</b><p>GPT-5.5 and Gemini 3 Pro are now in the picker.</p></div></div>
+      <div class="callout success"><i data-lucide="check-circle-2"></i><div><b>Deployed</b><p>Your preview is live.</p></div></div>
+      <div class="callout warning"><i data-lucide="triangle-alert"></i><div><b>Low balance</b><p>About 2 days of usage left.</p></div><span class="acts"><button class="btn outline sm">Add credits</button></span></div>
+      <div class="callout danger"><i data-lucide="alert-circle"></i><div><b>Session failed to start</b><p>The sandbox didn’t respond within 60s.</p></div><span class="acts"><button class="btn outline sm">Retry</button></span></div>
+      <div class="banner"><i data-lucide="wifi-off"></i>You’re offline. Changes will sync when you reconnect.<button class="btn ghost xs">Dismiss</button></div>
+    </div>
+    <dl class="notes"><dt>Today</dt><dd>Desktop's Alert has only two tones. Cloud's Alert and Banner use raw palette colors, including emerald, which DESIGN.md bans. Mobile has nine separate banners.</dd></dl>
+  </article>
+
+  <article class="spec" id="empty"><header><h3>Empty state</h3><span class="tag">Desktop + Mobile agree</span></header>
+    <p class="rule">A 40px icon tile, a title, one line of description, and at most one action. A compact version drops the tile.</p>
+    <div class="stage"><div class="empty"><span class="tile"><i data-lucide="message-square-dashed"></i></span><b>No sessions yet</b><p>Start a session to have Kilo work on a repo.</p><button class="btn outline sm"><i data-lucide="plus"></i>New session</button></div></div>
+    <dl class="notes"><dt>Cloud</dt><dd>Needs this component. Today every feature draws its own empty state.</dd></dl>
+  </article>
+
+  <article class="spec" id="code"><header><h3>Code block</h3><span class="tag">from Desktop chat</span></header>
+    <p class="rule">A header row with the language or file and a copy button, a mono body with syntax colors, and a 10px radius. The same block is used in chat, tool output and docs.</p>
+    <div class="stage"><div class="code"><div class="chd">ts<button class="btn ghost xs"><i data-lucide="copy"></i>Copy</button></div><pre><span class="k">export async function</span> requireSession(req) {
+  <span class="k">const</span> s = <span class="k">await</span> getSession(req.headers.<span class="n">cookie</span>)
+  <span class="k">if</span> (!s) <span class="k">throw new</span> AuthError(<span class="s">"no session"</span>)
+  <span class="k">return</span> s
+}</pre></div></div>
+    <dl class="notes"><dt>Today</dt><dd>Each product has three code surfaces. Cloud chat has no syntax colors, and Mobile mixes two mono fonts.</dd></dl>
+  </article>
+
+  <article class="spec" id="markdown"><header><h3>Markdown prose</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">One prose style for agent output and docs: 14/22 body, three heading sizes, and the shared code, link and quote styles.</p>
+    <div class="stage"><div class="prose"><h4>What changed</h4><p>I moved the session check into <code>requireSession</code> and called it from every route in <a href="#markdown">api/</a>.</p><ul><li>3 routes skipped the check before</li><li>Tests added for each</li></ul><blockquote>The webhook route stays public by design.</blockquote></div></div>
+    <dl class="notes"><dt>Today</dt><dd>Cloud has about seven separate react-markdown setups.</dd></dl>
+  </article>
+
+  <article class="spec" id="diff"><header><h3>Diff</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">A file header with a diff stat, mono lines, and tinted add and delete rows. Split view is available on wide screens only.</p>
+    <div class="stage"><div class="diff"><div class="dfh"><i data-lucide="file-code-2" class="c-muted"></i>src/auth/session.ts<span class="dstat" style="margin-left:auto"><span class="a">+3</span> <span class="d">−1</span></span></div><div class="dl ctx"><i>12</i><span>export async function handler(req) {</span></div><div class="dl del"><i>13</i><span>  const s = await getSession(req)</span></div><div class="dl add"><i>13</i><span>  const s = await requireSession(req)</span></div><div class="dl add"><i>14</i><span>  log.debug("session", s.id)</span></div><div class="dl ctx"><i>15</i><span>  return run(s)</span></div></div></div>
+    <dl class="notes"><dt>Mobile</dt><dd>Unified view only, with the same tints.</dd></dl>
+  </article>
+
+  </div>
+</section>
+
+<!-- ============ AGENT ============ -->
+<section>
+  <span class="eyebrow">05</span>
+  <h2>Agent and chat</h2>
+  <p class="lede">The parts every product has. Part names follow assistant-ui (Thread, Message, Composer, ToolCall), which Desktop and Cloud already use.</p>
+  <div class="grid">
+
+  <article class="spec wide" id="thread"><header><h3>Thread, messages and tool calls</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">The thread is a column up to 48rem wide with 16px between messages. User messages sit on the right in a neutral raised bubble. Assistant messages have no bubble. Tool calls are borderless rows: a status icon, a verb, and a mono target. Long runs of work fold into one summary line.</p>
+    <div class="stage">
+      <div class="thread">
+        <div class="um" id="user-msg">Check every route in api/ for a missing session check and fix them.</div>
+        <div class="umeta">2:14 PM<button class="btn ghost icon xs"><i data-lucide="copy"></i></button></div>
+        <div class="fold" id="tool-group"><i data-lucide="chevron-right" style="color:var(--subtle)"></i>Worked for 1m 42s · 14 steps<span class="line"></span></div>
+        <div id="reasoning" class="tr"><i data-lucide="chevron-down" style="color:var(--subtle)"></i>Thought for 8s</div>
+        <div class="tbody mutedtxt" style="font-size:13px;line-height:20px">Three handlers call getSession directly and never throw. I'll centralise the check.</div>
+        <div id="tool-row">
+          <div class="tr"><i data-lucide="check" style="color:var(--muted)"></i>Read<span class="obj">src/api/users.ts</span><span class="lead"></span></div>
+          <div class="tr"><i data-lucide="check" style="color:var(--muted)"></i>Edited<span class="obj">src/auth/session.ts</span><span class="dstat"><span class="a">+3</span> <span class="d">−1</span></span><span class="lead"></span><i data-lucide="chevron-right" class="chev"></i></div>
+          <div class="tr fail"><i data-lucide="x"></i>Ran<span class="obj" style="color:inherit">pnpm test api</span><span class="lead"></span>Failed<i data-lucide="chevron-right" class="chev"></i></div>
+          <div class="tr cancel"><i data-lucide="x"></i>Search<span class="obj">"getSession("</span><span class="lead"></span></div>
+          <div class="tr wait"><i data-lucide="shield-alert"></i>Run<span class="obj">pnpm db:migrate</span><span class="lead"></span><span class="c-warn">Needs approval</span></div>
+          <div class="tr"><i data-lucide="loader-circle" class="spin"></i><span class="shimmer">Running</span><span class="obj">pnpm test api</span><span class="lead"></span></div>
+        </div>
+        <div class="am" id="asst-msg"><p>Fixed 3 routes that skipped the session check. Tests pass, except <code class="mono" style="font-size:12px;background:var(--sel);padding:1px 5px;border-radius:6px">webhooks.test.ts</code>, which expects a public route.</p><div class="actbar"><button class="btn ghost icon xs"><i data-lucide="copy"></i></button><button class="btn ghost icon xs"><i data-lucide="rotate-ccw"></i></button><button class="btn ghost icon xs"><i data-lucide="more-horizontal"></i></button></div></div>
+        <div class="callout danger" id="error"><i data-lucide="alert-circle"></i><div><b>The model stopped responding</b><p>Provider timeout after 120s.</p></div><span class="acts"><button class="btn outline sm">Retry</button></span></div>
+        <div class="stopped" id="queued">You stopped after 34s</div>
+        <div class="um" style="opacity:.6">Also add a test for the webhook route.</div>
+        <div class="qd"><i data-lucide="clock" style="width:12px;height:12px"></i>Queued · sends when Kilo finishes<button class="btn ghost xs">Edit</button></div>
+        <div class="working"><span class="px"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="shimmer">Considering next steps</span><span class="t">0:42</span></div>
+      </div>
+    </div>
+    <dl class="notes">
+      <dt>User msg</dt><dd>Uses a neutral raised fill. The yellow bubbles in Cloud and Mobile go: they are the largest yellow area in either product.</dd>
+      <dt>Tool row</dt><dd>States: running (spinner and shimmer), done, failed (red, "Failed"), needs approval (warning), cancelled (struck through, 55%). Mobile drops the border from <code class="mono">FixedPartRow</code>, and tapping a row opens the detail sheet.</dd>
+      <dt>Queued</dt><dd>A dimmed bubble with "Queued" and an Edit action. A stopped turn gets one muted line. These replace Cloud's corner badge and Desktop's separate shelf look.</dd>
+      <dt>Error</dt><dd>An inline danger Callout with Retry. It replaces plain red text in Cloud and the custom banner in Desktop.</dd>
+    </dl>
+  </article>
+
+  <article class="spec wide" id="composer"><header><h3>Composer</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">One raised card, 16px radius. Attachments sit on top, then the input, then a toolbar: attach, mode and model chips, a context ring, and send. Send and stop share one round 28px slot. Under Mono, send is neutral.</p>
+    <div class="stage">
+      <div class="composer focus">
+        <div class="attach" id="attach">
+          <div class="att"><span class="rm"><i data-lucide="x"></i></span></div>
+          <div class="att up"><i data-lucide="loader-circle" class="spin"></i></div>
+          <div class="fchip"><i data-lucide="file-text" class="c-muted"></i><span class="tx"><b>schema.sql</b><small>12 KB</small></span><span class="rm"><i data-lucide="x"></i></span></div>
+          <div class="fchip err"><i data-lucide="alert-circle" class="c-danger"></i><span class="tx"><b>trace.zip</b><small style="color:var(--danger)">Too large</small></span></div>
+        </div>
+        <div class="inp">Ask Kilo to change something…</div>
+        <div class="tb">
+          <button class="btn ghost icon sm"><i data-lucide="paperclip"></i></button>
+          <span class="chip hover" id="model-chip"><i data-lucide="hammer"></i>Code<i data-lucide="chevron-down" class="cd"></i></span>
+          <span class="chip">Claude Opus 4.5<i data-lucide="chevron-down" class="cd"></i></span>
+          <span class="sp"></span>
+          <svg class="ring" id="context" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="var(--sel2)" stroke-width="2"/><circle cx="8" cy="8" r="6" fill="none" stroke="var(--fg-strong)" stroke-width="2" stroke-dasharray="37.7" stroke-dashoffset="10.5" transform="rotate(-90 8 8)" stroke-linecap="round"/></svg>
+          <span class="send" id="send"><i data-lucide="arrow-up" style="width:16px;height:16px;stroke-width:2.5"></i></span>
+        </div>
+      </div>
+      <div class="row" style="justify-content:center;gap:24px"><span class="row mutedtxt" style="gap:8px"><span class="send idle"><i data-lucide="arrow-up" style="width:16px;height:16px;stroke-width:2.5"></i></span>Empty</span><span class="row mutedtxt" style="gap:8px"><span class="send"><i data-lucide="arrow-up" style="width:16px;height:16px;stroke-width:2.5"></i></span>Ready</span><span class="row mutedtxt" style="gap:8px"><span class="send stop"><i></i></span>Stop</span><span class="row mutedtxt" style="gap:8px"><span class="send"><i data-lucide="loader-circle" class="spin" style="width:14px;height:14px"></i></span>Sending</span></div>
+    </div>
+    <dl class="notes">
+      <dt>Mobile</dt><dd>The same card docked above the keyboard, with a 44pt send button and the chips in a row above the input. This replaces the 20pt pill field.</dd>
+      <dt>Chips</dt><dd>Mode and model are 28px ghost chips with a chevron. They open Combobox on web and a picker sheet on iOS. Cloud's 36px outline comboboxes go.</dd>
+      <dt>Attach</dt><dd>Images are 56px square tiles. Files are 56px-high chips with an icon, a name and a size. Both have uploading and failed states, and a remove button in the corner.</dd>
+      <dt>Context</dt><dd>A 16px ring that is neutral until 80%, warning at 80% and danger at 95%. It opens the context popover.</dd>
+    </dl>
+  </article>
+
+  <article class="spec wide" id="permission"><header><h3>Permission request</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">Replaces the composer until answered, so nothing else can be sent. A warning icon, a title, the exact command or pattern in a box, then Reject (ghost), Always allow (outline) and Allow once (primary). The safest option is the default.</p>
+    <div class="stage">
+      <div class="perm"><div class="ph"><i data-lucide="shield-alert"></i><div><b>Run a database migration?</b><p>Kilo wants to run a command that changes your local database.</p></div></div><div class="pat">pnpm db:migrate --env development</div><div class="pf"><span class="hint"><span class="kbd">↵</span>Allow once</span><button class="btn ghost sm">Reject</button><button class="btn outline sm">Always allow</button><button class="btn primary sm">Allow once</button></div></div>
+    </div>
+    <dl class="notes"><dt>Fix</dt><dd>Mobile makes "Always allow" the primary action today, and Cloud uses a red Deny with an amber card. Both move to this order. Mobile docks the card where the composer was.</dd></dl>
+  </article>
+
+  <article class="spec" id="question"><header><h3>Question card</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">When the agent asks a question or suggests options, they show as choice rows with number shortcuts and an "Other" field. Uses the same card surface as the permission request.</p>
+    <div class="stage" style="gap:8px">
+      <b style="color:var(--fg-strong)">Which test runner should I use?</b>
+      <div class="qopt on"><span class="rd on"></span><div>Vitest<small>Already in package.json</small></div><span class="kbd">1</span></div>
+      <div class="qopt"><span class="rd"></span><div>Jest</div><span class="kbd">2</span></div>
+      <div class="qopt"><span class="rd"></span><div class="mutedtxt">Other…</div><span class="kbd">3</span></div>
+    </div>
+    <dl class="notes"><dt>Today</dt><dd>Cloud colors the selection green and blue. Cloud and Mobile suggestion cards fold into this card.</dd></dl>
+  </article>
+
+  <article class="spec" id="working"><header><h3>Working indicator</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">A 3×3 pixel mark, the current status in shimmering text, and a mono timer. It is the only animated mark for the agent working. Under Mono the pixels are neutral.</p>
+    <div class="stage"><div class="working"><span class="px"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="shimmer">Running tests</span><span class="t">1:08</span></div><div class="working"><span class="px"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="shimmer">Considering next steps</span><span class="t">0:04</span></div></div>
+    <dl class="notes"><dt>Retire</dt><dd>Cloud's two bounce-dot typing indicators and the StatusSpinner variant. Mobile's spinner-and-text line. Cloud's 4×4 grid becomes this 3×3.</dd></dl>
+  </article>
+
+  <article class="spec" id="session-status"><header><h3>Session status</h3><span class="tag">vocabulary from Mobile</span></header>
+    <p class="rule">Six states with one icon each, used everywhere a session appears: sidebar, lists, headers and notifications.</p>
+    <div class="stage"><div class="status">
+      <div><i data-lucide="loader-circle" class="spin c-muted"></i>Running</div>
+      <div><i data-lucide="alert-circle" class="c-warn"></i>Needs input</div>
+      <div><i data-lucide="clock" class="c-subtle"></i>Scheduled</div>
+      <div><i data-lucide="circle" class="c-subtle"></i>Idle</div>
+      <div><i data-lucide="x-circle" class="c-danger"></i>Failed</div>
+      <div><i data-lucide="check" class="c-muted"></i>Done</div>
+    </div></div>
+    <dl class="notes"><dt>Today</dt><dd>Mobile marks running in green and Desktop in info blue. Both become a neutral spinner, and only "needs input" and "failed" get color.</dd></dl>
+  </article>
+
+  <article class="spec" id="session-row"><header><h3>Session list item</h3><span class="tag">Desktop + Mobile</span></header>
+    <p class="rule">A status icon, a one-line title, a muted second line (repo · branch), and a mono time. The selected row uses the neutral fill. Actions show on hover.</p>
+    <div class="stage" style="gap:2px">
+      <div class="srow on"><i data-lucide="loader-circle" class="st spin"></i><span class="tx"><b>Refactor auth middleware</b><small>kilo-desktop · yacu/auth</small></span><span class="tm">now</span></div>
+      <div class="srow hover"><i data-lucide="alert-circle" class="st c-warn"></i><span class="tx"><b>Migrate usage charts</b><small>kilo-cloud · main</small></span><button class="btn ghost icon xs"><i data-lucide="more-horizontal"></i></button></div>
+      <div class="srow"><i data-lucide="circle" class="st c-subtle"></i><span class="tx"><b>Fix iOS composer padding</b><small>kilo-cloud · mobile/composer</small></span><span class="tm">2h</span></div>
+    </div>
+    <dl class="notes"><dt>Mobile</dt><dd>Same content, with a two-line title, a 44pt+ row and a chevron. Mobile's agent hue strip stays as a Mobile addition. Cloud has four session-row implementations today, which become one.</dd></dl>
+  </article>
+
+  <article class="spec" id="todo"><header><h3>Task list</h3><span class="tag">from Desktop</span></header>
+    <p class="rule">The agent's plan. Each task has a 14px square glyph: pending, running, done (struck through), or failed. It sits above the composer or inside a tool row.</p>
+    <div class="stage"><div class="todo"><div><span class="g done"><i data-lucide="check"></i></span><span class="done-t">Find routes without a session check</span></div><div><span class="g run"><i data-lucide="loader-circle" class="spin"></i></span>Add requireSession helper</div><div><span class="g fail"><i data-lucide="x"></i></span>Run migration</div><div><span class="g"></span><span class="mutedtxt">Write tests</span></div></div></div>
+    <dl class="notes"><dt>Today</dt><dd>Cloud ships two copies of the same list. Mobile's task rows switch to these glyphs.</dd></dl>
+  </article>
+
+  <article class="spec" id="context-meter"><header><h3>Context meter</h3><span class="tag">Desktop + Mobile ring</span></header>
+    <p class="rule">A 16px ring in the composer (20pt on iOS). It opens a popover or sheet with the token count and a Compact action. Neutral until 80%.</p>
+    <div class="stage"><div class="row" style="gap:16px;align-items:flex-start">
+      <svg class="ring" viewBox="0 0 16 16" style="width:20px;height:20px"><circle cx="8" cy="8" r="6" fill="none" stroke="var(--sel2)" stroke-width="2"/><circle cx="8" cy="8" r="6" fill="none" stroke="var(--fg-strong)" stroke-width="2" stroke-dasharray="37.7" stroke-dashoffset="22" transform="rotate(-90 8 8)" stroke-linecap="round"/></svg>
+      <svg class="ring" viewBox="0 0 16 16" style="width:20px;height:20px"><circle cx="8" cy="8" r="6" fill="none" stroke="var(--sel2)" stroke-width="2"/><circle cx="8" cy="8" r="6" fill="none" stroke="var(--warning)" stroke-width="2" stroke-dasharray="37.7" stroke-dashoffset="6" transform="rotate(-90 8 8)" stroke-linecap="round"/></svg>
+      <svg class="ring" viewBox="0 0 16 16" style="width:20px;height:20px"><circle cx="8" cy="8" r="6" fill="none" stroke="var(--sel2)" stroke-width="2"/><circle cx="8" cy="8" r="6" fill="none" stroke="var(--danger)" stroke-width="2" stroke-dasharray="37.7" stroke-dashoffset="1.5" transform="rotate(-90 8 8)" stroke-linecap="round"/></svg>
+      <span class="mutedtxt" style="font-size:12px">40% · 84% · 96%</span>
+    </div></div>
+    <dl class="notes"><dt>Cloud</dt><dd>The text button reading "12.3K (45%)" becomes this ring. The number moves into the popover.</dd></dl>
+  </article>
+
+  </div>
+</section>
+
+<section id="leftout">
+  <span class="eyebrow">06</span>
+  <h2>Not on the shared list</h2>
+  <p class="lede">These exist in only one product, or are product chrome rather than a shared component. They should still have one implementation inside their product.</p>
+  <ul class="leftout">
+    <li><b>Pagination</b> <span>— Cloud only, with about 10 hand-built versions. Cloud should build one.</span></li>
+    <li><b>Charts</b> <span>— Cloud usage only (recharts). They use the chart color roles.</span></li>
+    <li><b>Terminal pane</b> <span>— Desktop and Cloud each embed a terminal. It's a host surface, not a component.</span></li>
+    <li><b>Pane tab strip, resizable panes, find bar</b> <span>— Desktop canvas only.</span></li>
+    <li><b>Avatar</b> <span>— light use (six files in Cloud, none shared in Mobile). Revisit when team features grow.</span></li>
+    <li><b>Slider, calendar</b> <span>— one or two settings screens. Use the platform control.</span></li>
+    <li><b>KiloClaw chat</b> <span>— a third chat stack in Cloud and Mobile. It should adopt the agent parts above, not keep its own.</span></li>
+    <li><b>Reactions, swipe-to-reply, FAB</b> <span>— Mobile chat behaviors. They stay native.</span></li>
+  </ul>
+</section>
+
+</div>
+
+<script>
+// d/c/m: [count, status, note]. status: ok | drift | none | na
+const G={p:"Primitives",s:"Structure & overlays",a:"Agent & chat"};
+const rows=[
+["p","button","Button",[2,"drift","Button + model-selector trigger styles, raw &lt;button&gt;s"],[2,"drift","shadcn Button + legacy 15-variant Button (14 files)"],[3,"drift","Button + ActionButton + 2 FABs"],"Desktop"],
+["p","icon-button","Icon button",[3,"drift","Button icon sizes, TooltipIconButton, InputGroupButton (32 vs 28 clash)"],[4,"drift","size=icon + hand-rolled 22–36px"],[7,"drift","IconButton + ≥6 hand-built"],"Desktop"],
+["p","input","Input",[1,"ok","Input + InputGroup"],[4,"drift","Input + 3 ad-hoc (sidebar search, renames)"],[1,"ok","Input inside FormField"],"Desktop"],
+["p","search","Search field",[2,"drift","SidebarSearch + command search row"],[2,"drift","Ad-hoc 28px sidebar search"],[10,"drift","~10 search bars in 3 styles"],"Desktop"],
+["p","textarea","Textarea",[1,"ok","Textarea (composer separate)"],[3,"drift","Textarea + composer + KiloClaw raw textareas"],[0,"none","~11 raw multiline TextInputs"],"Desktop"],
+["p","field","Form field",[1,"ok","Field / FieldLabel / FieldError"],[0,"none","Hand-composed; 3 different error reds"],[1,"ok","FormField (reserved error space)"],"Mobile + Desktop"],
+["p","select","Select",[6,"drift","Select, Combobox, ModelSelector, composer menus, 3 Popover+Command pickers, virtualized model list"],[3,"drift","Radix Select, native &lt;select&gt; (8 files), Popover+Command"],[6,"drift","PickerSheet, standalone sheets, MenuSheet, action-sheet lib, ActionSheetIOS, inline radio lists"],"Desktop · iOS sheet"],
+["p","combobox","Combobox",[3,"drift","Combobox, Popover+Command pickers, / and @ menus"],[9,"drift","9 Popover+Command comboboxes, trigger heights vary"],[2,"drift","Search + list sheets"],"Cloud + Desktop"],
+["p","checkbox","Checkbox",[3,"drift","Checked = primary vs primary-ink across 3 builds"],[2,"drift","Native input, browser accent #333; 7 raw"],[0,"na","Trailing check in ChoiceRow"],"Desktop"],
+["p","radio","Radio",[3,"drift","RadioGroup, Questionnaire, theme cards"],[3,"drift","Custom button radio (yellow), native radios (10 files), RadioCardGroup"],[2,"na","Check glyph or filled pill"],"Desktop"],
+["p","switch","Switch",[1,"ok","32×18, on = primary-ink"],[1,"drift","44×24, on = yellow"],[1,"na","Native UISwitch"],"Desktop"],
+["p","segmented","Segmented control",[2,"drift","ToggleGroup + pill Tabs"],[2,"drift","RadioButtonGroup (yellow) + pill Tabs"],[4,"drift","SegmentedControl + 3 tab-style controls"],"Mobile"],
+["p","badge","Badge",[5,"drift","Badge (no status tones) + 2 diff stats, sidebar badge, chips"],[4,"drift","Badge + PR badges + hand-rolled tags"],[25,"drift","No component; ~25 ad-hoc pills"],"Desktop + Cloud tones"],
+["p","kbd","Keyboard shortcut",[4,"drift","Kbd, ShortcutHintChip, ShortcutChip, questionnaire key"],[0,"none","Raw &lt;kbd&gt; in admin only"],[0,"na","Not applicable"],"Desktop"],
+["p","spinner","Spinner",[3,"drift","Loader2, pixel indicator, shimmer"],[6,"drift","Loader2, StatusSpinner, BigLoader, CSS spinners, dots…"],[2,"na","Native ActivityIndicator + SpinningIcon"],"Desktop · native"],
+["p","progress","Progress",[4,"drift","Progress, wizard steps, cost bar, context ring"],[1,"drift","8px yellow bar"],[0,"none","No bar component"],"Desktop"],
+["p","skeleton","Skeleton",[1,"ok","Pulse"],[1,"ok","Pulse"],[1,"ok","Pulse + Reduce Motion"],"Mobile"],
+["p","tooltip","Tooltip",[1,"ok","Inverted"],[2,"drift","Gray popover style + native title="],[0,"na","Not applicable"],"Desktop"],
+["s","card","Card",[3,"drift","Card (ring) + bordered panels + PlanCard"],[2,"drift","Card r14 + chat cards r8"],[69,"drift","No component; 69 ad-hoc, 3 radii"],"Desktop"],
+["s","dialog","Dialog",[3,"ok","Dialog, AlertDialog, CommandDialog: consistent"],[4,"drift","Dialog, AlertDialog, Confirm, inline delete"],[3,"na","DialogCard, confirm sheet, Alert.alert"],"Desktop"],
+["s","sheet","Sheet",[1,"ok","Sheet"],[2,"drift","Sheet + DrawerStack (raw black scrim)"],[2,"na","Native bottom sheet + formSheet routes"],"Desktop · native"],
+["s","menu","Menu",[3,"drift","DropdownMenu, raw ContextMenu, ActionBarMore"],[1,"ok","DropdownMenu (no context menu)"],[3,"drift","MenuSheet, action-sheet lib (16 sites), ActionSheetIOS"],"Desktop"],
+["s","popover","Popover",[2,"drift","Popover + blurred chat variant"],[2,"drift","Popover + HoverCard, no shadow"],[0,"na","Bottom sheet instead"],"Desktop"],
+["s","command","Command palette",[1,"ok","CommandPalette"],[0,"none","CommandDialog unused; admin omnibox only"],[0,"na","Not applicable"],"Desktop"],
+["s","tabs","Tabs",[4,"drift","Pill, line, pane tabs, restyled settings tabs"],[4,"drift","Pill, underline (14 files), card tabs, workspace chips"],[3,"drift","Underline + segment-style controls"],"Desktop"],
+["s","disclosure","Disclosure",[5,"drift","Accordion + 4 bespoke"],[2,"drift","Accordion + Collapsible shells"],[10,"drift","CollapsibleSection + 9 ad-hoc"],"Desktop"],
+["s","table","Table",[1,"ok","40px head, dense"],[1,"drift","48px rows"],[0,"na","KvRow lists instead"],"Desktop"],
+["s","list-row","List row",[4,"drift","Item + session row, shelf row, PanelListRow"],[0,"none","No primitive; ad-hoc rows"],[6,"drift","ConfigureRow, PreferenceRow, KvRow, ChoiceRow + bespoke"],"Mobile"],
+["s","nav-item","Sidebar navigation",[1,"ok","Active = neutral selected"],[1,"ok","Active = neutral selected"],[1,"ok","Tab bar, active = foreground"],"Aligned"],
+["s","header","Page header",[2,"drift","PageHeader, SettingsPageHeader"],[3,"drift","AppTopbar 56, ChatHeader, ClawHeader"],[2,"ok","ScreenHeader, SheetHeader"],"Desktop · native"],
+["s","toast","Toast",[1,"ok","Sonner"],[1,"ok","Sonner (forced dark)"],[1,"ok","sonner-native"],"Aligned"],
+["s","callout","Callout / banner",[3,"drift","Alert (2 tones) + error banner + sign-in card"],[3,"drift","Alert (raw palette) + Banner (emerald) + one-offs"],[9,"drift","9 banners, none shared"],"Mobile tones"],
+["s","empty","Empty state",[1,"ok","Empty"],[0,"none","Per-feature only"],[1,"ok","EmptyState"],"Desktop + Mobile"],
+["s","code","Code block",[3,"drift","Markdown pre, chat CodeHeader, ToolOutputBlock"],[3,"drift","Chat pre (no highlight), ToolCodeBlock, CopyableCommand"],[3,"drift","CodeBlock, markdown code (Menlo), code fence"],"Desktop chat"],
+["s","markdown","Markdown prose",[2,"ok","2 renderers, shared component maps"],[7,"drift","~7 react-markdown configs"],[1,"ok","Enriched markdown"],"Desktop"],
+["s","diff","Diff",[1,"ok","@pierre/diffs"],[2,"drift","Monaco DiffEditor + @pierre/diffs"],[1,"ok","Custom diff-line (same tints)"],"Desktop"],
+["a","thread","Thread",[2,"ok","Thread + ReadonlyThread (assistant-ui)"],[4,"drift","assistant-ui thread + legacy v1 + KiloClaw + code review"],[2,"drift","Agent list + KiloClaw list"],"Desktop"],
+["a","user-msg","User message",[1,"ok","Neutral raised bubble"],[3,"drift","Yellow bubble + legacy + KiloClaw"],[2,"drift","Yellow bubble + KiloClaw"],"Desktop"],
+["a","asst-msg","Assistant message",[1,"ok","No bubble, hover actions"],[1,"ok","No bubble, hover actions"],[1,"ok","No bubble, long-press"],"Aligned"],
+["a","reasoning","Reasoning",[1,"ok","Fold inside activity group"],[2,"drift","Brain header row or card"],[1,"drift","Dashed bordered row"],"Desktop"],
+["a","tool-row","Tool call row",[1,"ok","Borderless activity row"],[3,"drift","ToolCardShell + 2 hand-rolled + legacy"],[1,"drift","Bordered FixedPartRow"],"Desktop"],
+["a","tool-group","Work summary",[2,"ok","ActivityGroup + Worked for Ns"],[1,"drift","AgentWorkGroup card"],[1,"drift","CondensedToolRunRow"],"Desktop"],
+["a","permission","Permission request",[1,"ok","Replaces composer; Allow once primary"],[1,"drift","Inline amber card; red Deny"],[2,"drift","Always allow is primary; KiloClaw inline"],"Desktop"],
+["a","question","Question card",[1,"ok","Questionnaire"],[2,"drift","QuestionToolCard (green/blue) + SuggestionCard"],[2,"drift","QuestionCard + suggestion card"],"Desktop"],
+["a","composer","Composer",[2,"ok","Composer + starter variant"],[2,"drift","CloudComposer + KiloClaw input"],[4,"drift","Agent, new session, KiloClaw, PR composers"],"Desktop"],
+["a","send","Send / stop",[1,"ok","28 round"],[1,"drift","32 square-ish yellow, red stop"],[2,"drift","44 yellow circle; KiloClaw square"],"Desktop"],
+["a","model-chip","Mode / model chip",[3,"drift","ModelSelector trigger, menu actions, virtualized selector"],[3,"drift","Mode/Model/Variant comboboxes, 36px outline"],[2,"drift","Round chips + KiloClaw cards"],"Desktop"],
+["a","attach","Attachment chip",[2,"drift","56px tile + directive chip"],[4,"drift","Composer strip, ImagePreviewStrip, KiloClaw ×2"],[2,"drift","Agent strip + KiloClaw chip"],"Desktop"],
+["a","working","Working indicator",[2,"ok","Pixel mark + Working for Ns"],[4,"drift","StatusSpinner, group spinner, 2 typing-dot indicators"],[3,"drift","Spinner line, footer, KiloClaw typing"],"Desktop"],
+["a","session-status","Session status",[1,"ok","Status glyphs (running in info blue)"],[2,"drift","Duplicate SessionStatusIndicator"],[2,"drift","SessionStatusIcon + StatusDot (running in green)"],"Mobile vocabulary"],
+["a","session-row","Session list item",[1,"ok","Session row + preview card"],[4,"drift","2 sidebar row variants, 2 SessionsLists, KiloClaw"],[2,"drift","SessionRow + KiloClaw card row"],"Desktop + Mobile"],
+["a","todo","Task list",[1,"ok","14px square glyphs"],[2,"drift","CurrentTaskList + inline duplicate"],[2,"drift","Tool task rows + todos feature"],"Desktop"],
+["a","context-meter","Context meter",[2,"ok","Ring + cost meter"],[2,"drift","Text button + KiloClaw ring"],[1,"ok","Ring"],"Desktop + Mobile"],
+["a","error","Error in thread",[1,"drift","Custom banner (not Alert)"],[3,"drift","Red text + ToolErrorCard + billing error"],[4,"drift","Failure footer, boundary, 2 chat failure rows"],"Callout"],
+["a","queued","Queued / stopped",[2,"ok","Queue shelf + stopped note"],[2,"drift","Corner delivery badge + Interrupted"],[1,"ok","Queued label + Restore"],"Desktop + Mobile"],
+];
+const strip=s=>s.replace(/&lt;/g,"<").replace(/&gt;/g,">");
+const pg=document.getElementById("pg");
+let sorted=false,filter="all";
+const flt=r=>{const s=[r[3][1],r[4][1],r[5][1]];return filter==="all"||(filter==="drift"&&s.includes("drift"))||(filter==="none"&&s.includes("none"))||(filter==="agree"&&s.every(x=>x==="ok"||x==="na"));};
+const weight=r=>[r[3],r[4],r[5]].reduce((a,x)=>a+(x[1]==="drift"?x[0]:x[1]==="none"?3:0),0);
+// ---- per-product renders of each component (as shipped) + target (B · Mono) ----
+const I=n=>`<i data-lucide="${n}"></i>`;
+const cb=(bg,fg,ck=true)=>`<span class="xcb" style="background:${bg};color:${fg};${bg==="none"?"box-shadow:inset 0 0 0 1px var(--in)":""}">${ck?I("check"):""}</span>`;
+const sw=(w,h,c,on=true)=>`<span class="xsw${on?"":" off"}" style="width:${w}px;height:${h}px;background:${on?c:"var(--fl)"}"></span>`;
+const ring=(sz,sw_,col,off)=>`<svg width="${sz}" height="${sz}" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="var(--fl)" stroke-width="${sw_}"/><circle cx="8" cy="8" r="6" fill="none" stroke="${col}" stroke-width="${sw_}" stroke-dasharray="37.7" stroke-dashoffset="${off}" transform="rotate(-90 8 8)" stroke-linecap="round"/></svg>`;
+const ub=(bg,fg,r,extra="")=>`<div style="align-self:flex-end;background:${bg};color:${fg};border-radius:${r};padding:7px 12px;font-size:13px;max-width:200px;${extra}">Fix the session check in api/</div>`;
+const sk=w=>`<div class="xsk" style="width:${w}"></div>`;
+const tip=(bg,fg,bd="")=>`<span style="position:relative;background:${bg};color:${fg};font-size:12px;padding:5px 10px;border-radius:8px;${bd}">Copy message</span>`;
+const R={
+button:{d:`<span class="xb">Allow once</span><span class="xb o">Outline</span>`,
+ c:`<span class="xb">Send</span><span class="xb o">Outline</span><span class="xb" style="background:#16a34a;color:#fff;font-weight:700;border-radius:6px;height:30px">Legacy</span>`,
+ m:`<span class="xb" style="padding:0 18px;height:44px">Continue</span><span class="xb ic" style="height:44px;width:44px;border-radius:50%">${I("plus")}</span>`},
+"icon-button":{d:`<span class="xb g ic" style="height:24px;width:24px">${I("copy")}</span><span class="xb s ic" style="height:28px;width:28px">${I("copy")}</span><span class="xb o ic">${I("plus")}</span>`,
+ c:`<span class="xb g ic" style="height:22px;width:22px;border-radius:4px">${I("copy")}</span><span class="xb s ic" style="height:32px;width:32px;border-radius:10px">${I("paperclip")}</span><span class="xb o ic">${I("plus")}</span>`,
+ m:`<span class="xb g ic" style="height:48px;width:48px;border-radius:50%;background:var(--sl)">${I("chevron-left")}</span><span class="xb s ic" style="height:28px;width:28px;border-radius:50%">${I("paperclip")}</span>`},
+input:{d:`<span class="xi"><span class="ph">Session name</span></span>`,m:`<span class="xi" style="height:44px"><span class="ph">Session name</span></span>`},
+search:{d:`<span class="xi" style="box-shadow:none;background:var(--sl)">${I("search")}<span class="ph">Search</span></span>`,
+ c:`<span class="xi" style="height:28px;box-shadow:none;background:rgba(32,32,32,.6);width:150px">${I("search")}<span class="ph">Search sessions…</span></span>`,
+ m:`<span class="xi" style="border-radius:999px;box-shadow:none;background:var(--rs);height:34px">${I("search")}<span class="ph">Search</span></span><span class="xi" style="border-radius:10px;background:var(--s);height:36px;box-shadow:inset 0 0 0 1px var(--ln)">${I("search")}<span class="ph">Search sessions</span></span>`,
+ t:`<span class="xi" style="box-shadow:none;background:var(--sl)">${I("search")}<span class="ph">Search</span><span class="xbadge" style="margin-left:auto;height:18px;border-radius:5px;padding:0 5px">⌘K</span></span>`},
+textarea:{d:`<span class="xi" style="height:64px;align-items:flex-start;padding-top:8px;width:200px"><span class="ph">Describe the change…</span></span>`},
+field:{d:`<div class="col z"><span style="font-size:12px;font-weight:500;color:var(--f)">Webhook URL</span><span class="xi" style="box-shadow:inset 0 0 0 1px var(--dg)">htp://</span><span style="font-size:12px;color:var(--dg)">Enter a valid URL</span></div>`},
+select:{d:`<span class="xi" style="justify-content:space-between">Auto-approve edits ${I("chevron-down")}</span>`,
+ c:`<div class="col"><span class="xi" style="justify-content:space-between">Auto-approve edits ${I("chevron-down")}</span><select style="font:12px system-ui;height:22px"><option>Native select</option></select></div>`,
+ m:`<div class="xsheet"><div class="gr"></div><div class="op">Ask every time</div><div class="op">Auto-approve edits${I("check")}</div><div class="op">Auto-approve all</div></div>`},
+combobox:{d:`<div class="xp z" style="width:220px"><div class="xm mu">${I("search")}kilo</div><div class="xm on">${I("git-branch")}kilo-desktop<span class="ck">${I("check")}</span></div><div class="xm">${I("git-branch")}kilo-cloud</div></div>`,
+ c:`<span class="xb o" style="justify-content:space-between;width:190px">${I("git-branch")}Kilo-Org/kilo-cloud ${I("chevrons-up-down")}</span>`,
+ m:`<div class="xsheet"><div class="gr"></div><div class="mu" style="margin:0 10px 5px;height:24px;border-radius:999px;background:var(--rs);display:flex;align-items:center;gap:6px;padding:0 8px;font-size:11px">${I("search")}Search models</div><div class="op">Claude Opus 4.5${I("check")}</div><div class="op">GPT-5</div></div>`},
+checkbox:{d:`<span class="ch">${cb("var(--pr)","var(--op)")}On</span><span class="ch">${cb("none","",false)}Off</span>`,
+ c:`<span class="ch"><input type="checkbox" checked style="accent-color:#333;width:16px;height:16px;margin:0">On</span><span class="ch"><input type="checkbox" style="width:16px;height:16px;margin:0">Off</span>`,
+ m:`<span style="width:190px;display:flex;justify-content:space-between;align-items:center;border-bottom:.5px solid var(--ln);padding:10px 0;color:var(--f)">English ${I("check")}</span>`},
+radio:{d:`<span class="ch"><span class="xrd on" style="--c:var(--pk)"></span>Unified</span><span class="ch"><span class="xrd" style="--c:var(--in)"></span>Split</span>`,
+ c:`<span class="ch"><span class="xrd on" style="--c:var(--pr)"></span>Unified</span><span class="ch"><input type="radio" checked style="margin:0">Native</span>`,
+ m:`<span class="xbadge" style="height:30px;padding:0 14px;background:var(--pr);color:var(--op)">Squash</span><span class="xbadge" style="height:30px;padding:0 14px;background:var(--rs)">Merge</span>`,
+ t:`<span class="ch"><span class="xrd on" style="--c:var(--pr)"></span>Unified</span><span class="ch"><span class="xrd" style="--c:var(--in)"></span>Split</span>`},
+switch:{d:sw(32,18,"var(--sw)")+sw(32,18,"",false),c:sw(44,24,"var(--pr)")+sw(44,24,"",false),m:sw(51,31,"var(--sw)")+sw(51,31,"",false)},
+segmented:{d:`<span style="display:inline-flex;box-shadow:inset 0 0 0 1px var(--in);border-radius:var(--r);overflow:hidden"><span style="height:30px;padding:0 12px;display:grid;place-items:center;background:var(--fl);color:var(--f);font-size:12px;font-weight:500">Unified</span><span style="height:30px;padding:0 12px;display:grid;place-items:center;font-size:12px" class="mu">Split</span></span>`,
+ c:`<span class="xb sm" style="height:28px">Day</span><span class="xb o sm" style="height:28px">Week</span><span class="xb o sm" style="height:28px">Month</span>`,
+ m:`<span style="display:inline-flex;background:var(--sl);border-radius:var(--r);padding:3px;gap:2px"><span style="height:28px;padding:0 14px;display:grid;place-items:center;background:var(--b);border-radius:5px;color:var(--f);font-size:12px;font-weight:500">Sessions</span><span style="height:28px;padding:0 14px;display:grid;place-items:center;font-size:12px" class="mu">To-dos</span></span>`},
+badge:{d:`<span class="xbadge" style="background:color-mix(in srgb,var(--pr) 14%,transparent);color:var(--pk)">Beta</span><span class="xbadge" style="background:color-mix(in srgb,var(--dg) 15%,transparent);color:var(--dg)">Failed</span><span class="xbadge" style="background:var(--pr);color:var(--op)">New</span>`,
+ c:`<span class="xbadge" style="background:var(--pr);color:var(--op)">New</span><span class="xbadge" style="background:rgba(34,197,94,.12);color:var(--ok)">Active</span><span class="xbadge" style="border-radius:4px;background:rgba(255,221,0,.2);color:var(--pr)">subtask</span>`,
+ m:`<span class="xbadge" style="font:500 9px var(--fm);letter-spacing:.15em;text-transform:uppercase;box-shadow:inset 0 0 0 1px var(--ln);background:var(--rs);color:var(--mu)">Beta</span><span class="xbadge" style="background:var(--ok);color:#0e0e10">Free</span><span class="xbadge" style="background:var(--fl);font-size:10px">BYOK</span>`,
+ t:`<span class="xbadge">Beta</span><span class="xbadge" style="background:color-mix(in srgb,var(--wn) 15%,transparent);color:var(--wn)">● Needs input</span><span class="xbadge" style="background:color-mix(in srgb,var(--dg) 14%,transparent);color:var(--dg)">● Failed</span>`},
+kbd:{d:`<span class="xbadge" style="border-radius:6px;height:20px;padding:0 6px">⌘</span><span class="xbadge" style="border-radius:6px;height:20px;padding:0 6px">K</span><span class="xbadge" style="border-radius:4px;height:16px;padding:0 4px;font-size:10px">⌘N</span><span class="xbadge" style="height:24px;background:var(--sl)">⌘ ⇧ P</span>`,
+ t:`<span class="xbadge" style="border-radius:6px;padding:0 6px">⌘</span><span class="xbadge" style="border-radius:6px;padding:0 6px">K</span>`},
+spinner:{d:`<i data-lucide="loader-circle" class="spin"></i><span class="px3">${"<i></i>".repeat(9)}</span>`,
+ c:`<i data-lucide="loader-2" class="spin"></i><span class="xg4">${"<i></i>".repeat(16)}</span><span class="dots"><i></i><i></i><i></i></span>`,
+ m:`<i data-lucide="loader" class="spin" style="width:20px;height:20px;color:var(--mu)"></i>`,
+ t:`<i data-lucide="loader-circle" class="spin"></i><span class="mu" style="font-size:12px">Loading…</span>`},
+progress:{d:`<div class="xbar"><i></i></div>`,c:`<div class="xbar" style="height:8px;background:rgba(255,221,0,.2)"><i style="background:var(--pr)"></i></div>`,t:`<div class="xbar"><i style="background:var(--f)"></i></div>`},
+skeleton:{d:`<div class="col" style="width:170px;gap:7px">${sk("60%")+sk("100%")+sk("80%")}</div>`},
+tooltip:{d:tip("var(--f)","var(--b)"),c:tip("var(--pp)","var(--f)","box-shadow:0 0 0 1px var(--ln)")},
+card:{d:`<div class="xcard" style="width:190px"><b>Kilo Pass</b><span class="mu">Monthly credits</span></div>`,
+ c:`<div class="xcard" style="width:100px"><b>Card</b><span class="mu">r14</span></div><div class="xcard" style="width:100px;border-radius:6px;background:rgba(32,32,32,.3)"><b>Chat card</b><span class="mu">r8</span></div>`,
+ m:`<div class="xcard" style="width:70px"><b>r14</b></div><div class="xcard" style="width:70px;border-radius:10px"><b>r10</b></div><div class="xcard" style="width:70px;border-radius:7px;box-shadow:none;background:var(--rs)"><b>tile</b></div>`},
+dialog:{d:`<div class="z6" style="background:var(--b);border-radius:var(--rc);box-shadow:0 0 0 1px var(--ln),0 12px 28px -8px rgba(0,0,0,.6);width:300px"><div style="padding:14px 14px 2px;font-weight:500;color:var(--f);font-size:15px">Delete session?</div><div class="mu" style="padding:0 14px 12px">This can’t be undone.</div><div style="padding:10px 14px;border-top:1px solid var(--ln);display:flex;justify-content:flex-end;gap:6px;background:color-mix(in srgb,var(--f) 3%,transparent);border-radius:0 0 var(--rc) var(--rc)"><span class="xb o">Cancel</span><span class="xb d">Delete</span></div></div>`,
+ c:`<div class="z6" style="background:var(--s);border-radius:var(--rc);box-shadow:0 0 0 1px var(--ln);width:300px;padding:20px"><div style="font-weight:600;color:var(--f);font-size:17px">Delete session?</div><div class="mu" style="margin:4px 0 14px">This can’t be undone.</div><div style="display:flex;justify-content:flex-end;gap:6px"><span class="xb o">Cancel</span><span class="xb d">Delete</span></div></div>`,
+ m:`<div class="xsheet" style="padding:8px 12px 10px;display:flex;flex-direction:column;gap:5px"><b style="font-size:12px;color:var(--f)">Delete session?</b><span class="xb d sm" style="justify-content:center">Delete</span><span class="xb o sm" style="justify-content:center">Cancel</span></div>`},
+sheet:{d:`<div style="position:absolute;inset:0;background:rgba(0,0,0,.25)"></div><div style="position:absolute;right:0;top:0;bottom:0;width:48%;background:var(--pp);box-shadow:-1px 0 0 var(--ln);padding:10px;display:flex;flex-direction:column;gap:7px;font-size:11px;color:var(--f)">Usage detail${sk("70%")+sk("100%")}</div>`,
+ c:`<div style="position:absolute;inset:0;background:rgba(0,0,0,.5)"></div><div style="position:absolute;right:0;top:0;bottom:0;width:48%;background:var(--s);border-radius:12px 0 0 12px;padding:10px;display:flex;flex-direction:column;gap:7px;font-size:11px;color:var(--f)">Usage detail${sk("70%")+sk("100%")}</div>`,
+ m:`<div style="position:absolute;inset:0;background:rgba(0,0,0,.3)"></div><div class="xsheet" style="padding:5px 12px 14px"><div class="gr"></div>${sk("60%")}<div style="height:6px"></div>${sk("100%")}</div>`},
+menu:{d:`<div class="xp z" style="width:200px"><div class="xm">${I("pencil")}Rename</div><div class="xm on">${I("pin")}Pin</div><div class="xm" style="color:var(--dg)">${I("trash-2")}Delete</div></div>`,
+ m:`<div class="xsheet"><div class="gr"></div><div class="mu" style="text-align:center;font-size:11px;font-weight:600;padding-bottom:4px">Session</div><div class="op">Rename</div><div class="op" style="color:var(--dg)">Delete</div></div>`},
+popover:{d:`<div class="xp" style="padding:10px;background:color-mix(in srgb,var(--pp) 95%,transparent);backdrop-filter:blur(4px)"><div style="font-size:12px;color:var(--f);font-weight:500;margin-bottom:6px">Context 72%</div><div class="xbar" style="width:100%"><i style="width:72%"></i></div></div>`,
+ c:`<div class="xp" style="padding:12px;box-shadow:0 0 0 1px var(--ln)"><div style="font-size:12px;color:var(--f);font-weight:500;margin-bottom:6px">Context 72%</div><div class="xbar" style="width:100%"><i style="width:72%"></i></div></div>`},
+command:{d:`<div class="xp z" style="width:250px"><div class="xm mu" style="height:30px">${I("search")}Search or run a command</div><div class="xm on">${I("square-pen")}New session<span class="ck mu" style="font-size:10px">⌘N</span></div><div class="xm">${I("git-branch")}Switch branch</div></div>`},
+tabs:{d:`<span style="display:inline-flex;background:var(--fl);border-radius:var(--r);padding:3px"><span style="padding:4px 10px;background:var(--b);border-radius:7px;color:var(--f);font-size:12px">Overview</span><span class="mu" style="padding:4px 10px;font-size:12px">Changes</span></span>`,
+ c:`<div class="col"><span style="display:inline-flex;background:var(--s);border-radius:10px;padding:3px"><span style="padding:3px 10px;box-shadow:inset 0 0 0 1px var(--ln);border-radius:7px;color:var(--f);font-size:12px">Overview</span><span class="mu" style="padding:3px 10px;font-size:12px">Changes</span></span><span style="display:flex;gap:14px;font-size:12px;border-bottom:1px solid var(--ln)"><span style="color:var(--f);border-bottom:2px solid var(--f);padding-bottom:3px">Overview</span><span class="mu">Logs</span></span></div>`,
+ m:`<span style="display:flex;gap:18px;font-size:12px;border-bottom:1px solid var(--ln);width:180px"><span style="color:var(--f);border-bottom:2px solid var(--f);padding-bottom:6px;font-weight:500">Sessions</span><span class="mu">To-dos</span></span>`,
+ t:`<span style="display:flex;gap:16px;font-size:12px;border-bottom:1px solid var(--ln);width:190px"><span style="color:var(--f);border-bottom:2px solid var(--f);padding-bottom:6px;font-weight:500">Overview</span><span class="mu">Changes</span><span class="mu">Logs</span></span>`},
+disclosure:{d:`<div class="col" style="width:190px;gap:2px;font-size:12px;color:var(--f)"><span class="ch">${I("chevron-right")}Advanced</span><span class="ch">${I("chevron-down")}Environment</span><span class="mu" style="margin-left:7px;padding-left:12px;border-left:1px solid var(--ln)">3 variables</span></div>`,
+ c:`<div class="col" style="width:190px;gap:0;font-size:12px;color:var(--f)"><span class="ch" style="border-bottom:1px solid var(--ln);width:100%;padding:6px 0">${I("chevron-right")}<u>Advanced</u></span><span class="ch" style="border-bottom:1px solid var(--ln);width:100%;padding:6px 0">${I("chevron-right")}Environment</span></div>`,
+ m:`<div style="width:190px;background:var(--rs);border-radius:9px;padding:9px 11px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--f)">Advanced config${I("chevron-down")}</div>`},
+table:{d:`<div class="z" style="width:280px;font-size:12px">${["Model|Cost","Opus|$84.10","GPT-5|$41.32"].map((r,i)=>{const [a,b]=r.split("|");return `<div style="display:flex;justify-content:space-between;height:${i?30:26}px;align-items:center;border-bottom:1px solid var(--ln);padding:0 6px;${i?"color:var(--f)":"color:var(--mu)"};${i===2?"background:var(--sl)":""}"><span>${a}</span><span class="fm">${b}</span></div>`}).join("")}</div>`,
+ c:`<div class="z" style="width:280px;font-size:13px">${["Model|Cost","Opus|$84.10","GPT-5|$41.32"].map((r,i)=>{const [a,b]=r.split("|");return `<div style="display:flex;justify-content:space-between;height:${i?40:30}px;align-items:center;border-bottom:1px solid var(--ln);padding:0 8px;${i?"color:var(--f)":"color:var(--mu)"}"><span>${a}</span><span class="fm">${b}</span></div>`}).join("")}</div>`,
+ m:`<div style="width:190px;font-size:12px">${["Plan|Kilo Pass","Credits|$19.20"].map(r=>{const [a,b]=r.split("|");return `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:.5px solid var(--ln)"><span class="mu">${a}</span><span class="fm" style="color:var(--f)">${b}</span></div>`}).join("")}</div>`},
+"list-row":{d:`<div style="width:200px;display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r);box-shadow:inset 0 0 0 1px var(--ln)"><span style="width:28px;height:28px;border-radius:7px;background:var(--fl);display:grid;place-items:center">${I("bell")}</span><span style="font-size:12px;color:var(--f)">Notifications</span></div>`,
+ m:`<div style="width:200px;display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:.5px solid var(--ln)"><span style="width:30px;height:30px;border-radius:9px;background:color-mix(in srgb,var(--if) 12%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--if) 25%,transparent);display:grid;place-items:center;color:var(--if)">${I("bell")}</span><span style="font-size:12px;color:var(--f);flex:1">Notifications</span><span class="mu">${I("chevron-right")}</span></div>`,
+ t:`<div style="width:200px;display:flex;align-items:center;gap:9px;padding:8px 6px;border-bottom:1px solid var(--ln)"><span style="width:28px;height:28px;border-radius:8px;background:var(--sl);display:grid;place-items:center">${I("bell")}</span><span style="font-size:12px;color:var(--f);flex:1">Notifications</span><span class="mu">${I("chevron-right")}</span></div>`},
+"nav-item":{d:`<div class="col" style="width:170px;gap:2px;font-size:12px"><span class="ch" style="width:100%;height:28px;padding:0 8px;border-radius:7px;background:var(--sl);font-weight:500">${I("house")}Home</span><span class="ch mu" style="width:100%;height:28px;padding:0 8px">${I("bot")}Agents</span></div>`,
+ m:`<div style="display:flex;gap:22px;font:500 9px var(--fm);letter-spacing:.15em;text-transform:uppercase">${[["house","Home",1],["bot","Agents"],["user-round","Profile"]].map(([i,l,on])=>`<span style="display:flex;flex-direction:column;align-items:center;gap:4px;color:${on?"var(--f)":"var(--mu)"}"><i data-lucide="${i}" style="width:20px;height:20px"></i>${l}</span>`).join("")}</div>`},
+header:{d:`<div style="width:100%;display:flex;align-items:center;gap:8px;font-size:12px"><span class="mu">${I("panel-left")}</span><span class="mu">kilo-desktop ›</span><span style="color:var(--f);font-weight:500">Refactor auth</span><span style="margin-left:auto" class="mu">${I("more-horizontal")}</span></div>`,
+ c:`<div style="position:absolute;inset:0 0 auto 0;height:56px;border-bottom:1px solid var(--ln);display:flex;align-items:center;font-size:13px"><span style="width:56px;height:56px;display:grid;place-items:center;border-right:1px solid var(--ln)" class="mu">${I("panel-left")}</span><span style="padding-left:12px;color:var(--f);font-weight:500">Cloud Agent</span></div>`,
+ m:`<div class="col" style="width:200px;gap:2px"><span class="fm mu" style="font-size:9px;letter-spacing:.15em">KILO</span><span style="font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--f);line-height:1">Agents</span></div>`},
+toast:{d:`<div class="xp" style="width:200px;display:flex;gap:8px;padding:9px 10px;font-size:12px;color:var(--f)"><span style="color:var(--ok)">${I("check-circle-2")}</span>PR opened</div>`},
+callout:{d:`<div class="col" style="width:210px;gap:5px"><div class="xcard" style="border-radius:var(--r);padding:7px 10px;width:100%;display:flex;gap:7px">${I("info")}<b style="font-weight:500">Read-only</b></div><div class="xcard" style="border-radius:var(--r);padding:7px 10px;width:100%;display:flex;gap:7px;color:var(--dg)">${I("alert-circle")}<b style="font-weight:500;color:var(--dg)">Failed</b></div></div>`,
+ c:`<div class="col" style="width:210px;gap:5px"><div style="border-radius:8px;padding:7px 10px;width:100%;display:flex;gap:7px;background:#172554;color:#bfdbfe;box-shadow:inset 0 0 0 1px #1e40af;font-size:12px">${I("info")}Notice</div><div style="border-radius:12px;padding:7px 10px;width:100%;display:flex;gap:7px;background:rgba(16,185,129,.12);color:#6ee7b7;font-size:12px">${I("check")}Banner (emerald)</div></div>`,
+ m:`<div class="col" style="width:210px;gap:5px"><div style="border-radius:9px;padding:8px 10px;width:100%;display:flex;gap:7px;background:color-mix(in srgb,var(--wn) 10%,transparent);color:var(--wn);font-size:12px">${I("triangle-alert")}Action required</div><div style="border-radius:6px;padding:0 10px;height:24px;width:100%;display:flex;gap:7px;align-items:center;background:var(--wn);color:#1a1a10;font-size:11px">${I("wifi-off")}Offline</div></div>`,
+ t:`<div class="col" style="width:210px;gap:5px"><div style="border-radius:10px;padding:7px 10px;width:100%;display:flex;gap:7px;align-items:center;background:color-mix(in srgb,var(--wn) 8%,var(--s));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--wn) 32%,transparent);font-size:12px;color:var(--f)"><span style="color:var(--wn);display:flex">${I("triangle-alert")}</span>Low balance</div><div style="border-radius:10px;padding:7px 10px;width:100%;display:flex;gap:7px;align-items:center;background:color-mix(in srgb,var(--dg) 7%,var(--s));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--dg) 30%,transparent);font-size:12px;color:var(--f)"><span style="color:var(--dg);display:flex">${I("alert-circle")}</span>Failed to start</div></div>`},
+empty:{d:`<div class="col" style="align-items:center;gap:5px;font-size:12px"><span style="width:32px;height:32px;border-radius:9px;background:var(--fl);display:grid;place-items:center" class="mu">${I("message-square-dashed")}</span><b style="color:var(--f);font-weight:500">No sessions yet</b><span class="mu" style="font-size:11px">Start one to begin.</span></div>`,
+ m:`<div class="col" style="align-items:center;gap:5px;font-size:12px"><span style="width:40px;height:40px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--ln);background:var(--s);display:grid;place-items:center" class="mu"><i data-lucide="inbox" style="width:20px;height:20px;stroke-width:1.5"></i></span><b style="color:var(--f);font-size:14px">No sessions yet</b></div>`},
+code:{d:`<div class="z" style="width:280px;border-radius:12px;box-shadow:0 0 0 1px var(--ln);overflow:hidden;background:color-mix(in srgb,var(--fl) 30%,var(--b))"><div class="mu fm" style="font-size:11px;padding:5px 12px;border-bottom:1px solid var(--ln);display:flex;justify-content:space-between">ts<span>${I("copy")}</span></div><pre class="fm" style="margin:0;padding:10px 12px;font-size:12px;color:var(--f)"><span class="mu">const</span> s = <span class="mu">await</span> get(<span style="color:var(--ok)">"id"</span>)</pre></div>`,
+ c:`<div class="z" style="width:280px;border-radius:6px;background:var(--s);position:relative"><pre class="fm" style="margin:0;padding:12px;font-size:12px;color:var(--f)">const s = await get("id")</pre></div>`,
+ m:`<div class="z" style="width:280px;border-radius:8px;background:var(--rs)"><pre style="margin:0;padding:12px;font:13px Menlo,monospace;color:var(--f)"><span style="color:#c678dd">const</span> s = get(<span style="color:#98c379">"id"</span>)</pre></div>`},
+markdown:{d:`<div style="width:210px;font-size:12px;line-height:1.5"><b style="color:var(--f);font-size:13px">What changed</b><div>Moved into <code class="fm" style="background:var(--sl);padding:0 4px;border-radius:5px;color:var(--f)">requireSession</code></div></div>`,
+ m:`<div class="z" style="width:280px;font-size:16px;line-height:24px"><b style="color:var(--f);font-size:20px">What changed</b><div>Moved into <code style="font:14px Menlo;background:var(--rs);padding:0 4px;border-radius:4px">requireSession</code></div></div>`},
+diff:{d:`<div class="fm" style="width:210px;font-size:11px;border-radius:8px;box-shadow:0 0 0 1px var(--ln);overflow:hidden;color:var(--f)"><div style="background:color-mix(in srgb,var(--dg) 12%,transparent);padding:2px 8px">- getSession(req)</div><div style="background:color-mix(in srgb,var(--ok) 12%,transparent);padding:2px 8px">+ requireSession(req)</div></div>`,
+ c:`<div class="fm" style="width:210px;font-size:11px;border-radius:6px;overflow:hidden"><div style="background:#42120B;color:#FC533A;padding:2px 8px">- getSession(req)</div><div style="background:#1A2919;color:#9BCD97;padding:2px 8px">+ requireSession(req)</div></div>`,
+ m:`<div class="fm" style="width:210px;font-size:11px;overflow:hidden;color:var(--f)"><div style="display:flex;background:color-mix(in srgb,var(--dg) 10%,transparent)"><span class="mu" style="width:40px;text-align:right;padding-right:8px">13</span>- getSession</div><div style="display:flex;background:color-mix(in srgb,var(--ok) 10%,transparent)"><span class="mu" style="width:40px;text-align:right;padding-right:8px">13</span>+ requireSession</div></div>`},
+thread:{d:`<div class="col z" style="width:300px;gap:8px;align-items:stretch">${ub("var(--rs)","var(--f)","14px")}<div class="tl"><span style="display:flex">${I("check")}</span>Read <span class="p">users.ts</span><span class="ld"></span></div><div style="font-size:13px">Fixed 3 routes.</div></div>`,
+ c:`<div class="col z" style="width:300px;gap:8px;align-items:stretch">${ub("var(--pr)","var(--op)","8px")}<div class="tl" style="background:color-mix(in srgb,var(--fl) 40%,transparent);border-radius:6px;padding:0 6px">${I("file")}Read · <span class="p">users.ts</span></div><div style="font-size:13px">Fixed 3 routes.</div></div>`,
+ m:`<div class="col z" style="width:300px;gap:8px;align-items:stretch">${ub("var(--as)","var(--oas)","16px","border-top-right-radius:3px")}<div class="tl" style="box-shadow:inset 0 0 0 1px var(--ln);border-radius:9px;padding:0 9px;height:28px">${I("file")}Read users.ts</div><div style="font-size:14px">Fixed 3 routes.</div></div>`},
+"user-msg":{d:ub("var(--rs)","var(--f)","14px","align-self:auto"),c:ub("var(--pr)","var(--op)","8px","align-self:auto"),m:ub("var(--as)","var(--oas)","16px","align-self:auto;border-top-right-radius:3px")},
+"asst-msg":{d:`<div class="col" style="width:210px;font-size:12px"><span>Fixed 3 routes that skipped the check.</span><span class="mu" style="display:flex;gap:8px">${I("copy")}${I("rotate-ccw")}${I("more-horizontal")}</span></div>`,
+ m:`<div class="col" style="width:210px;font-size:14px"><span>Fixed 3 routes that skipped the check.</span></div>`},
+reasoning:{d:`<span class="tl" style="width:auto">${I("chevron-right")}Thought for 8s</span>`,
+ c:`<span class="tl" style="width:auto;font-size:12px">${I("brain")}Thinking…</span>`,
+ m:`<span style="border:1.5px dashed var(--ln);border-radius:9px;padding:6px 10px;font:500 10px var(--fm);letter-spacing:.15em;color:var(--mu);width:190px">THOUGHT</span>`},
+"tool-row":{d:`<div class="tl"><span style="display:flex">${I("check")}</span>Read <span class="p">src/users.ts</span><span class="ld"></span></div>`,
+ c:`<div class="tl" style="background:color-mix(in srgb,var(--fl) 40%,transparent);border-radius:6px;padding:0 6px;height:26px">${I("file")}Read · <span class="p">src/users.ts</span><span style="margin-left:auto;display:flex">${I("chevron-right")}</span></div>`,
+ m:`<div class="tl" style="box-shadow:inset 0 0 0 1px var(--ln);border-radius:9px;padding:0 9px;height:30px">${I("file")}Read src/users.ts<span style="margin-left:auto;display:flex">${I("chevron-right")}</span></div>`},
+"tool-group":{d:`<div class="tl">${I("chevron-right")}Worked for 1m 42s<span class="ld"></span></div>`,
+ c:`<div class="tl" style="background:color-mix(in srgb,var(--fl) 30%,transparent);box-shadow:inset 0 0 0 1px var(--ln);border-radius:6px;padding:0 8px;height:36px">${I("chevron-right")}<span><span style="color:var(--f)">14 steps</span> <span class="p">· edit, bash</span></span></div>`,
+ m:`<div class="tl" style="box-shadow:inset 0 0 0 1px var(--ln);border-radius:9px;padding:0 9px;height:30px">${I("layers")}14 tool calls<span style="margin-left:auto;display:flex">${I("chevron-right")}</span></div>`},
+permission:{d:`<div class="z6" style="width:340px;background:var(--rs);border-radius:16px;box-shadow:0 0 0 1px var(--ln);padding:14px;display:flex;flex-direction:column;gap:10px"><div class="ch" style="font-size:14px;font-weight:500"><span style="color:var(--wn);display:flex">${I("shield-alert")}</span>Run a migration?</div><div class="fm" style="box-shadow:inset 0 0 0 1px var(--ln);border-radius:9px;padding:7px 10px;font-size:12px;color:var(--f)">pnpm db:migrate</div><div style="display:flex;justify-content:flex-end;gap:6px"><span class="xb g">Reject</span><span class="xb o">Always allow</span><span class="xb">Allow once</span></div></div>`,
+ c:`<div class="z6" style="width:340px;background:color-mix(in srgb,var(--s) 60%,transparent);border-radius:6px;box-shadow:inset 0 0 0 1px var(--ln),inset 4px 0 0 rgba(245,158,11,.5);padding:14px 14px 14px 18px;display:flex;flex-direction:column;gap:10px"><div class="ch" style="font-size:14px;font-weight:500"><span style="color:#f59e0b;display:flex">${I("shield")}</span>Permission required</div><code class="fm" style="background:var(--s);padding:4px 8px;border-radius:4px;font-size:12px">pnpm db:migrate</code><div style="display:flex;gap:6px"><span class="xb" style="height:32px">Allow Once</span><span class="xb s" style="height:32px">Always Allow</span><span class="xb d" style="height:32px">Deny</span></div></div>`,
+ m:`<div class="z6" style="width:340px;background:var(--s);border-radius:11px;box-shadow:0 0 0 1px var(--ln);overflow:hidden"><div style="background:var(--rs);padding:9px 12px;font-size:14px;font-weight:500;color:var(--f)">Run a migration?</div><div style="padding:12px"><div class="fm" style="background:var(--rs);border-radius:8px;padding:7px;font-size:12px">pnpm db:migrate</div></div><div style="border-top:1px solid var(--ln);padding:9px;display:flex;gap:6px"><span class="xb o" style="height:34px">Deny</span><span class="xb s" style="height:34px">Allow once</span><span class="xb" style="height:34px">Always allow</span></div></div>`},
+question:{d:`<div class="col" style="width:200px;gap:4px;font-size:12px">${[["Vitest",1],["Jest"]].map(([l,on])=>`<div class="ch" style="width:100%;padding:6px 9px;border-radius:9px;box-shadow:inset 0 0 0 1px ${on?"var(--f)":"var(--ln)"}"><span class="xrd ${on?"on":""}" style="--c:${on?"var(--pk)":"var(--in)"}"></span>${l}</div>`).join("")}</div>`,
+ c:`<div class="col" style="width:200px;gap:4px;font-size:12px">${[["Vitest",1],["Jest"]].map(([l,on])=>`<div class="ch" style="width:100%;padding:6px 9px;border-radius:6px;background:color-mix(in srgb,var(--fl) 30%,transparent);${on?"color:var(--pr)":""}">${l}${on?`<span style="margin-left:auto;color:#22c55e;display:flex">${I("check")}</span>`:""}</div>`).join("")}</div>`,
+ m:`<span class="xb sm" style="height:32px">Vitest</span><span class="xb o sm" style="height:32px">Jest</span><span class="xb o sm" style="height:32px">Other</span>`,
+ t:`<div class="col" style="width:200px;gap:4px;font-size:12px">${[["Vitest",1],["Jest"]].map(([l,on])=>`<div class="ch" style="width:100%;padding:6px 9px;border-radius:9px;box-shadow:inset 0 0 0 1px ${on?"var(--f)":"var(--ln)"}"><span class="xrd ${on?"on":""}" style="--c:${on?"var(--pr)":"var(--in)"}"></span>${l}</div>`).join("")}</div>`},
+composer:{d:`<div class="z6" style="width:360px;background:var(--rs);border-radius:16px;box-shadow:0 0 0 1px var(--ln),0 12px 28px -18px rgba(0,0,0,.4);padding:8px"><div class="mu" style="padding:8px;font-size:14px">Ask Kilo…</div><div style="display:flex;align-items:center;gap:4px"><span class="mu" style="padding:6px">${I("paperclip")}</span><span class="ch" style="padding:4px 8px">Code ${I("chevron-down")}</span><span class="ch" style="padding:4px 8px">Opus 4.5 ${I("chevron-down")}</span><span style="flex:1"></span><span class="xb ic" style="height:28px;width:28px;border-radius:50%">${I("arrow-up")}</span></div></div>`,
+ c:`<div class="z6" style="width:360px;background:color-mix(in srgb,var(--s) 30%,transparent);border-radius:10px;box-shadow:inset 0 0 0 1px var(--ln);padding:8px"><div class="mu" style="padding:8px;font-size:14px;height:44px">Ask anything…</div><div style="display:flex;align-items:center;gap:6px"><span class="xb o">Code ${I("chevrons-up-down")}</span><span class="xb o">Opus ${I("chevrons-up-down")}</span><span style="flex:1"></span><span class="xb ic" style="height:32px;width:32px;border-radius:10px">${I("send")}</span></div></div>`,
+ m:`<div class="z6" style="width:360px;display:flex;align-items:flex-end;gap:8px;padding:8px"><span class="xb s ic" style="height:28px;width:28px;border-radius:50%;margin-bottom:9px">${I("paperclip")}</span><span style="flex:1;border-radius:20px;box-shadow:inset 0 0 0 1px var(--ln);background:var(--s);padding:12px 16px;font-size:16px" class="mu">Message</span><span class="xb ic" style="height:44px;width:44px;border-radius:50%;background:var(--as);color:var(--oas)">${I("arrow-up")}</span></div>`},
+send:{d:`<span class="xb ic" style="height:28px;width:28px;border-radius:50%">${I("arrow-up")}</span><span class="xb ic" style="height:28px;width:28px;border-radius:50%"><i style="width:9px;height:9px;background:var(--op);border-radius:2px"></i></span>`,
+ c:`<span class="xb ic" style="height:32px;width:32px;border-radius:10px">${I("send")}</span><span class="xb d ic" style="height:32px;width:32px;border-radius:10px">${I("square")}</span>`,
+ m:`<span class="xb ic" style="height:44px;width:44px;border-radius:50%;background:var(--as);color:var(--oas)">${I("arrow-up")}</span><span class="xb ic" style="height:44px;width:44px;border-radius:50%;background:#737373"><i style="width:12px;height:12px;background:#fff;border-radius:2px"></i></span>`,
+ t:`<span class="xb ic" style="height:28px;width:28px;border-radius:50%">${I("arrow-up")}</span><span class="xb ic" style="height:28px;width:28px;border-radius:50%;background:var(--f)"><i style="width:9px;height:9px;background:var(--b);border-radius:2px"></i></span>`},
+"model-chip":{d:`<span class="ch" style="padding:5px 8px;border-radius:7px;background:var(--sl);font-weight:500">${I("hammer")}Code ${I("chevron-down")}</span><span class="ch" style="padding:5px 8px;font-weight:500">Opus 4.5 ${I("chevron-down")}</span>`,
+ c:`<span class="xb o">Code ${I("chevrons-up-down")}</span><span class="xb o">Opus ${I("chevrons-up-down")}</span>`,
+ m:`<span class="ch" style="padding:5px 11px;border-radius:999px;background:var(--rs);font-weight:500">Code <span class="mu">${I("chevron-down")}</span></span><span class="ch" style="padding:5px 11px;border-radius:999px;background:var(--rs);font-weight:500">Opus <span class="mu">${I("chevron-down")}</span></span>`},
+attach:{d:`<span style="width:56px;height:56px;border-radius:8px;background:linear-gradient(135deg,#6b7280,#374151)"></span><span class="xcard" style="border-radius:8px;height:56px;display:flex;align-items:center;gap:6px;width:120px">${I("file-text")}<b style="font-weight:500">schema.sql</b></span>`,
+ c:`<span style="width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,#6b7280,#374151);box-shadow:0 0 0 1px var(--ln)"></span><span style="width:64px;height:64px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--ln);background:color-mix(in srgb,var(--s) 30%,transparent);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;gap:3px">${I("file-text")}schema.sql</span>`,
+ m:`<span style="width:70px;height:56px;border-radius:7px;background:linear-gradient(135deg,#6b7280,#374151)"></span><span class="xcard" style="border-radius:7px;height:46px;display:flex;align-items:center;gap:6px;width:110px;padding:0 8px">${I("file")}<b style="font-weight:500;font-size:11px">schema.sql</b></span>`},
+working:{d:`<span class="ch mu"><span class="px3">${"<i></i>".repeat(9)}</span><span class="shimmer">Considering next steps</span><span class="fm" style="font-size:11px">0:42</span></span>`,
+ c:`<span class="ch mu" style="font-size:12px"><span class="xg4">${"<i></i>".repeat(16)}</span>Working · 0:42</span>`,
+ m:`<span class="ch mu" style="font-size:13px"><i data-lucide="loader" class="spin" style="width:18px;height:18px"></i>Running commands · 0:42</span>`},
+"session-status":{d:`<span class="ch"><span class="spin" style="display:flex;color:var(--if)">${I("loader-circle")}</span>Working</span><span class="ch"><span style="display:flex;color:var(--wn)">${I("alert-circle")}</span>Input</span>`,
+ c:`<span class="ch"><span class="xg4">${"<i></i>".repeat(16)}</span>Working</span><span class="ch"><span style="display:flex;color:var(--dg)">${I("triangle-alert")}</span>Failed</span>`,
+ m:`<span class="ch"><span style="width:8px;height:8px;border-radius:50%;background:var(--ok)"></span>Running</span><span class="ch"><span style="display:flex;color:var(--wn)">${I("alert-circle")}</span>Needs input</span>`,
+ t:`<span class="ch"><span class="spin mu" style="display:flex">${I("loader-circle")}</span>Running</span><span class="ch"><span style="display:flex;color:var(--wn)">${I("alert-circle")}</span>Needs input</span>`},
+"session-row":{d:`<div style="width:200px;display:flex;gap:7px;padding:6px 9px;border-radius:7px;background:var(--sl);font-size:12px"><span class="mu spin" style="display:flex;margin-top:2px">${I("loader-circle")}</span><span><b style="display:block;font-weight:500;color:var(--f)">Refactor auth</b><span class="mu" style="font-size:11px">kilo-desktop · main</span></span></div>`,
+ c:`<div style="width:200px;display:flex;align-items:center;padding:8px 12px;border-radius:10px;background:var(--fl);font-size:13px;color:var(--f);font-weight:500">Refactor auth<span class="mu" style="margin-left:auto;font-size:11px;font-weight:400">2h</span></div>`,
+ m:`<div style="width:200px;display:flex;gap:9px;padding:8px 0 8px 12px;border-bottom:.5px solid var(--ln);position:relative"><span style="position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:2px;background:#d4a017"></span><span><span class="fm" style="display:block;font-size:9px;letter-spacing:.15em;color:#d4a017">KILO CODE</span><b style="font-weight:500;font-size:13px;color:var(--f)">Refactor auth</b></span></div>`},
+todo:{d:`<div class="col" style="gap:4px;font-size:12px;color:var(--f)"><span class="ch">${cb("var(--f)","var(--b)")}<s class="mu">Find routes</s></span><span class="ch"><span class="spin" style="display:flex">${I("loader-circle")}</span>Add helper</span><span class="ch">${cb("none","",false)}Write tests</span></div>`,
+ c:`<div class="col" style="gap:4px;font-size:12px;color:var(--f)"><span class="ch"><span style="display:flex;color:#22c55e">${I("circle-check")}</span>Find routes</span><span class="ch"><span class="spin" style="display:flex">${I("loader-2")}</span>Add helper</span><span class="ch"><span class="mu" style="display:flex">${I("circle")}</span>Write tests <span style="color:var(--dg)">(high)</span></span></div>`,
+ m:`<div class="col" style="gap:0;font-size:12px;color:var(--f);width:180px">${["circle-check|Find routes","circle-dot|Add helper","circle|Write tests"].map(r=>{const [i,l]=r.split("|");return `<span class="ch" style="width:100%;padding:4px 6px;border-bottom:.5px solid var(--ln)"><span class="mu" style="display:flex">${I(i)}</span>${l}</span>`}).join("")}</div>`},
+"context-meter":{d:ring(18,2,"var(--f)",14),c:`<span class="xb g fm" style="font-size:11px;font-weight:400;color:var(--mu)">12.3K (45%)</span>`,m:ring(28,3,"var(--pr)",14),t:ring(18,2,"var(--f)",14)},
+error:{d:`<div class="xcard" style="width:210px;background:var(--b);border-radius:7px;display:flex;align-items:center;gap:7px"><span style="color:var(--dg);display:flex">${I("alert-circle")}</span><b style="font-weight:500">Provider error</b><span class="xb o sm" style="margin-left:auto;height:22px">Retry</span></div>`,
+ c:`<div class="col" style="font-size:13px"><span style="color:var(--dg)">Provider timed out.</span><span class="ch" style="color:var(--dg);font-size:11px">${I("alert-circle")}Failed</span></div>`,
+ m:`<div class="col" style="font-size:12px"><span class="ch" style="color:var(--dg)">${I("alert-circle")}Message failed</span><span style="display:flex;gap:5px"><span class="xb o sm">Retry</span><span class="xb sm" style="background:var(--as);color:var(--oas)">Add credits</span></span></div>`,
+ t:`<div style="width:210px;border-radius:10px;padding:8px 10px;display:flex;gap:7px;align-items:center;background:color-mix(in srgb,var(--dg) 7%,var(--s));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--dg) 30%,transparent);font-size:12px;color:var(--f)"><span style="color:var(--dg);display:flex">${I("alert-circle")}</span>Provider error<span class="xb o sm" style="margin-left:auto;height:22px">Retry</span></div>`},
+queued:{d:`<div style="width:210px;display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:9px;background:var(--rs);font-size:12px;color:var(--f)"><span class="mu" style="display:flex">${I("clock")}</span>Also add a test<span class="mu" style="margin-left:auto;display:flex">${I("pencil")}</span></div>`,
+ c:`<div style="position:relative">${ub("var(--pr)","var(--op)","8px","align-self:auto")}<span style="position:absolute;right:-8px;bottom:-8px;width:22px;height:22px;border-radius:50%;background:var(--s);box-shadow:0 0 0 2px var(--b);display:grid;place-items:center" class="mu">${I("clock")}</span></div>`,
+ m:`<div class="col" style="align-items:flex-end">${ub("var(--as)","var(--oas)","16px","align-self:auto;border-top-right-radius:3px")}<span class="ch mu" style="font-size:11px">${I("clock")}Queued</span></div>`,
+ t:`<div class="col" style="align-items:flex-end">${ub("var(--rs)","var(--f)","14px","align-self:auto;opacity:.6")}<span class="ch mu" style="font-size:11px">${I("clock")}Queued · <span style="color:var(--f)">Edit</span></span></div>`},
+};
+const KEYS=["d","c","m","t"];
+const render=(id,k,status)=>{
+  if(status==="none")return `<div class="rc miss th-${k}">missing</div>`;
+  const r=R[id]||{};const html=r[k]??(k==="m"&&status==="na"?null:r.d);
+  if(html==null)return `<div class="rc na th-${k}">${status==="na"?"n/a on iOS":"—"}</div>`;
+  return `<div class="rc th-${k}${k==="t"?" tgt":""}">${html}</div>`;
+};
+const pipLine=([n,s])=>{const k=s==="none"||s==="na"?1:Math.max(n,1),shown=Math.min(k,24);return `<div class="pl${k>8?" many":""}">${Array.from({length:shown},()=>`<i class="pip ${s}"></i>`).join("")}${k>1?`<span class="n">${k}</span>`:""}</div>`;};
+
+function renderGrid(){
+  let list=rows.filter(flt);
+  if(sorted)list=[...list].sort((a,b)=>weight(b)-weight(a));
+  let last="",h=`<div class="gh">Component</div><div class="gh">Desktop</div><div class="gh">Cloud web<small>dark only</small></div><div class="gh">Mobile</div><div class="gh">Target</div>`;
+  list.forEach((r,i)=>{
+    const [g,id,name,d,c,m,src]=r;
+    if(!sorted&&g!==last){h+=`<div class="grp">${G[g]}</div>`;last=g;}
+    h+=`<div class="nm" data-r="${i}"><a href="#${id}">${name}</a></div>`;
+    [d,c,m].forEach((x,j)=>{h+=`<div class="cw" data-r="${i}" data-tip="${strip(x[2]).replace(/"/g,"&quot;")}">${render(id,KEYS[j],x[1])}${pipLine(x)}</div>`;});
+    h+=`<div class="cw" data-r="${i}">${render(id,"t","ok")}<div class="pl"><span class="src">${src==="Aligned"?"already aligned":"from "+src}</span></div></div>`;
+  });
+  pg.innerHTML=h;
+  lucide.createIcons();
+}
+renderGrid();
+document.querySelectorAll(".mxfilter [data-f]").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".mxfilter [data-f]").forEach(x=>x.className="btn sm ghost");
+  b.className="btn sm secondary";filter=b.dataset.f;renderGrid();
+});
+document.getElementById("sortBtn").onclick=e=>{sorted=!sorted;e.currentTarget.className="btn sm "+(sorted?"secondary":"ghost");renderGrid();};
+// tooltip + row hover
+const hint=document.createElement("div");hint.className="hint";document.body.appendChild(hint);
+pg.addEventListener("mousemove",e=>{
+  const c=e.target.closest("[data-r]");
+  pg.querySelectorAll(".rowhover").forEach(x=>x.classList.remove("rowhover"));
+  if(!c){hint.style.display="none";return;}
+  pg.querySelectorAll(`[data-r="${c.dataset.r}"]`).forEach(x=>x.classList.add("rowhover"));
+  if(c.dataset.tip){hint.textContent=c.dataset.tip;hint.style.display="block";hint.style.left=Math.min(e.clientX+12,innerWidth-300)+"px";hint.style.top=e.clientY+14+"px";}else hint.style.display="none";
+});
+pg.addEventListener("mouseleave",()=>{hint.style.display="none";pg.querySelectorAll(".rowhover").forEach(x=>x.classList.remove("rowhover"));});
+// product scoreboard
+const P=[["Desktop",3],["Cloud web",4],["Mobile (iOS)",5]];
+document.getElementById("board").innerHTML=P.map(([nm,k])=>{
+  const cnt={ok:0,drift:0,none:0,na:0};rows.forEach(r=>cnt[r[k][1]]++);
+  const impl=rows.reduce((a,r)=>a+(r[k][1]==="drift"?r[k][0]:0),0);
+  const pct=x=>`${x/rows.length*100}%`;
+  return `<div class="pcard"><div class="pt"><b>${nm}</b><span class="mutedtxt" style="font-size:12px">${rows.length} components</span></div>
+  <div class="big">${cnt.ok}<small>match the target</small></div>
+  <div class="stack">${["ok","drift","none","na"].map(s=>cnt[s]?`<i class="${s}" style="width:${pct(cnt[s])}"></i>`:"").join("")}</div>
+  <div class="kv"><span><i class="pip drift"></i><b>${cnt.drift}</b> drift (${impl} impl.)</span><span><i class="pip none"></i><b>${cnt.none}</b> missing</span>${cnt.na?`<span><i class="pip na"></i><b>${cnt.na}</b> native</span>`:""}</div></div>`;
+}).join("");
+// mode
+const btn=document.getElementById("modeBtn"),root=document.documentElement;
+const qs=new URLSearchParams(location.search);if(qs.get("mode")==="light")root.dataset.mode="light";
+const paint=()=>{const l=root.dataset.mode==="light";btn.innerHTML=`<i data-lucide="${l?"moon":"sun"}"></i><span>${l?"Dark":"Light"}</span>`;lucide.createIcons();};
+btn.onclick=()=>{root.dataset.mode=root.dataset.mode==="light"?"dark":"light";paint();};
+addEventListener("keydown",e=>{if(e.key==="l"&&!e.metaKey)btn.click();});
+paint();
+const det=document.getElementById("detBtn");
+const setDet=on=>{document.body.classList.toggle("detail",on);det.querySelector("span").textContent=on?"Hide notes":"Show notes";};
+det.onclick=()=>setDet(!document.body.classList.contains("detail"));
+if(qs.get("notes")==="on")setDet(true);
+</script>
+</body>
+</html>

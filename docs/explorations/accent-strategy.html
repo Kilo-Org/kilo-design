@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kilo accent strategy · #FFDD00</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Roboto+Mono:wght@400;500&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<style>
+/* ==========================================================================
+   Kilo accent strategy explorer
+   Mocks follow shipped code:
+     Desktop  kilo-desktop  (app-themes.ts "kilo", thread.tsx, session-list-content.tsx, pane canvas)
+     Cloud    kilo-cloud/apps/web  (globals.css, AppSidebar, CloudChatPage, credits)
+     iOS      kilo-cloud/apps/mobile  (global.css, home/agents/agent-chat)
+   "Shipped" = each product's real tokens today. A–E = one proposed theme,
+   led by Desktop, applied to all three. #FFDD00 never changes.
+   ========================================================================== */
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:Inter,system-ui,sans-serif;font-size:13px;line-height:1.45}
+svg.lucide{flex:none;width:16px;height:16px}
+.s3 svg.lucide,svg.lucide.s3{width:12px;height:12px}
+svg.lucide.s14{width:14px;height:14px}
+svg.lucide.s18{width:18px;height:18px}
+svg.lucide.s20{width:20px;height:20px}
+svg.lucide.s22{width:22px;height:22px}
+svg.lucide.s24{width:24px;height:24px}
+.spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- Proposed theme: Desktop neutrals (app-themes.ts "kilo") ---------- */
+.k{--Y:#FFDD00;--Yfg:#1F1F1F;color:var(--fg)}
+.k[data-mode=dark]{
+  --stage:#0a0a0a;--stage-line:rgba(255,255,255,.03);
+  --sidebar:#0e0e0e;--bg:#111111;--card:#181818;--raised:#262626;--composer:#1f1f1f;--popover:#2b2b2b;
+  --hover:rgba(212,212,212,.05);--hover-strong:rgba(212,212,212,.08);--muted-fill:#333333;
+  --fg:#d4d4d4;--fg-strong:#fafafa;--fg2:#c4c4c4;--muted:#a3a3a3;--subtle:#737373;
+  --border:rgba(255,255,255,.1);--border-subtle:rgba(255,255,255,.06);--input:rgba(255,255,255,.1);
+  --success:#4ade80;--destructive:#f87171;--info:#60a5fa;
+  --warn:#fbbf24;--warn-bg:rgba(251,191,36,.09);--warn-bd:rgba(251,191,36,.28);
+  --add:#9BCD97;--add-bg:#1A2919;--del:#FC533A;--del-bg:#42120B;
+  --syn-kw:#FF9AE2;--syn-str:#ECF58C;--syn-num:#F2B36B;--syn-fn:#93E9F6;--syn-ty:#00CEB9;--syn-pr:#9CDCFE;--syn-co:#7A7A7A;
+  --shadow:0 30px 80px -20px rgba(0,0,0,.85),0 0 0 1px rgba(0,0,0,.6);--win-bd:rgba(255,255,255,.12);
+}
+.k[data-mode=light]{
+  --stage:#e8e8e6;--stage-line:rgba(0,0,0,.04);
+  --sidebar:#f4f4f4;--bg:#ffffff;--card:#ffffff;--raised:#f5f5f5;--composer:#ffffff;--popover:#ffffff;
+  --hover:#f5f5f5;--hover-strong:#efefef;--muted-fill:#f5f5f5;
+  --fg:#0a0a0a;--fg-strong:#000;--fg2:#262626;--muted:#737373;--subtle:#a3a3a3;
+  --border:#e5e5e5;--border-subtle:rgba(229,229,229,.6);--input:#e5e5e5;
+  --success:#166534;--destructive:#9f1239;--info:#1e40af;
+  --warn:#92400e;--warn-bg:#FFF8D6;--warn-bd:#F3D76A;
+  --add:#166534;--add-bg:#e8f6ec;--del:#b91c1c;--del-bg:#fdecec;
+  --syn-kw:#a626a4;--syn-str:#5c6b00;--syn-num:#b45309;--syn-fn:#0e7490;--syn-ty:#0f766e;--syn-pr:#1d4ed8;--syn-co:#8a8a8a;
+  --shadow:0 30px 80px -24px rgba(0,0,0,.28),0 0 0 1px rgba(0,0,0,.06);--win-bd:rgba(0,0,0,.12);
+}
+/* Lever: warm neutrals */
+.k[data-mode=dark][data-warm=on]{--stage:#0b0a08;--sidebar:#0e0d0a;--bg:#11100d;--card:#191813;--raised:#27251f;--composer:#1e1d18;--popover:#2a2823;--hover:rgba(255,246,220,.05);--hover-strong:rgba(255,246,220,.08);--muted-fill:#34322b;--fg:#d9d5c9;--fg-strong:#f7f4ea;--fg2:#c9c4b6;--muted:#a29d90;--subtle:#77736a;--border:rgba(255,244,214,.09);--border-subtle:rgba(255,244,214,.055)}
+.k[data-mode=light][data-warm=on]{--stage:#e6e3d9;--sidebar:#efece2;--bg:#fbfaf5;--card:#fffefa;--raised:#f0eee6;--composer:#fffefa;--popover:#fffefa;--hover:#efece2;--hover-strong:#e9e6da;--muted-fill:#f0eee6;--fg:#14130f;--fg2:#2b2822;--muted:#6f6a61;--subtle:#a9a39a;--border:#e6e2d5;--border-subtle:rgba(230,226,213,.6);--input:#e6e2d5}
+/* Lever: warnings move to orange */
+.k[data-mode=dark][data-warn=orange]{--warn:#FB923C;--warn-bg:rgba(251,146,60,.09);--warn-bd:rgba(251,146,60,.3)}
+.k[data-mode=light][data-warn=orange]{--warn:#C2410C;--warn-bg:#FFF1E7;--warn-bd:#FBC9A4}
+
+/* ---------- Accent roles ----------
+   act      primary button (Desktop Send / Allow once, Cloud Start session, iOS FAB)
+   ink      primary-ink: links, done dot, active tab border, switch, SEE ALL
+   soft     primary-soft: Beta badge, chips      bubble   user message (Cloud, iOS)
+   send     send button                          live     "agent is working" mark
+   check    checkbox checked                     ring     focus                       */
+.k{--act-bd:var(--act-bg);--send-bg:var(--act-bg);--send-fg:var(--act-fg);--send-bd:var(--act-bd);--soft-bd:transparent;--live:var(--info);--check-bg:var(--act-bg);--check-fg:var(--act-fg);--chart-hi:var(--ink)}
+/* Shipped + A · Fill (Desktop today) */
+.k:is([data-s=shipped],[data-s=fill]){--act-bg:var(--Y);--act-fg:var(--Yfg);--act-hover:#F2D200;--bubble-bg:var(--Y);--bubble-fg:var(--Yfg)}
+.k:is([data-s=shipped],[data-s=fill])[data-mode=dark]{--ink:var(--Y);--ink-fg:var(--Yfg);--soft-bg:rgba(255,221,0,.1);--soft-fg:var(--Y);--ring:var(--Y)}
+.k:is([data-s=shipped],[data-s=fill])[data-mode=light]{--ink:#737373;--ink-fg:#fff;--soft-bg:var(--Y);--soft-fg:var(--Yfg);--ring:#737373}
+/* B · Mono */
+.k[data-s=mono][data-mode=dark]{--act-bg:#ededed;--act-fg:#111;--act-hover:#fff;--ink:#ededed;--ink-fg:#111;--soft-bg:rgba(255,255,255,.08);--soft-fg:var(--fg);--bubble-bg:var(--raised);--bubble-fg:var(--fg-strong);--ring:rgba(237,237,237,.5)}
+.k[data-s=mono][data-mode=light]{--act-bg:#0a0a0a;--act-fg:#fff;--act-hover:#262626;--ink:#0a0a0a;--ink-fg:#fff;--soft-bg:#efefef;--soft-fg:#0a0a0a;--bubble-bg:var(--raised);--bubble-fg:var(--fg);--ring:rgba(10,10,10,.45)}
+/* C · Mono + Spark: yellow only where the agent acts */
+.k[data-s=spark][data-mode=dark]{--act-bg:#ededed;--act-fg:#111;--act-hover:#fff;--ink:#ededed;--ink-fg:#111;--soft-bg:rgba(255,255,255,.08);--soft-fg:var(--fg);--bubble-bg:var(--raised);--bubble-fg:var(--fg-strong);--send-bg:var(--Y);--send-fg:var(--Yfg);--send-bd:var(--Y);--live:var(--Y);--chart-hi:var(--Y);--ring:var(--Y)}
+.k[data-s=spark][data-mode=light]{--act-bg:#0a0a0a;--act-fg:#fff;--act-hover:#262626;--ink:#0a0a0a;--ink-fg:#fff;--soft-bg:#efefef;--soft-fg:#0a0a0a;--bubble-bg:var(--raised);--bubble-fg:var(--fg);--send-bg:var(--Y);--send-fg:var(--Yfg);--send-bd:rgba(0,0,0,.14);--live:var(--Y);--chart-hi:var(--Y);--ring:#0a0a0a}
+/* D · Ink: yellow as letter and line */
+.k[data-s=ink][data-mode=dark]{--act-bg:transparent;--act-fg:var(--Y);--act-bd:var(--Y);--act-hover:rgba(255,221,0,.08);--ink:var(--Y);--ink-fg:var(--Yfg);--soft-bg:transparent;--soft-fg:var(--Y);--soft-bd:rgba(255,221,0,.45);--bubble-bg:var(--raised);--bubble-fg:var(--fg-strong);--check-bg:var(--Y);--check-fg:var(--Yfg);--ring:var(--Y)}
+.k[data-s=ink][data-mode=light]{--act-bg:#1F1F1F;--act-fg:var(--Y);--act-hover:#000;--ink:#1F1F1F;--ink-fg:var(--Y);--soft-bg:#1F1F1F;--soft-fg:var(--Y);--bubble-bg:#1F1F1F;--bubble-fg:#f5f5f5;--ring:#1F1F1F}
+/* E · Soft: tint as area, deep same-hue label */
+.k[data-s=soft][data-mode=dark]{--act-bg:#322E0F;--act-fg:var(--Y);--act-bd:#5E530E;--act-hover:#3d3812;--ink:var(--Y);--ink-fg:var(--Yfg);--soft-bg:#322E0F;--soft-fg:var(--Y);--bubble-bg:#2a2710;--bubble-fg:var(--fg-strong);--check-bg:var(--Y);--check-fg:var(--Yfg);--ring:var(--Y)}
+.k[data-s=soft][data-mode=light]{--act-bg:#FFF5BF;--act-fg:#4A3F00;--act-bd:#EED54A;--act-hover:#FFEE8F;--ink:#6B5A00;--ink-fg:#fff;--soft-bg:#FFF5BF;--soft-fg:#4A3F00;--soft-bd:#EED54A;--bubble-bg:#FFF8D6;--bubble-fg:#1f1f1f;--ring:#C9AE00}
+
+/* ==========================================================================
+   Page chrome
+   ========================================================================== */
+body,#root{background:var(--stage,#0a0a0a)}
+#root{min-height:100vh;transition:background .25s}
+.page{max-width:1500px;margin:0 auto;padding:28px 32px 80px}
+.hdr h1{font-size:20px;font-weight:600;letter-spacing:-.015em;color:var(--fg-strong);display:flex;align-items:center;gap:10px}
+.hdr p{color:var(--muted);max-width:720px;margin-top:4px;text-wrap:pretty}
+.pill-y{display:inline-flex;align-items:center;gap:6px;font:500 11px/1 "Roboto Mono",monospace;color:var(--muted);padding:3px 8px 3px 3px;border:1px solid var(--border);border-radius:99px;background:var(--card)}
+.pill-y i{width:14px;height:14px;border-radius:99px;background:var(--Y);box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.controls{position:sticky;top:0;z-index:30;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:10px 12px;margin:18px -12px 18px;border-radius:12px;background:color-mix(in srgb,var(--stage) 84%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.ctl{display:flex;align-items:center;gap:8px}
+.ctl>label{font:500 11px/1 Inter;letter-spacing:.06em;text-transform:uppercase;color:var(--subtle)}
+.seg{display:inline-flex;padding:2px;border-radius:8px;background:var(--muted-fill);border:1px solid var(--border)}
+.seg button{all:unset;cursor:pointer;font:500 12px/1 Inter;color:var(--muted);padding:6px 10px;border-radius:6px}
+.seg button:hover{color:var(--fg)}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--fg-strong);box-shadow:0 1px 2px rgba(0,0,0,.2),0 0 0 1px var(--border)}
+.seg button:focus-visible,.tog:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+.tog{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font:500 12px/1 Inter;color:var(--fg2);padding:6px 9px;border-radius:7px;border:1px solid var(--border);background:var(--card)}
+.tog .t-sw{width:24px;height:14px;border-radius:9px;background:var(--muted-fill);position:relative;box-shadow:inset 0 0 0 1px var(--border)}
+.tog .t-sw::after{content:"";position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:9px;background:var(--muted);transition:transform .2s}
+.tog[aria-pressed=true] .t-sw{background:var(--fg-strong)}
+.tog[aria-pressed=true] .t-sw::after{transform:translateX(10px);background:var(--bg)}
+.brief{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.brief h2{font-size:15px;font-weight:600;color:var(--fg-strong)}
+.lede{color:var(--fg2);margin-top:6px;text-wrap:pretty}
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+.pc h4{font:500 11px/1 Inter;letter-spacing:.06em;text-transform:uppercase;color:var(--subtle);margin-bottom:6px}
+.pc li{list-style:none;color:var(--fg2);padding-left:14px;position:relative;margin-bottom:4px;text-wrap:pretty}
+.pc li::before{content:"";position:absolute;left:2px;top:7px;width:5px;height:5px;border-radius:2px}
+.pc .pro li::before{background:var(--success)}.pc .con li::before{background:var(--destructive)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.metric{border:1px solid var(--border);border-radius:9px;padding:9px 11px;background:var(--bg)}
+.metric .lab{font-size:11px;color:var(--muted)}
+.metric .val{display:flex;align-items:baseline;gap:6px;margin-top:2px;font:600 16px/1.2 Inter;color:var(--fg-strong);font-variant-numeric:tabular-nums;flex-wrap:wrap}
+.metric .val small{font:500 10.5px/1 Inter;padding:2px 6px;border-radius:99px}
+.pass{color:var(--success);background:color-mix(in srgb,var(--success) 14%,transparent)}
+.fail{color:var(--destructive);background:color-mix(in srgb,var(--destructive) 14%,transparent)}
+.na{color:var(--muted);background:var(--muted-fill)}
+.metric .hint{font-size:10.5px;color:var(--subtle);margin-top:2px}
+.note{margin-top:10px;color:var(--muted);font-size:12px;text-wrap:pretty}
+.note b{color:var(--fg2);font-weight:500}
+.sect{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:34px 2px 10px}
+.sect h3{font-size:13px;font-weight:600;color:var(--fg-strong);display:flex;align-items:center;gap:10px}
+.sect h3 span{font-weight:400;color:var(--subtle);font-size:12px}
+.stage{position:relative;border-radius:16px;overflow:hidden;background:var(--stage);background-image:linear-gradient(var(--stage-line) 1px,transparent 1px),linear-gradient(90deg,var(--stage-line) 1px,transparent 1px);background-size:32px 32px;box-shadow:inset 0 0 0 1px var(--border)}
+.fit{position:relative;width:100%}
+.fit>.design{position:absolute;left:0;top:0;transform-origin:0 0}
+.win{position:absolute;overflow:hidden;border-radius:12px;box-shadow:var(--shadow);border:1px solid var(--win-bd)}
+.lights{display:flex;gap:8px}
+.lights i{width:12px;height:12px;border-radius:99px;background:#ff5f57;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2)}
+.lights i:nth-child(2){background:#febc2e}.lights i:nth-child(3){background:#28c840}
+.kmark{display:block;flex:none}
+.kmark rect{fill:var(--Y)}
+
+/* ==========================================================================
+   KILO DESKTOP (origin/main b6e3be7c: plugins/shell, workbench, chat; "bordercalypse")
+   ========================================================================== */
+.desk{background:var(--sidebar);font-size:13px;color:var(--fg);display:grid;grid-template-columns:256px 1fr;
+  --hairline:color-mix(in srgb,var(--fg) 15%,transparent);--st-hover:color-mix(in srgb,var(--fg) 4%,transparent);--st-sel:color-mix(in srgb,var(--fg) 7%,transparent);--st-sel2:color-mix(in srgb,var(--fg) 10%,transparent)}
+.desk .mono{font-family:"Source Code Pro",ui-monospace,monospace}
+.pane-edge{box-shadow:0 0 0 .5px var(--hairline)}
+.d-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 10px;border-radius:10px;font:500 13px/1 Inter;border:1px solid transparent;color:var(--fg);white-space:nowrap}
+.d-btn.sm{height:28px;padding:0 9px;border-radius:9px;font-size:12px}
+.d-btn.xs{height:24px;padding:0 7px;border-radius:8px;font-size:12px}
+.d-btn.icon{width:32px;padding:0}.d-btn.icon-sm{width:28px;height:28px;padding:0;border-radius:9px}.d-btn.icon-xs{width:24px;height:24px;padding:0;border-radius:8px}
+.d-btn.ghost:hover{background:var(--st-hover)}
+.d-btn.mut{color:var(--muted)}
+.d-btn.outline{border-color:var(--border);background:transparent}
+.d-btn.primary{background:var(--act-bg);color:var(--act-fg);border-color:var(--act-bd)}
+.d-btn.primary:hover{background:var(--act-hover)}
+.d-badge-soft{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:99px;font:500 12px/1 Inter;background:var(--soft-bg);color:var(--soft-fg);border:1px solid var(--soft-bd)}
+.d-badge-outline{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:99px;font:500 11px/1 "Source Code Pro",monospace;border:1px solid var(--border);color:var(--fg2)}
+/* sidebar: transparent on the shell glass, no border */
+.d-side{display:flex;flex-direction:column;min-height:0;position:relative}
+.d-side-h{height:48px;flex:none;display:flex;align-items:center;padding-left:16px}
+.d-cluster{position:absolute;left:84px;top:10px;display:flex;align-items:center;gap:6px;z-index:2}
+.d-side-c{flex:1;min-height:0;overflow:hidden;padding:0 8px}
+.d-mi{display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border-radius:10px;color:var(--fg);font-size:13px}
+.d-mi:hover{background:var(--st-hover)}
+.d-mi svg{color:var(--fg2)}
+.d-actions{display:grid;gap:2px;margin:2px 0 12px}
+.d-grouprow{display:flex;align-items:center;gap:2px;height:30px;margin-bottom:2px;border-radius:8px;padding-right:4px}
+.d-wsf{flex:1;display:flex;align-items:center;gap:8px;height:30px;padding:0 8px;color:var(--fg)}
+.d-wsf .cv{color:var(--muted)}
+.d-shelf{display:flex;align-items:center;gap:6px;height:30px;padding:0 8px;color:var(--muted);font-size:13px}
+.d-shelf.warn{color:var(--warn)}
+.d-row{margin:0 1px 1px;border-radius:8px;padding:5px 10px;display:grid;gap:1px}
+.d-row:hover{background:var(--st-hover)}
+.d-row.on{background:var(--st-sel)}
+.d-row .t{display:flex;align-items:center;gap:8px;height:20px}
+.d-row .g{width:14px;height:14px;display:grid;place-items:center;flex:none}
+.d-row .ti{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:color-mix(in srgb,var(--fg) 85%,transparent)}
+.d-row.on .ti,.d-row:hover .ti{color:var(--fg)}
+.d-row .tr{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:3px;font-variant-numeric:tabular-nums}
+.d-done{width:6px;height:6px;border-radius:9px;background:var(--ink)}
+.d-side-f{flex:none;display:grid;gap:8px;padding:7px 8px 8px}
+.d-upd{display:flex;align-items:center;gap:8px;height:32px;padding:0 10px;border-radius:10px;background:var(--soft-bg);color:var(--soft-fg);font-size:12px;font-weight:500;border:1px solid var(--soft-bd)}
+.d-acctrow{display:flex;align-items:center;gap:8px}
+.d-acct{flex:1;display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border-radius:10px;font-weight:500;color:var(--fg)}
+.d-av{width:22px;height:22px;border-radius:99px;display:grid;place-items:center;font:600 11px/1 Inter;color:#fff;background:linear-gradient(135deg,#6366f1,#0ea5e9)}
+/* main */
+.d-inset{display:flex;flex-direction:column;min-width:0;min-height:0}
+.d-head{height:48px;flex:none;display:flex;align-items:center;gap:8px;padding:8px 12px 0 22px;margin-bottom:8px}
+.d-crumb{display:flex;align-items:center;gap:6px;font-size:13px;min-width:0}
+.d-crumb .ws{color:var(--fg);display:flex;align-items:center;gap:6px}
+.d-crumb .sep{color:var(--muted)}
+.d-crumb .ti{font-weight:500;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d-head .grow{flex:1}
+.d-git{display:flex;align-items:center;gap:4px;padding-right:6px;box-shadow:.5px 0 0 0 var(--hairline)}
+.d-git .split{display:inline-flex}
+.plus{color:var(--success);font:500 12px "Source Code Pro",monospace}
+.minus{color:var(--destructive);font:500 12px "Source Code Pro",monospace}
+/* pane canvas: islands */
+.d-canvas{flex:1;min-height:0;padding:0 6px 6px;margin-top:-2px;display:grid;grid-template-columns:1fr 372px;gap:4px}
+.d-col{display:flex;flex-direction:column;gap:4px;min-height:0}
+.d-island{flex:1;min-height:0;background:var(--card);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.d-tabs{height:40px;flex:none;display:flex;align-items:center;gap:4px;padding:6px}
+.d-tab{min-width:160px;max-width:224px;height:28px;display:flex;align-items:center;gap:6px;padding:0 8px;border-radius:8px;color:var(--muted);font-size:13px}
+.d-tab span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.d-tab:hover{background:var(--st-hover)}
+.d-tab.on{background:var(--st-sel2);color:var(--fg)}
+.d-tab.shown{background:var(--st-sel);color:var(--fg)}
+.d-div{flex:none;border-top:.5px solid var(--hairline)}
+.d-island.focus .d-div{border-top-color:var(--ink)}
+.d-body{flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+/* thread */
+.d-thread{flex:1;min-height:0;overflow:hidden;padding:16px 4px 12px;font-size:14px;display:flex;flex-direction:column;justify-content:flex-end}
+.d-col-inner{max-width:48rem;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;gap:16px}
+.d-worked{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;padding-bottom:12px;border-bottom:1px solid var(--border-subtle)}
+.d-umsg{align-self:flex-end;max-width:80%;background:var(--raised);color:var(--fg);border-radius:14px;padding:8px 16px;text-wrap:pretty}
+.d-amsg{padding:0 8px;line-height:1.5;color:var(--fg);text-wrap:pretty}
+.d-amsg code{font:400 .85em "Source Code Pro",monospace;background:var(--muted-fill);border-radius:6px;padding:2px 6px}
+.d-amsg a{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+.d-act{padding:0 8px}
+.d-act .trig{display:flex;align-items:center;gap:8px;padding:4px 0;color:var(--muted);font-size:13px}
+.d-act .stack{display:flex}
+.d-act .stack span{width:26px;height:26px;border-radius:99px;display:grid;place-items:center;border:1px solid;margin-left:-4px;background:var(--card)}
+.d-act .stack span:first-child{margin-left:0}
+.d-act .lab{font-weight:500;color:var(--fg)}
+.d-act .lab em{font-style:normal;opacity:.6}
+.c-sky{color:#0284c7;border-color:rgba(2,132,199,.4)!important;background:#e0f2fe!important}
+.c-amber{color:#d97706;border-color:rgba(217,119,6,.4)!important;background:#fef3c7!important}
+.c-zinc{color:#52525b;border-color:rgba(82,82,91,.4)!important;background:#f4f4f5!important}
+.k[data-mode=dark] .c-sky{color:#38bdf8;background:#082f49!important}
+.k[data-mode=dark] .c-amber{color:#fbbf24;background:#451a03!important}
+.k[data-mode=dark] .c-zinc{color:#a1a1aa;background:#09090b!important}
+.d-rail{margin-left:12.5px;border-left:1px solid var(--border-subtle);padding-left:12px;display:grid;gap:2px;margin-top:2px}
+.d-rail .r{display:flex;align-items:center;gap:8px;height:24px;color:var(--muted);font-size:13px}
+.d-rail .r b{font-weight:500;color:var(--fg)}
+.d-rail .r .dots{flex:1;border-bottom:.5px dashed color-mix(in srgb,var(--muted) 20%,transparent);height:1px}
+.d-working{display:flex;align-items:center;gap:8px;padding:0 8px;color:var(--muted);font-size:13px}
+.pix{display:grid;grid-template-columns:repeat(3,4px);gap:2px;border-radius:99px;width:22px;height:22px;place-content:center;background:var(--muted-fill)}
+.pix i{width:4px;height:4px;border-radius:1px;background:var(--live);animation:pix 1.2s ease-in-out infinite}
+.pix i:nth-child(2n){animation-delay:.2s}.pix i:nth-child(3n){animation-delay:.4s}
+@keyframes pix{50%{opacity:.25}}
+.shimmer{background:linear-gradient(90deg,var(--muted) 0%,var(--fg-strong) 50%,var(--muted) 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 2s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.d-runhead{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;padding:8px 0;border-bottom:1px solid var(--border-subtle)}
+/* bottom: tasks + composer + footer */
+.d-bottom{flex:none;padding:0 24px 8px}
+.d-bottom-in{max-width:48rem;margin:0 auto;display:grid;gap:6px}
+.d-tasks{border-radius:14px;background:color-mix(in srgb,var(--raised) 94%,transparent);border:1px solid var(--border-subtle);padding-bottom:6px}
+.d-tasks .hd{height:32px;display:flex;align-items:center;gap:6px;padding:0 12px;font-size:12px;font-weight:500;color:var(--muted)}
+.d-tasks .hd .c{color:color-mix(in srgb,var(--fg) 35%,transparent);margin-left:auto}
+.d-tasks .it{display:flex;align-items:center;gap:10px;padding:3px 12px;font-size:13px;color:color-mix(in srgb,var(--fg) 90%,transparent)}
+.d-tasks .it.done{color:color-mix(in srgb,var(--fg) 45%,transparent);text-decoration:line-through}
+.d-tasks .it.pend{color:var(--muted)}
+.d-tbox{width:14px;height:14px;border-radius:4px;border:1px solid color-mix(in srgb,var(--fg) 15%,transparent);display:grid;place-items:center;flex:none}
+.d-tbox.done{border-color:color-mix(in srgb,var(--fg) 20%,transparent);background:color-mix(in srgb,var(--fg) 6%,transparent);color:var(--fg)}
+.d-tbox svg{width:10px;height:10px;stroke-width:3}
+.d-cb{width:14px;height:14px;border-radius:4px;border:1px solid var(--input);display:grid;place-items:center;flex:none}
+.d-cb.on{background:var(--check-bg);border-color:var(--check-bg);color:var(--check-fg)}
+.d-cb.on svg{width:10px;height:10px;stroke-width:3}
+.d-composer{border-radius:16px;padding:8px;background:color-mix(in srgb,var(--raised) 94%,transparent);outline:1px solid var(--border-subtle);box-shadow:var(--composer-shadow,none)}
+.k[data-mode=light] .d-composer{--composer-shadow:0 12px 28px -18px rgba(0,0,0,.4)}
+.d-composer .in{min-height:44px;padding:4px 6px;color:color-mix(in srgb,var(--muted) 80%,transparent);font-size:14px}
+.d-composer .row{display:flex;align-items:center;gap:4px}
+.d-composer .row .grow{flex:1}
+.d-pick{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:8px;font-size:12px;color:var(--fg)}
+.d-pick:hover{background:var(--st-hover)}
+.d-pick .eff{color:var(--muted)}
+.d-pick .cv{opacity:.5}
+.d-send{width:28px;height:28px;border-radius:99px;display:grid;place-items:center;background:var(--send-bg);color:var(--send-fg);border:1px solid var(--send-bd)}
+.d-foot{display:flex;align-items:center;gap:10px;padding:2px 10px 0;font-size:12px;color:color-mix(in srgb,var(--fg) 70%,transparent)}
+.d-foot span{display:inline-flex;align-items:center;gap:4px}
+.d-foot svg{color:color-mix(in srgb,var(--fg) 40%,transparent)}
+.d-foot .grow{flex:1}
+/* permission card (replaces the composer) */
+.d-perm{border-radius:16px;padding:16px;display:grid;gap:16px;background:color-mix(in srgb,var(--raised) 94%,transparent);outline:1px solid var(--border-subtle)}
+.d-perm .top{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--muted)}
+.d-perm .top svg{color:var(--warn)}
+.d-perm .top .d-badge-outline{margin-left:auto}
+.d-perm h3{font-size:16px;font-weight:500;color:var(--fg-strong)}
+.d-perm p{color:var(--muted);margin-top:2px}
+.d-perm .pat{border:1px solid var(--input);border-radius:10px;padding:10px 12px;font:400 13px "Source Code Pro",monospace;color:var(--fg)}
+.d-perm .acts{display:flex;align-items:center;gap:8px}
+.d-perm .acts .grow{flex:1}
+/* views */
+.desk [data-only]{display:none}
+.desk[data-view=session] [data-only~=session],.desk[data-view=permission] [data-only~=permission],.desk[data-view=welcome] [data-only~=welcome]{display:flex}
+/* launcher (New session page), inside the main card */
+.d-card{flex:1;min-height:0;margin:0 8px 8px;border-radius:10px;background:var(--card);flex-direction:column;align-items:center;justify-content:center;padding:24px 16px 56px}
+.d-launch{width:100%;max-width:50rem;display:flex;flex-direction:column;align-items:center}
+.d-launch .logo{width:48px;height:48px;margin-bottom:16px;color:color-mix(in srgb,var(--muted) 30%,transparent)}
+.d-launch h1{font-size:24px;font-weight:500;color:var(--fg-strong);margin-bottom:24px;letter-spacing:-.01em}
+.d-starter{width:100%;border-radius:16px;padding:8px;background:color-mix(in srgb,var(--muted-fill) 64%,transparent)}
+.d-starter .in{min-height:44px;padding:4px 6px;color:color-mix(in srgb,var(--muted) 80%,transparent);font-size:14px}
+.d-starter .row{display:flex;align-items:center;gap:4px}
+.d-loc{display:flex;gap:24px;margin-top:16px;width:100%;padding:0 4px}
+.d-loc .p{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 8px;border-radius:9px;font-size:13px;color:var(--fg)}
+.d-loc .p small{font-size:.8rem;color:var(--muted)}
+.d-loc .p .cv{opacity:.5}
+.d-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;margin-top:28px}
+.d-tiles span{height:44px;border-radius:10px;background:color-mix(in srgb,var(--muted-fill) 60%,transparent);display:flex;align-items:center;gap:8px;padding:0 8px 0 12px;font-size:13px;color:var(--fg)}
+/* changes + terminal */
+.d-ph{height:40px;flex:none;display:flex;align-items:center;gap:8px;padding:0 10px;font-weight:500;color:var(--fg)}
+.d-ph .grow{flex:1}
+.d-file{display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:12px;color:var(--fg)}
+.d-file .p{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.d-file .p span{color:var(--muted)}
+.diff{font:400 11.5px/1.7 "Source Code Pro",monospace}
+.ln{display:block;white-space:pre;padding-right:10px}
+.ln .n{display:inline-block;width:32px;text-align:right;padding-right:8px;color:var(--subtle)}
+.ln .s{display:inline-block;width:14px;color:var(--subtle)}
+.ln.a{background:var(--add-bg)}.ln.a .s{color:var(--add)}
+.ln.d{background:var(--del-bg)}.ln.d .s{color:var(--del)}
+.kw{color:var(--syn-kw)}.st{color:var(--syn-str)}.nu{color:var(--syn-num)}.fn{color:var(--syn-fn)}.ty{color:var(--syn-ty)}.pr{color:var(--syn-pr)}.co{color:var(--syn-co)}
+.term{padding:8px 12px;font:400 12px/1.65 "Source Code Pro",monospace;color:var(--fg2);white-space:pre}
+.term .g{color:var(--success)}.term .y{color:var(--warn)}.term .m{color:var(--subtle)}.term .b{color:var(--fg-strong)}
+#probe{position:absolute;left:-999px;top:0;visibility:hidden}
+
+/* ==========================================================================
+   KILO CLOUD (dark-only today; tokens fall back to the proposed theme)
+   ========================================================================== */
+.cloud{
+  --c-bg:var(--bg);--c-sidebar:var(--sidebar);--c-card:var(--card);--c-secondary:var(--muted-fill);--c-accent:var(--hover-strong);--c-selected:var(--hover-strong);
+  --c-fg:var(--fg);--c-fg-strong:var(--fg-strong);--c-muted:var(--muted);--c-border:var(--border);--c-border-strong:var(--input);--c-input-bg:color-mix(in srgb,var(--fg) 3%,transparent);
+  --c-link:var(--ink);--c-act-bg:var(--act-bg);--c-act-fg:var(--act-fg);--c-act-bd:var(--act-bd);--c-act-hover:var(--act-hover);--c-ink:var(--ink);
+  --c-bubble-bg:var(--bubble-bg);--c-bubble-fg:var(--bubble-fg);--c-send-bg:var(--send-bg);--c-send-fg:var(--send-fg);--c-send-bd:var(--send-bd);--c-live:var(--live);--c-warn:var(--warn);
+  --c-success:var(--success);--c-success-bg:color-mix(in srgb,var(--success) 12%,transparent);--c-check-bg:var(--check-bg);--c-check-fg:var(--check-fg);
+  background:var(--c-bg);color:var(--c-fg);font-size:14px;
+}
+.k[data-s=shipped] .cloud{
+  --c-bg:#151515;--c-sidebar:#202020;--c-card:#202020;--c-secondary:#333333;--c-accent:#3a3a3a;--c-selected:#454545;
+  --c-fg:#fafafa;--c-fg-strong:#fafafa;--c-muted:#a3a3a3;--c-border:#ffffff1a;--c-border-strong:#ffffff2e;--c-input-bg:#ffffff0a;
+  --c-link:#60a5fa;--c-act-bg:#FFDD00;--c-act-fg:#1F1F1F;--c-act-bd:#FFDD00;--c-act-hover:#EDCD00;--c-ink:#FFDD00;
+  --c-bubble-bg:#FFDD00;--c-bubble-fg:#1F1F1F;--c-send-bg:#FFDD00;--c-send-fg:#1F1F1F;--c-send-bd:#FFDD00;--c-live:#a3a3a3;--c-warn:#fbc51c;
+  --c-success:#86efac;--c-success-bg:#22c55e1a;--c-check-bg:#FFDD00;--c-check-fg:#1F1F1F;
+  --win-bd:rgba(255,255,255,.12);--shadow:0 30px 80px -20px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.4);
+}
+.cloud .mono{font-family:"Roboto Mono",monospace}
+.c-chrome{height:40px;display:flex;align-items:center;gap:14px;padding:0 14px;background:var(--c-sidebar);border-bottom:1px solid var(--c-border);color:var(--c-muted)}
+.c-url{flex:1;max-width:460px;margin:0 auto;height:26px;border-radius:7px;background:var(--c-secondary);display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--c-fg)}
+.c-url span{color:var(--c-muted)}
+.c-app{display:grid;grid-template-columns:256px 1fr;height:calc(100% - 40px)}
+.c-side{background:var(--c-sidebar);border-right:1px solid var(--c-border);display:flex;flex-direction:column;min-height:0}
+.c-side-h{padding:16px;display:flex;flex-direction:column;gap:24px}
+.c-logo{display:flex;align-items:center;gap:14px;color:var(--c-fg-strong)}
+.c-logo b{font:700 26px/1 "JetBrains Mono",monospace;letter-spacing:-.01em}
+.c-org{min-height:48px;border:1px solid var(--c-border);border-radius:10px;padding:6px 12px;display:flex;align-items:center;gap:10px}
+.c-org b{display:block;font-size:14px;font-weight:600;line-height:16px;color:var(--c-fg-strong)}
+.c-org small{font-size:12px;color:var(--c-muted)}
+.c-org svg{margin-left:auto;color:var(--c-muted)}
+.c-nav{flex:1;overflow:hidden;padding:0 8px}
+.c-gl{height:32px;display:flex;align-items:center;padding:0 8px;font-size:12px;font-weight:500;color:var(--c-muted)}
+.c-mi{height:32px;display:flex;align-items:center;gap:12px;padding:0 8px;border-radius:8px;font-size:14px;color:var(--c-fg);margin-bottom:4px}
+.c-mi:hover{background:var(--c-accent)}
+.c-mi.on{background:var(--c-selected);font-weight:500}
+.c-promo{margin:12px;padding:12px;border-radius:14px;border:1px solid var(--c-border);background:var(--c-bg);display:grid;gap:8px}
+.c-promo b{font-size:14px;font-weight:600;color:var(--c-fg-strong)}
+.c-promo p{font-size:12px;color:var(--c-muted)}
+.c-user{padding:16px;display:flex;align-items:center;gap:12px}
+.c-user .av{width:32px;height:32px;border-radius:99px;display:grid;place-items:center;font:600 12px/1 Inter;background:var(--c-secondary);border:1px solid var(--c-border)}
+.c-user b{display:block;font-size:14px;font-weight:500}
+.c-user small{font-size:12px;color:var(--c-muted)}
+.c-user svg{margin-left:auto;color:var(--c-muted)}
+.c-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 14px;border-radius:8px;font:500 12px/1 Inter;border:1px solid transparent;color:var(--c-fg);white-space:nowrap}
+.c-btn.sm{height:32px;padding:0 12px}
+.c-btn.primary{background:var(--c-act-bg);color:var(--c-act-fg);border-color:var(--c-act-bd)}
+.c-btn.primary:hover{background:var(--c-act-hover)}
+.c-btn.outline{border-color:var(--c-border)}
+.c-btn.secondary{border-color:var(--c-border);background:var(--c-secondary)}
+.c-btn.ghost:hover,.c-btn.outline:hover{background:var(--c-accent)}
+.c-inset{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--c-bg)}
+.c-top{height:56px;flex:none;display:flex;align-items:center;border-bottom:1px solid var(--c-border);background:var(--c-bg)}
+.c-top .trig{width:56px;height:56px;display:grid;place-items:center;color:var(--c-muted)}
+.c-top .ttl{font-size:14px;color:var(--c-fg);display:flex;align-items:center;gap:10px}
+.cloud [data-only]{display:none}
+.cloud[data-view=agent] [data-only=agent],.cloud[data-view=credits] [data-only=credits]{display:flex}
+.c-top .act[data-only]{margin-left:auto}
+/* agent */
+.c-agent{flex:1;min-height:0}
+.c-sess{width:320px;flex:none;border-right:1px solid var(--c-border);display:flex;flex-direction:column}
+.c-sess .hd{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--c-border);color:var(--c-muted)}
+.c-sess .hd span{padding:6px;border-radius:6px;display:grid}
+.c-sess .hd .r{margin-left:auto}
+.c-sess .list{padding:8px;overflow:hidden}
+.c-sess .gh{padding:16px 8px 4px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--c-muted)}
+.c-sess .gh:first-child{padding-top:4px}
+.c-srow{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;font-size:14px;color:var(--c-fg);margin-bottom:1px}
+.c-srow .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.c-srow .tm{font-size:12px;color:var(--c-muted);font-variant-numeric:tabular-nums}
+.c-srow.on{background:var(--c-accent);font-weight:500}
+.c-srow:hover{background:var(--c-accent)}
+.c-ping{width:7px;height:7px;border-radius:9px;background:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.2)}
+.c-chat{flex:1;min-width:0;display:flex;flex-direction:column}
+.c-tabs{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--c-border)}
+.c-tab{height:32px;display:flex;align-items:center;gap:6px;padding:0 10px;border-radius:8px;font-size:12px;color:var(--c-muted);border:1px solid var(--c-border);background:color-mix(in srgb,var(--c-card) 40%,transparent);max-width:200px}
+.c-tab span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.c-tab.on{border-color:color-mix(in srgb,var(--c-fg) 30%,transparent);background:var(--c-secondary);color:var(--c-fg);box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.c-top .act{margin-left:auto;padding-right:12px;display:flex;gap:4px;color:var(--c-muted)}
+.c-tabs .grow{flex:1}
+.c-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--c-muted)}
+.c-status i{width:6px;height:6px;border-radius:9px;background:var(--c-success)}
+.c-msgs{flex:1;min-height:0;overflow:hidden;padding:12px max(1rem,calc(50% - 27rem));display:flex;flex-direction:column;gap:10px}
+.c-umsg{align-self:flex-end;max-width:80%;background:var(--c-bubble-bg);color:var(--c-bubble-fg);border-radius:8px;padding:8px 12px;font-size:14px;line-height:1.6;text-wrap:pretty}
+.c-amsg{padding:6px 0;line-height:1.6;text-wrap:pretty}
+.c-amsg code,.c-tool code{font:400 12.5px "Roboto Mono",monospace;background:var(--c-secondary);border-radius:5px;padding:1px 5px}
+.c-tool{display:flex;align-items:center;gap:8px;min-height:24px;padding:4px 8px;border-radius:8px;font-size:12px;color:var(--c-muted)}
+.c-tool:hover{background:color-mix(in srgb,var(--c-secondary) 40%,transparent)}
+.c-tool code{font-size:11.5px;background:none;padding:0}
+.c-tool .cv{margin-left:auto}
+.c-work{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--c-muted);padding:4px 8px}
+.c-work svg{color:var(--c-live)}
+.c-inputw{padding:0 max(1rem,calc(50% - 27rem)) 12px}
+.c-input{border:1px solid var(--c-border);border-radius:10px;background:color-mix(in srgb,var(--c-secondary) 30%,transparent);overflow:hidden}
+.c-input .ta{padding:14px 16px 6px;color:var(--c-muted);font-size:14px;min-height:56px}
+.c-input .tb{display:flex;align-items:center;gap:8px;padding:6px 12px}
+.c-input .tb .grow{flex:1}
+.c-combo{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 10px;border:1px solid var(--c-border);border-radius:8px;font-size:12px;font-weight:500}
+.c-combo svg{color:var(--c-muted)}
+.c-send{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--c-send-bg);color:var(--c-send-fg);border:1px solid var(--c-send-bd)}
+.c-ibtn{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:var(--c-muted)}
+.c-meta{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--c-muted);padding:8px 2px 0}
+.c-meta .grow{flex:1}
+/* credits */
+.c-page{flex:1;min-height:0;overflow:hidden}
+.c-cont{max-width:1140px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:24px;width:100%}
+.c-sub{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.c-sub p{color:var(--c-muted)}
+.c-link{color:var(--c-link);font-weight:500;font-size:14px;display:inline-flex;align-items:center;gap:2px}
+.c-card{background:var(--c-card);border:1px solid var(--c-border);border-radius:14px}
+.c-card .h{padding:24px 24px 8px;display:grid;gap:6px}
+.c-card .h h4{font-size:18px;font-weight:600;color:var(--c-fg-strong);display:flex;align-items:center;gap:8px}
+.c-card .h p{color:var(--c-muted)}
+.c-card .b{padding:0 24px 24px}
+.c-bal{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:24px;align-items:center;padding:16px 0}
+.c-bal .div{background:var(--c-border);height:100%;min-height:56px}
+.c-bal .big{font:600 28px/1.15 Inter;letter-spacing:-.015em;color:var(--c-fg-strong);font-variant-numeric:tabular-nums}
+.c-bal .lab{font-size:12px;font-weight:500;color:var(--c-muted)}
+.c-bal .it{display:grid;gap:4px}
+.c-bal .it b{display:flex;align-items:center;gap:6px;font-weight:500}
+.c-amts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.c-amts .c-btn{height:44px;font-size:14px}
+.c-row2{display:flex;align-items:center;gap:12px}
+.c-sw{width:36px;height:20px;border-radius:99px;background:var(--c-check-bg);position:relative;flex:none}
+.c-sw::after{content:"";position:absolute;top:2px;left:18px;width:16px;height:16px;border-radius:99px;background:var(--c-check-fg)}
+.c-tbl{width:100%;border-collapse:collapse;font-size:14px}
+.c-tbl th{text-align:left;padding:12px 24px;font:500 11px/1 Inter;letter-spacing:.08em;text-transform:uppercase;color:var(--c-muted);background:var(--c-secondary);border-bottom:1px solid var(--c-border)}
+.c-tbl td{padding:14px 24px;border-bottom:1px solid var(--c-border)}
+.c-tbl tr:nth-child(even) td{background:color-mix(in srgb,var(--c-secondary) 50%,transparent)}
+.c-banner{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;font-size:14px;background:color-mix(in srgb,var(--c-warn) 9%,transparent);border:1px solid color-mix(in srgb,var(--c-warn) 30%,transparent)}
+.c-banner svg{color:var(--c-warn)}
+.c-banner .grow{flex:1;color:var(--c-muted)}
+.c-banner b{color:var(--c-fg);font-weight:500}
+
+/* ==========================================================================
+   KILO iOS (mobile tokens; light + dark)
+   ========================================================================== */
+.ios{
+  --m-bg:var(--bg);--m-fg:var(--fg-strong);--m-card:var(--card);--m-secondary:var(--muted-fill);--m-muted:var(--muted);--m-ink2:var(--fg2);--m-muted-soft:var(--subtle);
+  --m-border:var(--border);--m-hair:var(--border-subtle);
+  --m-act-bg:var(--act-bg);--m-act-fg:var(--act-fg);--m-act-bd:var(--act-bd);--m-ink:var(--ink);--m-ink-fg:var(--ink-fg);
+  --m-bubble-bg:var(--bubble-bg);--m-bubble-fg:var(--bubble-fg);--m-send-bg:var(--send-bg);--m-send-fg:var(--send-fg);--m-send-bd:var(--send-bd);
+  --m-good:var(--success);--m-warn:var(--warn);--m-live:var(--live);
+}
+.k[data-mode=light] .ios{--h-yuki:#6b4fd6;--h-cloud:#2f9a5f;--h-kilo:#b27214;--h-coral:#c25647;--h-sky:#2c7fb0;--h-honey:#7c6c1d;--h-gold:#7a7c1d}
+.k[data-mode=dark] .ios{--h-yuki:#a78bfa;--h-cloud:#5fcb8e;--h-kilo:#f2b05f;--h-coral:#f28b7a;--h-sky:#6bb5e0;--h-honey:#ebda84;--h-gold:#e9eb84}
+.k[data-s=shipped][data-mode=light] .ios{
+  --m-bg:#fbfaf5;--m-fg:#14130f;--m-card:#ffffff;--m-secondary:#f0eee6;--m-muted:#6f6a61;--m-ink2:#3c382f;--m-muted-soft:#a9a39a;
+  --m-border:rgba(20,15,10,.09);--m-hair:rgba(20,15,10,.05);
+  --m-act-bg:#4f5a10;--m-act-fg:#ffffff;--m-act-bd:#4f5a10;--m-ink:#4f5a10;--m-ink-fg:#fff;
+  --m-bubble-bg:#ffdd00;--m-bubble-fg:#1a1a10;--m-send-bg:#ffdd00;--m-send-fg:#1a1a10;--m-send-bd:#ffdd00;--m-good:#24784a;--m-warn:#956011;--m-live:#24784a;
+}
+.k[data-s=shipped][data-mode=dark] .ios{
+  --m-bg:#0e0e10;--m-fg:#f2f0eb;--m-card:#17171a;--m-secondary:#1f1f24;--m-muted:#8a8680;--m-ink2:#c4c1b8;--m-muted-soft:#56544f;
+  --m-border:rgba(255,255,255,.07);--m-hair:rgba(255,255,255,.04);
+  --m-act-bg:#ffdd00;--m-act-fg:#1a1a10;--m-act-bd:#ffdd00;--m-ink:#ffdd00;--m-ink-fg:#1a1a10;
+  --m-bubble-bg:#ffdd00;--m-bubble-fg:#1a1a10;--m-send-bg:#ffdd00;--m-send-fg:#1a1a10;--m-send-bd:#ffdd00;--m-good:#5fcb8e;--m-warn:#f2b05f;--m-live:#5fcb8e;
+}
+.ios{font-family:-apple-system,"SF Pro Text",BlinkMacSystemFont,system-ui,sans-serif}
+.phone{position:absolute;width:393px;height:852px;border-radius:56px;background:#0b0b0b;padding:10px;box-shadow:0 40px 90px -30px rgba(0,0,0,.6),inset 0 0 0 1.5px #3a3a3a}
+.k[data-mode=light] .phone{background:#1c1c1e;box-shadow:0 40px 90px -30px rgba(0,0,0,.3),inset 0 0 0 1.5px #48484a}
+.scr{position:relative;width:100%;height:100%;border-radius:46px;overflow:hidden;background:var(--m-bg);color:var(--m-fg);display:flex;flex-direction:column;font-weight:500}
+.sb{height:54px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 40px;font:600 16px/1 -apple-system,system-ui;color:var(--m-fg)}
+.sb .r{display:flex;gap:6px;align-items:center}
+.sb .bat{width:25px;height:12px;border-radius:4px;border:1.5px solid currentColor;opacity:.9;position:relative}
+.sb .bat::after{content:"";position:absolute;inset:1.5px;right:5px;border-radius:2px;background:currentColor}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:124px;height:36px;border-radius:99px;background:#000;z-index:5}
+.eyebrow{font:500 10px/1.2 "JetBrains Mono",monospace;letter-spacing:1.5px;text-transform:uppercase;color:var(--m-muted)}
+.seeall{font:500 11px/1 "JetBrains Mono",monospace;letter-spacing:1.5px;text-transform:uppercase;color:var(--m-ink)}
+.m-homeh{display:flex;align-items:center;gap:12px;padding:8px 14px 4px}
+.m-ctxc{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;color:var(--m-muted);font-weight:500}
+.m-glance{margin:0 14px;border-radius:16px;border:1px solid var(--m-border);background:var(--m-card);overflow:hidden}
+.m-glance .cnt{padding:10px 14px}
+.m-glance .cnt .r{display:flex;align-items:center;gap:7px;min-height:34px;font-size:12.5px;color:var(--m-muted)}
+.m-glance .cnt .r b{font-weight:600;color:var(--m-fg)}
+.m-glance .cnt .r .on{color:var(--m-fg)}
+.m-glance .cnt .r small{margin-left:auto;font-size:11px}
+.m-glance .newest{border-top:1px solid var(--m-border);padding:11px 14px;display:grid;gap:4px}
+.m-glance .newest .t{font-size:12.5px;color:var(--m-fg)}
+.m-glance .newest .m{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--m-muted)}
+.m-glance .newest .m small{margin-left:auto;font-size:11px}
+.m-todo{margin:0 14px;min-height:49px;display:flex;align-items:center;gap:11px}
+.m-todo .tl{width:32px;height:32px;border-radius:9px;background:var(--m-secondary);display:grid;place-items:center;color:var(--m-muted)}
+.m-todo .bd{flex:1}.m-todo b{display:block;font-size:14px;font-weight:500}.m-todo small{font-size:11px;color:var(--m-muted);font-weight:400}
+.m-todo .pl{width:40px;height:40px;border-radius:99px;background:var(--m-secondary);display:grid;place-items:center}
+.m-agh{display:flex;align-items:center;gap:10px;padding:8px 22px 4px}
+.m-agh h2{flex:1;font-size:30px;font-weight:700;letter-spacing:-.02em}
+.m-ib{width:36px;height:36px;display:grid;place-items:center;color:var(--m-fg)}
+.m-tabrow{display:flex;align-items:center;gap:16px;min-height:48px;padding:0 22px;border-bottom:1px solid var(--m-border);font-size:12.5px;color:var(--m-muted)}
+.m-tabrow>span:not(.m-ib):not(.m-filter){align-self:stretch;display:flex;align-items:center;border-bottom:2px solid transparent}
+.m-tabrow .on{border-bottom-color:var(--m-fg)!important;color:var(--m-fg);font-weight:600}
+.m-hdr{padding:8px 22px 4px}
+.m-hdr h2{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.m-ctx{min-height:38px;display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:0 22px}
+.m-filter{position:relative;color:var(--m-fg);display:grid}
+.m-filter b{position:absolute;top:-6px;right:-8px;min-width:15px;height:15px;border-radius:99px;background:var(--m-act-bg);color:var(--m-act-fg);border:1px solid var(--m-act-bd);font:500 10px/13px "JetBrains Mono",monospace;text-align:center}
+.m-search{margin:8px 22px;min-height:44px;border-radius:10px;border:1px solid var(--m-border);background:var(--m-card);display:flex;align-items:center;gap:8px;padding:0 14px;color:var(--m-muted);font-size:15px;font-weight:400}
+.m-row{display:flex;gap:12px;padding:13px 22px;border-bottom:.5px solid var(--m-hair);align-items:flex-start}
+.m-row .strip{width:3px;align-self:stretch;border-radius:2px;flex:none}
+.m-row .bd{flex:1;min-width:0}
+.m-row .eb{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;gap:8px}
+.m-row .eb .rp{font:500 10px/1.2 "JetBrains Mono",monospace;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-row .eb .mt{display:flex;align-items:center;gap:4px;font:500 11px/1 "JetBrains Mono",monospace;color:var(--m-ink2);white-space:nowrap}
+.m-row .ti{font-size:14px;font-weight:500;letter-spacing:-.01em;line-height:1.3;color:var(--m-fg)}
+.m-row .su{font:500 11px/1.3 "JetBrains Mono",monospace;letter-spacing:.3px;color:var(--m-muted);margin-top:4px}
+.m-row>svg{color:var(--m-muted-soft);align-self:center}
+.m-card{position:relative;margin:0 14px 8px;border-radius:16px;border:1px solid var(--m-border);background:var(--m-card);overflow:hidden}
+.m-card .m-row{border:0;padding-left:18px}
+.m-card .m-row .strip{position:absolute;left:0;top:0;bottom:0;border-radius:0}
+.m-sec{display:flex;justify-content:space-between;align-items:center;padding:8px 14px 8px}
+.m-btn{display:flex;align-items:center;justify-content:center;gap:7px;min-height:38.5px;padding:0 21px;border-radius:7px;font-size:13px;font-weight:600;margin:0 14px 8px}
+.m-btn.primary{background:var(--m-act-bg);color:var(--m-act-fg);border:1px solid var(--m-act-bd);box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.m-btn.secondary{background:var(--m-secondary);color:var(--m-fg)}
+.m-cfg{margin:0 14px 8px;border-radius:9px;background:var(--m-secondary);padding:0 11px}
+.m-cfg .r{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:.5px solid var(--m-hair)}
+.m-cfg .r:last-child{border:0}
+.m-tile{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--h) 20%,transparent);background:color-mix(in srgb,var(--h) 10%,transparent);color:var(--h)}
+.m-cfg .r b{display:block;font-size:12.5px;font-weight:500}
+.m-cfg .r small{font-size:11px;color:var(--m-muted);font-weight:400}
+.m-cfg .r>svg{margin-left:auto;color:var(--m-muted)}
+.m-tabbar{position:absolute;left:0;right:0;bottom:0;height:84px;display:flex;justify-content:space-around;padding-top:7px;background:color-mix(in srgb,var(--m-bg) 80%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid var(--m-border)}
+.m-tbi{display:flex;flex-direction:column;align-items:center;gap:4px;width:72px;color:var(--m-muted);font:500 11px/16px "JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.2px}
+.m-tbi.on{color:var(--m-fg)}
+.m-tbi .ib{position:relative}
+.m-tbi .ib b{position:absolute;top:-4px;right:-10px;min-width:17px;height:17px;border-radius:99px;background:#ff3b30;color:#fff;font:600 11px/17px -apple-system,system-ui;text-align:center;letter-spacing:0}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:9px;background:var(--m-fg);z-index:6}
+.m-fab{position:absolute;right:20px;bottom:100px;width:56px;height:56px;border-radius:99px;display:grid;place-items:center;background:var(--m-act-bg);color:var(--m-act-fg);border:1px solid var(--m-act-bd);box-shadow:0 10px 15px -3px rgba(0,0,0,.25),0 4px 6px -4px rgba(0,0,0,.2)}
+.k[data-s=ink][data-mode=dark] .m-fab{background:var(--m-bg)}
+/* chat */
+.m-chead{display:flex;align-items:center;gap:6px;padding:0 14px 4px;min-height:56px}
+.m-chead .bk{width:44px;height:44px;display:grid;place-items:center;margin-left:-10px}
+.m-chead h3{flex:1;font-size:16px;font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.m-prb{display:inline-flex;align-items:center;gap:4px;border-radius:99px;background:var(--m-secondary);padding:2px 8px 2px 6px;font-size:12px;font-weight:500;color:var(--m-good)}
+.m-ctxp{display:inline-flex;align-items:center;gap:7px;height:38px;border-radius:99px;border:1px solid var(--m-border);background:var(--m-secondary);padding:0 10px 0 6px;font-size:12px}
+.m-ctxp .rg{width:26px;height:26px;border-radius:99px;background:conic-gradient(var(--m-ink) 0 42%,var(--m-hair) 42% 100%);-webkit-mask:radial-gradient(circle 10px,transparent 98%,#000);mask:radial-gradient(circle 10px,transparent 98%,#000)}
+.m-ctxp b{font-weight:600}.m-ctxp span{color:var(--m-muted)}
+.m-goal{display:flex;align-items:center;gap:8px;padding:6px 16px 8px;border-bottom:1px solid var(--m-hair);min-height:42px}
+.m-goal .st{font-size:11px;color:var(--m-ink)}
+.m-goal .tx{font-size:12.5px;color:var(--m-fg);font-weight:400}
+.m-trans{flex:1;overflow:hidden;padding:12px 0 0;display:flex;flex-direction:column;gap:8px}
+.m-time{text-align:center;font:500 10px/1 "JetBrains Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--m-muted);padding:6px 0}
+.m-ub{align-self:flex-end;max-width:82%;margin:0 16px;border-radius:16px 4px 16px 16px;padding:9px 12px;background:var(--m-bubble-bg);color:var(--m-bubble-fg);font-size:15px;line-height:21px;font-weight:500}
+.m-ab{padding:2px 16px;font-size:16px;line-height:24px;font-weight:400;color:var(--m-fg)}
+.m-ab code{font:400 14px Menlo,monospace;background:var(--m-secondary);border-radius:4px;padding:1px 4px}
+.m-tool{margin:0 16px;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:1px solid var(--m-border);font-size:12.5px;color:var(--m-muted);font-weight:400}
+.m-tool .cv{margin-left:auto}
+.m-tool.dash{border-style:dashed}
+.m-wk{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:12.5px;color:var(--m-muted);font-weight:400}
+.m-wk svg{color:var(--m-live)}
+.m-composer{flex:none;background:color-mix(in srgb,var(--m-bg) 85%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid var(--m-border);padding-bottom:30px}
+.m-chips{display:flex;gap:8px;padding:10px 12px 4px}
+.m-chip{display:inline-flex;align-items:center;gap:6px;border-radius:99px;background:var(--m-secondary);padding:5px 11px;font-size:12.5px;font-weight:500}
+.m-chip svg{color:var(--m-muted)}
+.m-inrow{display:flex;align-items:center;padding:8px 12px}
+.m-clip{width:32px;height:32px;border-radius:99px;display:grid;place-items:center;color:var(--m-muted)}
+.m-in{flex:1;margin:0 10px;border-radius:20px;border:1px solid var(--m-border);background:var(--m-card);padding:11px 16px;font-size:16px;color:var(--m-muted);font-weight:400}
+.m-send{width:44px;height:44px;border-radius:99px;display:grid;place-items:center;background:var(--m-send-bg);color:var(--m-send-fg);border:1px solid var(--m-send-bd)}
+.m-perm{margin:8px 16px 38px;border-radius:12px;border:1px solid var(--m-border);background:var(--m-card);overflow:hidden;flex:none}
+.m-perm .h{background:var(--m-secondary);border-bottom:1px solid var(--m-border);padding:11px 14px}
+.m-perm .h b{font-size:13px;font-weight:500}
+.m-perm .h p{font-size:11px;color:var(--m-muted);font-weight:400;margin-top:2px;line-height:1.4}
+.m-perm .bd{padding:14px;display:grid;gap:10px;font-size:13px}
+.m-perm .ap{border-radius:7px;background:var(--m-secondary);padding:7px 8px;font-size:11px;color:var(--m-muted);font-weight:400}
+.m-perm .f{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;border-top:1px solid var(--m-border)}
+.m-perm .f span{min-height:32px;border-radius:7px;display:grid;place-items:center;font-size:11px;font-weight:600}
+.m-perm .f .o{border:1px solid var(--m-border);background:var(--m-card)}
+.m-perm .f .s{background:var(--m-secondary)}
+.m-perm .f .p{background:var(--m-act-bg);color:var(--m-act-fg);border:1px solid var(--m-act-bd)}
+.cap{position:absolute;font:500 12px/1 Inter;color:var(--muted)}
+
+/* ==========================================================================
+   Matrix
+   ========================================================================== */
+.matrix{display:grid;grid-template-columns:56px repeat(6,minmax(0,1fr));gap:8px}
+.matrix .mh{font:500 11px/1.3 Inter;color:var(--subtle);letter-spacing:.04em;text-transform:uppercase;padding:6px 4px;display:flex;align-items:flex-end}
+.matrix .mh.r{align-items:center}
+.matrix .mh button{all:unset;cursor:pointer;color:var(--fg2);text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:600}
+.cell{border-radius:11px;padding:12px;background:var(--bg);border:1px solid var(--border);display:grid;gap:10px;align-content:start}
+.cell .r{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg2);flex-wrap:wrap;row-gap:6px}
+.cell .sp{margin-left:auto}
+@media (prefers-reduced-motion:reduce){.spin,.pix i,.shimmer{animation:none}}
+@media (max-width:1100px){.brief{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="kpath" viewBox="0 0 100 100"><path fill-rule="evenodd" d="M0,0v100h100V0H0ZM92.5925926,92.5925926H7.4074074V7.4074074h85.1851852v85.1851852ZM61.1111044,71.9096084h9.2592593v7.4074074h-11.6402116l-5.026455-5.026455v-11.6402116h7.4074074v9.2592593ZM77.7777711,71.9096084h-7.4074074v-9.2592593h-9.2592593v-7.4074074h11.6402116l5.026455,5.026455v11.6402116ZM46.2962963,61.1114207h-7.4074074v-7.4074074h7.4074074v7.4074074ZM22.2222222,53.7040133h7.4074074v16.6666667h16.6666667v7.4074074h-19.047619l-5.026455-5.026455v-19.047619ZM77.7777711,38.8888889v7.4074074h-24.0740741v-7.4074074h8.2781918v-9.2592593h-8.2781918v-7.4074074h10.6591442l5.026455,5.026455v11.6402116h8.3884749ZM29.6296296,30.5555556h9.2592593l7.4074074,7.4074074v8.3333333h-7.4074074v-8.3333333h-9.2592593v8.3333333h-7.4074074v-24.0740741h7.4074074v8.3333333ZM46.2962963,30.5555556h-7.4074074v-8.3333333h7.4074074v8.3333333Z"/></symbol>
+</defs></svg>
+
+<div id="root" class="k" data-s="shipped" data-mode="dark" data-warm="off" data-warn="yellow">
+<div class="page">
+
+  <div class="hdr">
+    <h1><svg class="kmark" width="22" height="22" viewBox="0 0 100 100"><rect width="100" height="100" rx="18"/><use href="#kpath" fill="#1F1F1F"/></svg>Kilo accent strategy <span class="pill-y"><i></i>#FFDD00 fixed</span></h1>
+    <p>Kilo Desktop leads the theme; Kilo Cloud and Kilo iOS follow it. The mocks match each repo's main branch as of Nov 9 (kilo-desktop b6e3be7c, kilo-cloud bd292ea5e5). "Shipped" shows each product's real tokens today. A to E apply one proposed theme to all three. The yellow never changes, only where it goes.</p>
+  </div>
+
+  <div class="controls" role="toolbar" aria-label="Theme controls">
+    <div class="ctl"><label>Theme</label>
+      <div class="seg" data-key="s">
+        <button data-v="shipped">Shipped</button>
+        <button data-v="fill">A · Fill</button>
+        <button data-v="mono">B · Mono</button>
+        <button data-v="spark">C · Mono + Spark</button>
+        <button data-v="ink">D · Ink</button>
+        <button data-v="soft">E · Soft</button>
+      </div>
+    </div>
+    <div class="ctl"><label>Mode</label><div class="seg" data-key="mode"><button data-v="dark">Dark</button><button data-v="light">Light</button></div></div>
+    <div class="ctl"><label>Levers</label>
+      <button class="tog" data-key="warm" data-on="on" data-off="off"><span class="t-sw"></span>Warm neutrals</button>
+      <button class="tog" data-key="warn" data-on="orange" data-off="yellow"><span class="t-sw"></span>Warnings → orange</button>
+    </div>
+  </div>
+
+  <section class="brief">
+    <div class="card">
+      <h2 id="b-title"></h2>
+      <p class="lede" id="b-lede"></p>
+      <div class="pc"><div class="pro"><h4>Works</h4><ul id="b-pro"></ul></div><div class="con"><h4>Breaks</h4><ul id="b-con"></ul></div></div>
+    </div>
+    <div class="card">
+      <div class="metrics">
+        <div class="metric"><div class="lab">Primary label</div><div class="val" id="m-label">–</div><div class="hint">Desktop, needs 4.5:1</div></div>
+        <div class="metric"><div class="lab">Primary edge</div><div class="val" id="m-edge">–</div><div class="hint">vs pane, needs 3:1</div></div>
+        <div class="metric"><div class="lab">Links / ink</div><div class="val" id="m-ink">–</div><div class="hint">Desktop, needs 4.5:1</div></div>
+        <div class="metric"><div class="lab">Yellow · Desktop</div><div class="val" id="y-desk">–</div><div class="hint">filled area · marks</div></div>
+        <div class="metric"><div class="lab">Yellow · Cloud</div><div class="val" id="y-cloud">–</div><div class="hint">filled area · marks</div></div>
+        <div class="metric"><div class="lab">Yellow · iOS</div><div class="val" id="y-ios">–</div><div class="hint">filled area · marks</div></div>
+      </div>
+      <p class="note" id="b-note"></p>
+    </div>
+  </section>
+
+  <!-- =========================== DESKTOP =========================== -->
+  <div class="sect">
+    <h3>Kilo Desktop <span>main · 1280 × 860 · pane islands</span></h3>
+    <div class="seg" data-view-for="desk"><button data-v="session" aria-pressed="true">Session</button><button data-v="permission">Permission request</button><button data-v="welcome">New session</button></div>
+  </div>
+  <div class="stage"><div class="fit" data-w="1400" data-h="960"><div class="design" style="width:1400px;height:960px">
+  <div class="win desk" id="desk" data-view="session" style="left:60px;top:50px;width:1280px;height:860px">
+    <aside class="d-side">
+      <div class="d-side-h"><div class="lights"><i></i><i></i><i></i></div></div>
+      <div class="d-cluster"><span class="d-btn ghost mut icon-sm"><i data-lucide="panel-left" class="s14"></i></span><span class="d-badge-soft">Beta</span></div>
+      <div class="d-side-c">
+        <div class="d-actions">
+          <div class="d-mi"><i data-lucide="message-square" class="s14"></i>New session</div>
+          <div class="d-mi"><i data-lucide="search" class="s14"></i>Search</div>
+        </div>
+        <div class="d-grouprow"><div class="d-wsf"><i data-lucide="layout-grid" class="s14"></i>All workspaces<i data-lucide="chevron-down" class="s14 cv"></i></div><span class="d-btn ghost mut icon-xs"><i data-lucide="list-filter" class="s14"></i></span></div>
+        <div class="d-shelf warn">Needs attention</div>
+        <div class="d-row"><div class="t"><span class="g" style="color:var(--warn)"><i data-lucide="circle-alert" class="s14"></i></span><span class="ti">Fix terminal ANSI palette</span></div></div>
+        <div class="d-row"><div class="t"><span class="g" style="color:var(--warn)"><i data-lucide="message-circle-question" class="s14"></i></span><span class="ti">Pick a token migration path</span></div></div>
+        <div class="d-shelf">Pinned</div>
+        <div class="d-row"><div class="t"><span class="g"><span class="d-done"></span></span><span class="ti">Design tokens v0.3</span><span class="tr"><i data-lucide="git-pull-request" class="s3"></i>#742</span></div></div>
+        <div class="d-shelf">Active</div>
+        <div class="d-row on"><div class="t"><span class="g" style="color:var(--live)"><i data-lucide="loader-circle" class="s14 spin"></i></span><span class="ti">Single Kilo yellow</span><span class="tr"><i data-lucide="git-pull-request" class="s3"></i>#765</span></div></div>
+        <div class="d-row"><div class="t"><span class="g" style="color:var(--live);opacity:.75"><i data-lucide="loader-circle" class="s14 spin"></i></span><span class="ti">Native app menu from contributions</span></div></div>
+        <div class="d-row"><div class="t"><span class="g"><span class="d-done"></span></span><span class="ti">Bump koffi to 3.3.3</span><span class="tr"><i data-lucide="git-pull-request" class="s3"></i>#608</span></div></div>
+        <div class="d-row"><div class="t"><span class="g"></span><span class="ti">Update oxfmt to 0.72.0</span></div></div>
+        <div class="d-row"><div class="t"><span class="g"></span><span class="ti">Notebook kernel restart flake</span></div></div>
+        <div class="d-row"><div class="t"><span class="g"><span class="d-done"></span></span><span class="ti">Local models list empty state</span></div></div>
+        <div class="d-shelf"><i data-lucide="archive" class="s14"></i>Archived<i data-lucide="chevron-right" class="s3" style="opacity:.6"></i></div>
+      </div>
+      <div class="d-side-f">
+        <div class="d-upd"><i data-lucide="rotate-cw" class="s14"></i>Restart to update</div>
+        <div class="d-acctrow"><div class="d-acct"><span class="d-av">YC</span>Yacu</div><span class="d-btn ghost mut icon"><i data-lucide="settings" class="s14"></i></span></div>
+      </div>
+    </aside>
+
+    <main class="d-inset">
+      <header class="d-head">
+        <div class="d-crumb" data-only="session permission"><span class="ws"><i data-lucide="folder" class="s14" style="color:#60a5fa"></i>kilo-desktop</span><i data-lucide="chevron-right" class="s3 sep"></i><span class="ti">Single Kilo yellow across themes</span></div>
+        <span class="grow"></span>
+        <div class="d-git" data-only="session permission">
+          <span class="d-btn ghost sm"><i data-lucide="files" class="s14" style="color:var(--muted)"></i><span style="color:var(--muted)">3</span><span class="plus">+9</span><span class="minus">-11</span></span>
+          <span class="split"><span class="d-btn ghost sm"><i data-lucide="git-commit-horizontal" class="s14"></i>Commit &amp; push</span><span class="d-btn ghost icon-sm"><i data-lucide="chevron-down" class="s14"></i></span></span>
+        </div>
+        <span class="d-btn ghost icon-sm" data-only="session permission"><i data-lucide="plus" class="s14"></i></span>
+        <span class="d-btn ghost icon-sm" data-only="session permission"><i data-lucide="bot" class="s14"></i></span>
+        <span class="d-btn ghost icon-sm" data-only="session permission"><i data-lucide="gallery-horizontal" class="s14"></i></span>
+      </header>
+
+      <div class="d-canvas" data-only="session permission">
+        <div class="d-col">
+          <div class="d-island pane-edge focus">
+            <div class="d-tabs"><div class="d-tab on"><i data-lucide="bot" class="s14"></i><span>Agent</span></div><div class="d-tab"><i data-lucide="bot" class="s14"></i><span>Agent 2</span></div></div>
+            <div class="d-div"></div>
+            <div class="d-body" id="d-pane" style="background:var(--card)">
+              <span class="d-btn primary" id="probe">Allow once</span>
+              <div class="d-thread"><div class="d-col-inner">
+                <div class="d-worked"><i data-lucide="chevron-right" class="s14"></i>Worked for 48s</div>
+                <div class="d-umsg">Use a single #ffdd00 Kilo yellow in both light and dark themes. Update the splash window and its tests.</div>
+                <div class="d-amsg">I'll change the theme contract first, then collapse the splash logo to one constant.</div>
+                <div class="d-act">
+                  <div class="trig"><span class="stack"><span class="c-sky"><i data-lucide="book-open" class="s3"></i></span><span class="c-amber"><i data-lucide="file-pen" class="s3"></i></span></span><span class="lab">Edited <em>3 files</em></span><i data-lucide="chevron-down" class="s14"></i></div>
+                  <div class="d-rail">
+                    <div class="r"><i data-lucide="check" class="s3"></i><b>Read</b> app-themes.ts<span class="dots"></span><i data-lucide="chevron-right" class="s3"></i></div>
+                    <div class="r"><i data-lucide="check" class="s3"></i><b>Edited</b> app-themes.ts<span class="plus">+3</span><span class="minus">-3</span><span class="dots"></span><i data-lucide="chevron-right" class="s3"></i></div>
+                    <div class="r"><i data-lucide="check" class="s3"></i><b>Edited</b> SplashWindow.ts<span class="plus">+1</span><span class="minus">-3</span><span class="dots"></span><i data-lucide="chevron-right" class="s3"></i></div>
+                  </div>
+                </div>
+                <div class="d-amsg">Splash now reads <code>KILO_LOGO_YELLOW</code> in both modes. Light mode keeps gray for small marks, since the yellow is about 1.35:1 on white. See the <a>contrast note in app-themes.ts</a>.</div>
+                <div class="d-runhead">Working for 12s</div>
+                <div class="d-act"><div class="trig"><span class="stack"><span class="c-zinc"><i data-lucide="terminal" class="s3"></i></span></span><span class="lab">Running <em>pnpm vitest run SplashWindow</em></span></div></div>
+                <div class="d-working"><span class="pix"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="shimmer">Considering next steps</span></div>
+              </div></div>
+              <div class="d-bottom"><div class="d-bottom-in">
+                <div class="d-tasks">
+                  <div class="hd">Tasks <span class="c">2/4 Completed</span><i data-lucide="chevron-down" class="s14"></i></div>
+                  <div class="it done"><span class="d-tbox done"><i data-lucide="check"></i></span>Update theme contract and tests</div>
+                  <div class="it done"><span class="d-tbox done"><i data-lucide="check"></i></span>Collapse splash logo to one constant</div>
+                  <div class="it"><i data-lucide="loader-circle" class="s3 spin" style="color:var(--ink);margin:0 1px"></i>Run SplashWindow tests</div>
+                  <div class="it pend"><span class="d-tbox"></span>Regenerate icon.icns and volume icon</div>
+                </div>
+                <div class="d-composer" data-only="session" style="flex-direction:column">
+                  <div class="in">Send a message, @ to mention files, or / for commands…</div>
+                  <div class="row">
+                    <span class="d-btn ghost mut icon-sm" style="border-radius:99px"><i data-lucide="plus" class="s18" stroke-width="1.5"></i></span>
+                    <span class="d-pick"><i data-lucide="hammer" class="s14"></i>Code<i data-lucide="chevron-down" class="s14 cv"></i></span>
+                    <span class="d-pick"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.3 3.5h-3.6L20.2 20.5h3.6zM6.7 3.5 0 20.5h3.7l1.4-3.6h7l1.3 3.6h3.7L10.5 3.5zm-.4 10.3 2.3-6 2.3 6z"/></svg>Opus 5.5<span class="eff">High</span><i data-lucide="chevron-down" class="s14 cv"></i></span>
+                    <span class="grow"></span>
+                    <span class="d-pick"><i data-lucide="hand" class="s14"></i>Manual</span>
+                    <span class="d-send"><i data-lucide="arrow-up" class="s18"></i></span>
+                  </div>
+                </div>
+                <div class="d-perm" data-only="permission" style="flex-direction:column">
+                  <div class="top"><i data-lucide="shield-alert" class="s14"></i>Permission request<span class="d-badge-outline">bash</span></div>
+                  <div><h3>Allow bash?</h3><p>The agent is requesting permission to use bash.</p></div>
+                  <div class="pat">pnpm vitest run apps/desktop/src/main/platform/SplashWindow</div>
+                  <div class="acts"><span class="d-btn ghost">Reject</span><span class="grow"></span><span class="d-btn outline">Always allow</span><span class="d-btn primary">Allow once</span></div>
+                </div>
+                <div class="d-foot"><span><i data-lucide="folder" class="s3"></i>Local</span><span><i data-lucide="git-branch" class="s3"></i>yacu/single-yellow</span><span class="grow"></span><span><i data-lucide="arrow-up" class="s3"></i>48.2k</span><span><i data-lucide="arrow-down-to-line" class="s3"></i>6.1k</span><span>$0.84</span></div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+        <div class="d-col">
+          <div class="d-island pane-edge" style="flex:1.5">
+            <div class="d-tabs"><div class="d-tab shown"><i data-lucide="git-compare" class="s14"></i><span>Changes</span></div></div>
+            <div class="d-div"></div>
+            <div class="d-body">
+              <div class="d-ph">Changes <span class="plus">+9</span><span class="minus">−11</span><span class="grow"></span><span class="d-btn ghost mut icon-xs"><i data-lucide="list-collapse" class="s14"></i></span></div>
+              <div class="d-file"><i data-lucide="chevron-down" class="s3" style="color:var(--muted)"></i><span class="p">SplashWindow.ts <span>apps/desktop/src/main/platform</span></span><span class="plus">+1</span><span class="minus">-3</span></div>
+              <div class="diff">
+                <span class="ln"><span class="n">14</span><span class="s"> </span><span class="kw">const</span> <span class="ty">SPLASH_WIDTH</span> = <span class="nu">320</span>;</span>
+                <span class="ln d"><span class="n">16</span><span class="s">−</span><span class="kw">const</span> <span class="ty">KILO_LOGO_LIGHT</span> = <span class="st">"#f0f042"</span>;</span>
+                <span class="ln d"><span class="n">17</span><span class="s">−</span><span class="kw">const</span> <span class="ty">KILO_LOGO_DARK</span> = <span class="st">"#f7f586"</span>;</span>
+                <span class="ln a"><span class="n">16</span><span class="s">+</span><span class="kw">const</span> <span class="ty">KILO_LOGO_YELLOW</span> = <span class="st">"#ffdd00"</span>;</span>
+                <span class="ln"><span class="n">17</span><span class="s"> </span></span>
+                <span class="ln"><span class="n">18</span><span class="s"> </span><span class="kw">export function</span> <span class="fn">resolveSplashTheme</span>(</span>
+              </div>
+              <div class="d-file"><i data-lucide="chevron-down" class="s3" style="color:var(--muted)"></i><span class="p">app-themes.ts <span>packages/ui/src/themes</span></span><span class="plus">+3</span><span class="minus">-3</span></div>
+              <div class="diff">
+                <span class="ln d"><span class="n">288</span><span class="s">−</span>  <span class="pr">primary</span>: <span class="st">"#f1f200"</span>,</span>
+                <span class="ln a"><span class="n">288</span><span class="s">+</span>  <span class="pr">primary</span>: <span class="st">"#ffdd00"</span>,</span>
+                <span class="ln"><span class="n">289</span><span class="s"> </span>  <span class="pr">primaryForeground</span>: <span class="st">"#1f1f1f"</span>,</span>
+              </div>
+              <div class="d-file"><i data-lucide="chevron-right" class="s3" style="color:var(--muted)"></i><span class="p">SplashWindow.test.ts <span>apps/desktop/src/main/platform</span></span><span class="plus">+5</span><span class="minus">-5</span></div>
+            </div>
+          </div>
+          <div class="d-island pane-edge">
+            <div class="d-tabs"><div class="d-tab shown"><i data-lucide="square-terminal" class="s14"></i><span>Terminal</span></div></div>
+            <div class="d-div"></div>
+            <div class="d-body"><div class="term"><span class="m">~/kilo-desktop</span> <span class="b">pnpm vitest run SplashWindow</span>
+ <span class="g">✓</span> resolveSplashTheme <span class="m">(4)</span>
+ <span class="g">✓</span> SplashWindow <span class="m">(6)</span>
+ <span class="y">▲ icon.icns is 841 KB, budget 512 KB</span>
+ <span class="b">Tests</span>  <span class="g">10 passed</span> <span class="m">(10)</span>  <span class="m">812ms</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-card pane-edge" data-only="welcome">
+        <div class="d-launch">
+          <svg class="logo" viewBox="0 0 100 100" fill="currentColor"><use href="#kpath"/></svg>
+          <h1>What should we work on in kilo-desktop?</h1>
+          <div class="d-starter">
+            <div class="in">Send a message, @ to mention files, or / for commands…</div>
+            <div class="row">
+              <span class="d-btn ghost mut icon-sm" style="border-radius:99px"><i data-lucide="plus" class="s18" stroke-width="1.5"></i></span>
+              <span class="d-pick"><i data-lucide="hammer" class="s14"></i>Code<i data-lucide="chevron-down" class="s14 cv"></i></span>
+              <span class="d-pick">Opus 5.5<span class="eff">High</span><i data-lucide="chevron-down" class="s14 cv"></i></span>
+              <span style="flex:1"></span>
+              <span class="d-pick"><i data-lucide="hand" class="s14"></i>Manual</span>
+              <span class="d-send"><i data-lucide="arrow-up" class="s18"></i></span>
+            </div>
+          </div>
+          <div class="d-loc">
+            <span class="p"><small>Workspace</small><i data-lucide="folder" class="s14" style="color:#60a5fa"></i>kilo-desktop<i data-lucide="chevron-down" class="s14 cv"></i></span>
+            <span class="p"><small>Use</small><i data-lucide="laptop" class="s14"></i>Current checkout<i data-lucide="chevron-down" class="s14 cv"></i></span>
+            <span class="p"><small>Branch</small><i data-lucide="git-branch" class="s14"></i>main<i data-lucide="chevron-down" class="s14 cv"></i></span>
+          </div>
+          <div class="d-tiles"><span><i data-lucide="square-terminal" class="s14"></i>Terminal</span><span><i data-lucide="notebook" class="s14"></i>Notebook</span><span><i data-lucide="earth" class="s14"></i>Browser</span><span><i data-lucide="files" class="s14"></i>Files</span></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  </div></div></div>
+
+  <!-- =========================== CLOUD =========================== -->
+  <div class="sect">
+    <h3>Kilo Cloud <span>main · app.kilo.ai · dark-only · #FFDD00 since Oct 14</span></h3>
+    <div class="seg" data-view-for="cloud"><button data-v="agent" aria-pressed="true">Cloud Agent</button><button data-v="credits">Credits</button></div>
+  </div>
+  <div class="stage"><div class="fit" data-w="1400" data-h="900"><div class="design" style="width:1400px;height:900px">
+  <div class="win cloud" id="cloud" data-view="agent" style="left:60px;top:50px;width:1280px;height:800px">
+    <div class="c-chrome"><div class="lights"><i></i><i></i><i></i></div><i data-lucide="arrow-left" class="s14"></i><i data-lucide="arrow-right" class="s14" style="opacity:.4"></i><i data-lucide="rotate-cw" class="s14"></i>
+      <div class="c-url"><i data-lucide="lock" class="s3"></i>app.kilo.ai<span data-only="agent" style="display:none" class="u-agent">/cloud/chat</span><span class="u-credits" style="display:none">/credits</span></div><i data-lucide="panel-right" class="s14"></i></div>
+    <div class="c-app">
+      <aside class="c-side">
+        <div class="c-side-h">
+          <div class="c-logo"><svg width="48" height="48" viewBox="0 0 100 100" fill="currentColor"><use href="#kpath"/></svg><b>Kilo</b></div>
+          <div class="c-org"><div><b>Personal</b><small>Personal Workspace</small></div><i data-lucide="chevron-down" class="s14"></i></div>
+        </div>
+        <nav class="c-nav">
+          <div class="c-gl">Dashboard</div>
+          <div class="c-mi"><i data-lucide="user"></i>Your Profile</div>
+          <div class="c-mi"><i data-lucide="building-2"></i>Organizations</div>
+          <div class="c-mi"><i data-lucide="chart-column-increasing"></i>Usage</div>
+          <div class="c-gl">Cloud</div>
+          <div class="c-mi n-agent"><i data-lucide="cloud"></i>Cloud Agent</div>
+          <div class="c-mi"><i data-lucide="list"></i>Sessions</div>
+          <div class="c-mi"><i data-lucide="webhook"></i>Webhooks / Triggers</div>
+          <div class="c-mi"><i data-lucide="bot"></i>Code Reviewer</div>
+          <div class="c-mi"><i data-lucide="shield"></i>Security Agent</div>
+          <div class="c-gl">Account</div>
+          <div class="c-mi"><i data-lucide="credit-card"></i>Subscriptions</div>
+          <div class="c-mi"><i data-lucide="cable"></i>Integrations</div>
+          <div class="c-mi n-credits"><i data-lucide="coins"></i>Credits</div>
+          <div class="c-mi"><i data-lucide="key"></i>Bring Your Own Key (BYOK)</div>
+        </nav>
+        <div class="c-promo"><b>Up to 50% Free AI Credits</b><p>Maximize your AI output per dollar with Kilo Pass</p><span class="c-btn primary sm" style="width:100%">Get Kilo Pass</span></div>
+        <div class="c-user"><span class="av">YC</span><div><b>Yacu</b><small>yacu@kilocode.ai</small></div><i data-lucide="chevrons-up-down" class="s14"></i></div>
+      </aside>
+      <div class="c-inset">
+        <header class="c-top"><span class="trig"><i data-lucide="panel-left"></i></span>
+          <span class="ttl" data-only="agent">Review #765 kilo-ui yellow <span class="c-btn ghost sm" style="height:28px;color:var(--c-muted)">Cost <span class="mono" style="color:var(--c-fg)">$0.84</span></span></span>
+          <span class="ttl" data-only="credits">Credits</span>
+          <span class="act" data-only="agent"><span class="c-ibtn"><i data-lucide="settings" class="s14"></i></span></span>
+        </header>
+
+        <div class="c-agent" data-only="agent">
+          <div class="c-sess">
+            <div class="hd"><span><i data-lucide="square-pen" class="s14"></i></span><span><i data-lucide="folder-plus" class="s14"></i></span><span class="r"><i data-lucide="search" class="s14"></i></span><span><i data-lucide="sliders-horizontal" class="s14"></i></span></div>
+            <div class="list">
+              <div class="gh">Today</div>
+              <div class="c-srow on"><span class="t">Review #765 kilo-ui yellow</span><span class="tm">2m</span></div>
+              <div class="c-srow"><span class="t">Triage #db-alerts</span><i data-lucide="loader-circle" class="s14 spin" style="color:var(--c-live)"></i></div>
+              <div class="c-srow"><span class="t">Fix flaky notebook kernel test</span><span class="tm">3h</span></div>
+              <div class="gh">Yesterday</div>
+              <div class="c-srow"><span class="t">Cloud usage chart tooltip</span><span class="c-ping"></span></div>
+              <div class="c-srow"><span class="t">Bump koffi to 3.3.3</span><span class="tm">1d</span></div>
+              <div class="gh">Monday</div>
+              <div class="c-srow"><span class="t">Migrate oxfmt config</span><span class="tm">2d</span></div>
+              <div class="c-srow"><span class="t">kilo run --fix lint</span><span class="tm">2d</span></div>
+              <div class="gh">Older</div>
+              <div class="c-srow"><span class="t">Security agent: lockfile audit</span><span class="tm">Nov 2</span></div>
+            </div>
+          </div>
+          <div class="c-chat">
+            <div class="c-tabs"><span class="c-tab on"><i data-lucide="message-square" class="s14"></i><span>Review #765 and check light…</span></span><span class="c-tab"><i data-lucide="terminal" class="s14"></i><span>Terminal</span><i style="width:6px;height:6px;border-radius:9px;background:var(--c-success)"></i></span><span class="c-tab"><i data-lucide="file-diff" class="s14"></i><span>SplashWindow.test.ts</span></span><span class="c-ibtn"><i data-lucide="plus" class="s14"></i></span><span class="grow"></span>
+              <span class="c-btn ghost sm" style="height:28px"><i data-lucide="git-compare" class="s14"></i><span class="mono" style="color:var(--c-success)">+9</span><span class="mono" style="color:#f87171">−11</span></span><span class="c-status"><i></i>Sandbox</span><span class="c-ibtn"><i data-lucide="volume-2" class="s14"></i></span><span class="c-ibtn"><i data-lucide="ellipsis" class="s14"></i></span></div>
+            <div class="c-msgs">
+              <div class="c-umsg">Review #765 and check light theme contrast for the new yellow.</div>
+              <div class="c-amsg">Cloned <code>Kilo-Org/kilo-desktop</code> on <code>yacu/single-yellow</code>. Reading the diff.</div>
+              <div class="c-tool"><i data-lucide="file-text" class="s14"></i>Read · <code>packages/contracts/src/features/app-themes.ts</code><i data-lucide="chevron-right" class="s14 cv"></i></div>
+              <div class="c-tool"><i data-lucide="search" class="s14"></i>Searched · <code>"#f7f586"</code><i data-lucide="chevron-right" class="s14 cv"></i></div>
+              <div class="c-tool"><i data-lucide="terminal" class="s14"></i>Ran · <code>pnpm vitest run app-themes</code><i data-lucide="chevron-right" class="s14 cv"></i></div>
+              <div class="c-amsg">Two findings. <code>#ffdd00</code> is 1.35:1 on white, so light-mode primary buttons lose their edge. And one splash test still expects the old light logo color.</div>
+              <div class="c-umsg">Fix the test and leave a review note on the contrast.</div>
+              <div class="c-work"><i data-lucide="loader-circle" class="s14 spin"></i>Making edits</div>
+            </div>
+            <div class="c-inputw">
+              <div class="c-input">
+                <div class="ta">Ask anything…</div>
+                <div class="tb"><span class="c-combo">Code<i data-lucide="chevrons-up-down" class="s14"></i></span><span class="c-combo">Sonnet 5<i data-lucide="chevrons-up-down" class="s14"></i></span><span class="grow"></span><span class="c-ibtn"><i data-lucide="paperclip" class="s14"></i></span><span class="c-send"><i data-lucide="send" class="s14"></i></span></div>
+              </div>
+              <div class="c-meta"><i data-lucide="git-branch" class="s14"></i>Kilo-Org/kilo-desktop · yacu/single-yellow<span class="grow"></span>38% context</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="c-page" data-only="credits">
+          <div class="c-cont">
+            <div class="c-sub"><p>Buy credits, view your balance, and manage auto top-up.</p><span class="c-link">Manage subscriptions <i data-lucide="chevron-right" class="s14"></i></span></div>
+            <div class="c-banner"><i data-lucide="circle-alert" class="s18"></i><span class="grow"><b>Payment is still processing</b></span></div>
+            <div class="c-card"><div class="h"><h4>Your credit balance</h4></div><div class="b"><div class="c-bal">
+              <div class="it"><span class="big">$8.60</span><span class="lab">available</span></div><span class="div"></span>
+              <div class="it"><b><i data-lucide="circle-check" class="s14" style="color:var(--c-success)"></i>Purchased credits</b><span class="lab">Never expire unless purchased with an expiry</span></div><span class="div"></span>
+              <div class="it"><b><i data-lucide="calendar-days" class="s14"></i>Next credit expiry</b><span class="lab">None scheduled</span></div>
+            </div></div></div>
+            <div class="c-card"><div class="h"><h4><i data-lucide="coins" class="s18"></i>Buy Credits</h4></div><div class="b"><div class="c-amts"><span class="c-btn outline">$20</span><span class="c-btn outline">$50</span><span class="c-btn outline">$100</span><span class="c-btn outline">Custom</span></div></div></div>
+            <div class="c-card"><div class="h"><h4><i data-lucide="coins" class="s18"></i>Automatic Top Up</h4><p>Automatically add credits when your balance falls below $5.</p></div><div class="b"><div class="c-row2"><span class="c-sw"></span><span>Enabled</span><span style="flex:1"></span><span class="c-btn outline">Configure automatic top-up</span></div></div></div>
+            <div class="c-card" style="overflow:hidden"><div class="h"><h4>Credit purchase history</h4><p>Completed personal credit purchases and invoices.</p></div>
+              <table class="c-tbl"><tr><th>Purchase Date</th><th>Type</th><th>Credits Added</th><th>Expires</th><th>Invoice</th></tr>
+              <tr><td>Nov 2, 2026</td><td>Top up</td><td class="mono">$50.00</td><td>Never</td><td><span class="c-link">View invoice <i data-lucide="external-link" class="s3"></i></span></td></tr>
+              <tr><td>Oct 14, 2026</td><td>Purchase</td><td class="mono">$100.00</td><td>Never</td><td><span class="c-link">View invoice <i data-lucide="external-link" class="s3"></i></span></td></tr></table></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div></div></div>
+
+  <!-- =========================== iOS =========================== -->
+  <div class="sect"><h3>Kilo iOS <span>main · Expo app · light and dark · SF Pro + JetBrains Mono</span></h3></div>
+  <div class="stage"><div class="fit" data-w="1840" data-h="980"><div class="design ios" id="ios" style="width:1840px;height:980px">
+    <!-- Home -->
+    <div class="phone" style="left:60px;top:70px"><div class="scr">
+      <div class="island"></div><div class="sb"><span>9:41</span><span class="r"><i data-lucide="wifi" class="s18"></i><span class="bat"></span></span></div>
+      <div class="m-homeh"><svg width="40" height="40" viewBox="0 0 100 100" style="border-radius:9px"><rect width="100" height="100" fill="#FFDD00"/><use href="#kpath" fill="#1F1F1F"/></svg><span class="m-ctxc">Personal<i data-lucide="chevron-down" class="s14"></i></span></div>
+      <div class="m-sec"><span class="eyebrow">Live now</span><span class="seeall">See all</span></div>
+      <div class="m-glance">
+        <div class="cnt">
+          <div class="r"><i data-lucide="circle-alert" class="s3" style="color:var(--m-warn)"></i><b>1</b><span class="on">Needs input</span></div>
+          <div class="r"><i data-lucide="circle" class="s3" fill="currentColor" style="color:var(--m-good)"></i><b>2</b><span>Working</span></div>
+          <div class="r"><i data-lucide="clock" class="s3" style="color:var(--m-muted-soft)"></i><b>1</b><span>Scheduled</span><small>9:00 AM</small></div>
+          <div class="r"><i data-lucide="circle" class="s3" style="color:var(--m-muted-soft)"></i><b>4</b><span>Idle</span></div>
+        </div>
+        <div class="newest"><div class="t">Single Kilo yellow across themes</div><div class="m"><i data-lucide="circle" class="s3" fill="currentColor" style="color:var(--m-good)"></i><span>Working</span><small>2m</small></div></div>
+      </div>
+      <div class="m-sec"><span class="eyebrow">Up next</span></div>
+      <div class="m-todo"><span class="tl"><i data-lucide="list-todo" class="s14"></i></span><div class="bd"><b>Audit tokens.json drift</b><small>Design</small></div><span class="pl"><i data-lucide="play" class="s14"></i></span></div>
+      <div style="height:8px"></div>
+      <div class="m-btn primary"><i data-lucide="plus" class="s18"></i>New coding task</div>
+      <div class="m-btn secondary"><i data-lucide="camera" class="s18"></i>New task from a picture</div>
+      <div class="m-sec" style="padding-top:12px"><span class="eyebrow">Explore</span></div>
+      <div class="m-cfg">
+        <div class="r"><span class="m-tile" style="--h:var(--h-honey)"><i data-lucide="git-pull-request" class="s14"></i></span><div><b>Code Reviewer</b><small>Automatic PR reviews</small></div><i data-lucide="chevron-right" class="s14"></i></div>
+      </div>
+      <div class="m-tabbar"><div class="m-tbi on"><i data-lucide="house" class="s22"></i>Home</div><div class="m-tbi"><i data-lucide="message-square" class="s22" stroke-width="1.5"></i>KiloClaw</div><div class="m-tbi"><span class="ib"><i data-lucide="bot" class="s22" stroke-width="1.5"></i><b>1</b></span>Agents</div><div class="m-tbi"><i data-lucide="message-circle" class="s22" stroke-width="1.5"></i>Chat</div><div class="m-tbi"><i data-lucide="user-round" class="s22" stroke-width="1.5"></i>Profile</div></div>
+      <div class="home-ind"></div>
+    </div></div>
+    <!-- Agents -->
+    <div class="phone" style="left:493px;top:70px"><div class="scr">
+      <div class="island"></div><div class="sb"><span>9:41</span><span class="r"><i data-lucide="wifi" class="s18"></i><span class="bat"></span></span></div>
+      <div class="m-agh"><h2>Agents</h2><span class="m-ctxc">Personal<i data-lucide="chevron-down" class="s14"></i></span><span class="m-ib"><i data-lucide="history" class="s20"></i></span></div>
+      <div class="m-tabrow"><span class="on">Sessions</span><span>To-dos</span><span style="flex:1"></span><span class="m-ib"><i data-lucide="search" class="s20"></i></span><span class="m-filter"><i data-lucide="sliders-horizontal" class="s20"></i><b>1</b></span></div>
+      <div class="m-row"><span class="strip" style="background:var(--h-cloud)"></span><div class="bd"><div class="eb"><span class="rp" style="color:var(--h-cloud)">kilo-cloud</span><span class="mt" style="color:var(--m-warn)"><i data-lucide="circle-alert" class="s3"></i>Needs input</span></div><div class="ti">Fix terminal ANSI palette</div><div class="su">fix/ansi-palette · #771</div></div><i data-lucide="chevron-right" class="s14"></i></div>
+      <div class="m-row"><span class="strip" style="background:var(--h-yuki)"></span><div class="bd"><div class="eb"><span class="rp" style="color:var(--h-yuki)">kilo-desktop</span><span class="mt"><i data-lucide="circle" class="s3" fill="currentColor" style="color:var(--m-good)"></i>$0.84 · 2M AGO</span></div><div class="ti">Single Kilo yellow across themes</div><div class="su">yacu/single-yellow · #765</div></div><i data-lucide="chevron-right" class="s14"></i></div>
+      <div class="m-row"><span class="strip" style="background:var(--h-sky)"></span><div class="bd"><div class="eb"><span class="rp" style="color:var(--h-sky)">kilo-design</span><span class="mt"><i data-lucide="circle" class="s3" fill="currentColor" style="color:var(--m-good)"></i>$0.12 · JUST NOW</span></div><div class="ti">Accent strategy explorer</div><div class="su">main</div></div><i data-lucide="chevron-right" class="s14"></i></div>
+      <div class="m-row"><span class="strip" style="background:var(--h-kilo);opacity:.3"></span><div class="bd"><div class="eb"><span class="rp" style="color:var(--m-muted)">kilo-desktop</span><span class="mt"><i data-lucide="clock" class="s3" style="color:var(--m-muted-soft)"></i>Scheduled · 9:00 AM</span></div><div class="ti">Nightly dependency bumps</div><div class="su">chore/deps</div></div><i data-lucide="chevron-right" class="s14"></i></div>
+      <div class="m-row"><span class="strip" style="background:var(--h-coral);opacity:.3"></span><div class="bd"><div class="eb"><span class="rp" style="color:var(--m-muted)">kilo-cloud</span><span class="mt"><i data-lucide="circle" class="s3" style="color:var(--m-muted-soft)"></i>$0.33 · 2D AGO</span></div><div class="ti">Cloud usage chart tooltip</div><div class="su">feat/usage-tooltip · #2381</div></div><i data-lucide="chevron-right" class="s14"></i></div>
+      <div class="m-fab"><i data-lucide="plus" class="s24"></i></div>
+      <div class="m-tabbar"><div class="m-tbi"><i data-lucide="house" class="s22" stroke-width="1.5"></i>Home</div><div class="m-tbi"><i data-lucide="message-square" class="s22" stroke-width="1.5"></i>KiloClaw</div><div class="m-tbi on"><span class="ib"><i data-lucide="bot" class="s22"></i><b>1</b></span>Agents</div><div class="m-tbi"><i data-lucide="message-circle" class="s22" stroke-width="1.5"></i>Chat</div><div class="m-tbi"><i data-lucide="user-round" class="s22" stroke-width="1.5"></i>Profile</div></div>
+      <div class="home-ind"></div>
+    </div></div>
+    <!-- Session, composer -->
+    <div class="phone" style="left:926px;top:70px"><div class="scr">
+      <div class="island"></div><div class="sb"><span>9:41</span><span class="r"><i data-lucide="wifi" class="s18"></i><span class="bat"></span></span></div>
+      <div class="m-chead"><span class="bk"><i data-lucide="chevron-left" class="s24"></i></span><h3>Single Kilo yellow across themes</h3><span class="m-ib"><i data-lucide="bell" class="s20"></i></span><span class="m-ctxp"><span class="rg"></span><b>42%</b><span>$0.84</span></span></div>
+      <div class="m-goal"><span class="m-prb"><i data-lucide="git-pull-request" class="s3"></i>#765</span><i data-lucide="circle-dot" class="s14" style="color:var(--m-ink)"></i><div><div class="st">Active goal</div><div class="tx">Ship one #ffdd00 across light and dark</div></div></div>
+      <div class="m-trans">
+        <div class="m-time">Today 9:38</div>
+        <div class="m-ub">Use one yellow in both themes and update the splash tests.</div>
+        <div class="m-ab">On it. Changing the theme contract first, then the splash window.</div>
+        <div class="m-tool"><i data-lucide="eye" class="s14"></i>app-themes.ts<span style="font-size:11px">L270, 80 lines</span><i data-lucide="chevron-right" class="s14 cv"></i></div>
+        <div class="m-tool"><i data-lucide="pencil" class="s14"></i>SplashWindow.ts<i data-lucide="chevron-right" class="s14 cv"></i></div>
+        <div class="m-ab">Splash now reads <code>KILO_LOGO_YELLOW</code> in both modes.</div>
+        <div class="m-wk"><i data-lucide="loader-circle" class="s14 spin"></i>Running commands · 12s</div>
+      </div>
+      <div class="m-composer">
+        <div class="m-chips"><span class="m-chip"><i data-lucide="code" class="s14"></i>Code<i data-lucide="chevron-down" class="s14"></i></span><span class="m-chip">Opus 5.5<i data-lucide="chevron-down" class="s14"></i></span></div>
+        <div class="m-inrow"><span class="m-clip"><i data-lucide="paperclip" class="s18"></i></span><span class="m-in">Message</span><span class="m-send"><i data-lucide="arrow-up" class="s18" stroke-width="2.5"></i></span></div>
+      </div>
+      <div class="home-ind"></div>
+    </div></div>
+    <!-- Session, permission -->
+    <div class="phone" style="left:1359px;top:70px"><div class="scr">
+      <div class="island"></div><div class="sb"><span>9:41</span><span class="r"><i data-lucide="wifi" class="s18"></i><span class="bat"></span></span></div>
+      <div class="m-chead"><span class="bk"><i data-lucide="chevron-left" class="s24"></i></span><h3>Fix terminal ANSI pal…</h3><span class="m-ctxp"><span class="rg"></span><b>18%</b><span>$0.21</span></span></div>
+      <div class="m-trans">
+        <div class="m-time">Today 9:12</div>
+        <div class="m-ub">The terminal yellow is unreadable on light. Fix the palette.</div>
+        <div class="m-tool dash"><i data-lucide="brain" class="s14"></i><span class="eyebrow" style="font-size:10px">Thought</span><i data-lucide="chevron-right" class="s14 cv"></i></div>
+        <div class="m-tool"><i data-lucide="pencil" class="s14"></i>app-themes.ts<i data-lucide="chevron-right" class="s14 cv"></i></div>
+        <div class="m-ab">ANSI yellow now uses <code>#d28100</code> in light. I'll run the terminal tests next.</div>
+      </div>
+      <div class="m-perm">
+        <div class="h"><b>Permission required</b><p>The agent is waiting for permission. While this request is open, your message to the agent is paused.</p></div>
+        <div class="bd">Allow bash?<div class="ap">Applies to:<br>• pnpm test --filter terminal</div></div>
+        <div class="f"><span class="o">Deny</span><span class="s">Allow Once</span><span class="p">Always Allow</span></div>
+      </div>
+      <div class="home-ind"></div>
+    </div></div>
+    <span class="cap" style="left:60px;top:940px">Home</span><span class="cap" style="left:493px;top:940px">Agents</span><span class="cap" style="left:926px;top:940px">Session</span><span class="cap" style="left:1359px;top:940px">Session · permission</span>
+  </div></div></div>
+
+  <!-- =========================== MATRIX =========================== -->
+  <div class="sect"><h3>All themes side by side <span>Desktop components · click a name to load it</span></h3></div>
+  <div class="matrix" id="matrix"></div>
+
+</div>
+</div>
+
+<script>
+const root = document.getElementById('root');
+const state = { s:'shipped', mode:'dark', warm:'off', warn:'yellow' };
+const NAMES = { shipped:'Shipped (Desktop)', fill:'A · Fill', mono:'B · Mono', spark:'C · Mono + Spark', ink:'D · Ink', soft:'E · Soft' };
+const NOTES = {
+  shipped: {
+    lede: 'Each product on main today. All three use #FFDD00. Desktop fills primary actions with it in both modes and turns small marks gray in light mode. Cloud is dark-only, with yellow buttons and yellow user bubbles. iOS uses yellow bubbles and send in both modes, yellow primary in dark, and keeps an olive primary (#4f5a10) in light.',
+    pro: ['One brand yellow across the suite since mid-October', 'Desktop already keeps most actions ghost; yellow lands on Send, Allow once, Beta and the focused pane divider', 'iOS already sidesteps light-mode contrast with olive'],
+    con: ['Cloud and iOS user bubbles fill every conversation with #FFDD00', 'Desktop light mode: the primary edge is ~1.3:1, so the button outline vanishes', 'Three different light-mode rules: Desktop gray ink, iOS olive, Cloud has no light mode'],
+  },
+  fill: {
+    lede: 'Desktop\'s rule applied to all three: #FFDD00 for primary, primary-soft and bubbles, with small marks gray in light mode. Cloud and iOS adopt Desktop neutrals and iOS drops olive.',
+    pro: ['One rule for the whole suite, unmistakably Kilo', 'Excellent label contrast in both modes', 'Smallest change from Desktop today'],
+    con: ['iOS light loses its olive fix: the FAB and "New coding task" become yellow on white', 'Light mode: fill is ~1.3:1 on white, so the button shape disappears', 'Next to yellow warnings (Needs attention, Needs input) it reads as a caution state'],
+  },
+  mono: {
+    lede: 'Primary actions use the foreground color. Yellow appears only in the logo.',
+    pro: ['Calm, native, never mistaken for an alert', 'Strong contrast in both modes with no light-mode exceptions', 'Status colors (warning, info, success) finally read clearly'],
+    con: ['Kilo could be any dev tool; brand recall drops to the logo tile', 'Wastes the yellow the brand just paid for', 'Chat bubbles lose their warmth on iOS'],
+  },
+  spark: {
+    lede: 'Actions stay neutral. Yellow is reserved for Kilo itself: the send button, the working indicator, the live session spinner. Yellow means "the agent is working".',
+    pro: ['Yellow gets one meaning, so every yellow pixel says something', 'Light mode solved: neutral fills carry the shape; yellow stays small', 'Maps directly onto existing Desktop roles (send, working, spinner)'],
+    con: ['Yellow spinners on white need a dark edge to read', 'Needs a written rule ("yellow is agent state") or it drifts back', 'Replaces the info blue Desktop uses for Working today'],
+  },
+  ink: {
+    lede: 'Yellow as letter and line, never as area. Light mode: black button with a yellow label. Dark mode: yellow outline and label.',
+    pro: ['Strongest brand recall that still works on white (~12:1 label)', 'Black + yellow is ownable and close to the logo itself', 'Checkboxes become black with a yellow tick in light mode'],
+    con: ['Dark outline primaries weigh less than filled secondaries', 'Black and yellow at large sizes can read as hazard tape', 'Two different looks for one token across modes'],
+  },
+  soft: {
+    lede: 'A tint of #FFDD00 as the area, with a deep same-hue ink for labels. The yellow is diluted, not changed.',
+    pro: ['Gentle; highlighted rather than shouting', 'Label contrast passes in both modes', 'Keeps a yellow presence on every primary and bubble'],
+    con: ['A pale yellow tint is exactly what highlighters and warning banners look like', 'The tint loses its edge on white and warm paper', 'Clashes with warnings unless warnings move to orange'],
+  },
+};
+
+/* ---------- Matrix ---------- */
+const CELL = `
+  <div class="r"><span class="d-btn primary sm">Allow once</span><span class="d-send sp"><i data-lucide="arrow-up" class="s14"></i></span></div>
+  <div class="r"><span class="d-cb on"><i data-lucide="check"></i></span>Checkbox<span class="d-badge-soft sp">Beta</span></div>
+  <div class="r"><span style="color:var(--live);display:grid"><i data-lucide="loader-circle" class="s14 spin"></i></span>Working<span class="d-done sp"></span></div>
+  <div class="r"><span style="color:var(--ink);text-decoration:underline;text-underline-offset:2px;font-weight:500">contrast note</span><span class="sp" style="color:var(--warn);display:flex;gap:4px;align-items:center"><i data-lucide="circle-alert" class="s14"></i>Needs attention</span></div>
+  <div class="r"><span style="align-self:flex-end;background:var(--bubble-bg);color:var(--bubble-fg);border-radius:10px 4px 10px 10px;padding:5px 9px;margin-left:auto">User bubble</span></div>`;
+function buildMatrix(){
+  const m = document.getElementById('matrix');
+  let html = '<div></div>' + Object.keys(NAMES).map(s=>`<div class="mh"><button data-pick="${s}">${NAMES[s]}</button></div>`).join('');
+  for (const mode of ['dark','light']){
+    html += `<div class="mh r">${mode}</div>`;
+    for (const s of Object.keys(NAMES)) html += `<div class="k cell" data-s="${s}" data-mode="${mode}">${CELL}</div>`;
+  }
+  m.innerHTML = html;
+  m.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{ state.s=b.dataset.pick; apply(); window.scrollTo({top:0,behavior:'smooth'}); });
+}
+
+/* ---------- Contrast + yellow budget ---------- */
+function parse(c){ const m=c&&c.match(/rgba?\(([^)]+)\)/); if(!m) return null; const p=m[1].split(/[ ,/]+/).filter(Boolean).map(Number); return [p[0],p[1],p[2],p[3]===undefined?1:p[3]]; }
+const over=(f,b)=>[0,1,2].map(i=>f[i]*f[3]+b[i]*(1-f[3])).concat(1);
+const lum=c=>{const [r,g,b]=c.slice(0,3).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b};
+const ratio=(a,b)=>{const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+function yellowish(c){ // saturated yellow family: hue 45–75°, sat > .6, light > .5
+  if(!c||c[3]<.5) return false;
+  const [r,g,b]=c.map((v,i)=>i<3?v/255:v), mx=Math.max(r,g,b), mn=Math.min(r,g,b), l=(mx+mn)/2, d=mx-mn;
+  if(d<.2||l<.45) return false;
+  const s=d/(1-Math.abs(2*l-1)); let h=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4; h*=60; if(h<0)h+=360;
+  return h>=45&&h<=75&&s>.6;
+}
+function show(id,r,need){ document.getElementById(id).innerHTML=`${r.toFixed(2)}:1 <small class="${r>=need?'pass':'fail'}">${r>=need?'Pass':'Fail'}</small>`; }
+function budget(el,id){
+  const box=el.getBoundingClientRect(); let area=0,marks=0;
+  el.querySelectorAll('*').forEach(n=>{
+    if(n.id==='probe') return;
+    const r=n.getBoundingClientRect(); if(!r.width||!r.height) return;
+    const s=getComputedStyle(n);
+    if(yellowish(parse(s.backgroundColor))){ area+=r.width*r.height; marks++; return; }
+    if(n.tagName==='rect'&&yellowish(parse(s.fill))){ area+=r.width*r.height; marks++; return; }
+    if(n.tagName==='svg'&&yellowish(parse(s.color))) marks++;
+    else if(!n.children.length&&n.textContent.trim()&&yellowish(parse(s.color))) marks++;
+    else if(parseFloat(s.borderTopWidth)>0&&yellowish(parse(s.borderTopColor))) marks++;
+  });
+  document.getElementById(id).innerHTML=`${(area/(box.width*box.height)*100).toFixed(2)}% <small class="na">${marks} marks</small>`;
+}
+function measure(){
+  const pane=document.getElementById('d-pane'), probe=document.getElementById('probe');
+  const bg=parse(getComputedStyle(pane).backgroundColor), cs=getComputedStyle(probe);
+  const fill=over(parse(cs.backgroundColor),bg);
+  show('m-label',ratio(over(parse(cs.color),fill),fill),4.5);
+  show('m-edge',Math.max(ratio(fill,bg),ratio(over(parse(cs.borderTopColor),bg),bg)),3);
+  show('m-ink',ratio(over(parse(getComputedStyle(pane.querySelector('.d-amsg a')).color),bg),bg),4.5);
+  budget(document.getElementById('desk'),'y-desk'); budget(document.getElementById('cloud'),'y-cloud'); budget(document.getElementById('ios'),'y-ios');
+}
+
+/* ---------- State ---------- */
+function apply(){
+  Object.assign(root.dataset,state);
+  document.querySelectorAll('.matrix .cell').forEach(c=>{c.dataset.warm=state.warm;c.dataset.warn=state.warn});
+  document.querySelectorAll('.controls .seg').forEach(seg=>seg.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(state[seg.dataset.key]===b.dataset.v))));
+  document.querySelectorAll('.controls .tog').forEach(t=>t.setAttribute('aria-pressed',String(state[t.dataset.key]===t.dataset.on)));
+  const n=NOTES[state.s];
+  document.getElementById('b-title').textContent=NAMES[state.s];
+  document.getElementById('b-lede').textContent=n.lede;
+  document.getElementById('b-pro').innerHTML=n.pro.map(x=>`<li>${x}</li>`).join('');
+  document.getElementById('b-con').innerHTML=n.con.map(x=>`<li>${x}</li>`).join('');
+  const notes=[];
+  if(state.s==='shipped'&&state.mode==='light') notes.push('<b>Cloud stays dark:</b> it ships dark-only, so Shipped shows it dark in both modes.');
+  if(state.s==='shipped') notes.push('<b>Levers</b> apply to the proposed theme; Cloud and iOS keep their own shipped neutrals here.');
+  notes.push(state.warm==='on'?'<b>Warm neutrals:</b> beside paper and ink the yellow reads as brand; beside cool gray it reads as caution.':'<b>Cool neutrals:</b> the Desktop gray ladder.');
+  notes.push(state.warn==='orange'?'<b>Warnings are orange:</b> yellow no longer means "careful".':'<b>Warnings are yellow:</b> compare "Needs attention" and the low-balance banner with the brand.');
+  document.getElementById('b-note').innerHTML=notes.join(' ');
+  setTimeout(measure,320); // after hover transitions settle
+}
+document.querySelectorAll('.controls .seg').forEach(seg=>seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;state[seg.dataset.key]=b.dataset.v;apply()}));
+document.querySelectorAll('.controls .tog').forEach(t=>t.addEventListener('click',()=>{const k=t.dataset.key;state[k]=state[k]===t.dataset.on?t.dataset.off:t.dataset.on;apply()}));
+function setView(id,v){
+  const el=document.getElementById(id); el.dataset.view=v;
+  document.querySelectorAll(`[data-view-for=${id}] button`).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===v)));
+  if(id==='cloud'){
+    el.querySelector('.u-agent').style.display=v==='agent'?'inline':'none';
+    el.querySelector('.u-credits').style.display=v==='credits'?'inline':'none';
+    el.querySelector('.n-agent').classList.toggle('on',v==='agent');
+    el.querySelector('.n-credits').classList.toggle('on',v==='credits');
+  }
+  setTimeout(measure,50);
+}
+document.querySelectorAll('[data-view-for]').forEach(seg=>seg.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setView(seg.dataset.viewFor,b.dataset.v)}));
+document.addEventListener('keydown',e=>{
+  const keys=Object.keys(NAMES), i='012345'.indexOf(e.key);
+  if(i>=0){state.s=keys[i];apply()}
+  if(e.key==='l'){state.mode=state.mode==='dark'?'light':'dark';apply()}
+});
+function fit(){ document.querySelectorAll('.fit').forEach(f=>{const w=+f.dataset.w,h=+f.dataset.h,s=Math.min(1,f.clientWidth/w);f.style.height=(h*s)+'px';f.firstElementChild.style.transform=`scale(${s})`}); }
+new ResizeObserver(fit).observe(document.body);
+
+const q=new URLSearchParams(location.search);
+for(const k of Object.keys(state)) if(q.get(k)) state[k]=q.get(k);
+buildMatrix();
+lucide.createIcons();
+setView('desk',q.get('desk')||'session'); setView('cloud',q.get('cloud')||'agent');
+fit(); apply();
+</script>
+</body>
+</html>
