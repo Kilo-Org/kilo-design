@@ -7,8 +7,8 @@ on:
       - main
 
 jobs:
-  staleness:
-    name: Generated artifacts are current
+  valid:
+    name: tokens.json is valid and the app builds
     runs-on: ubuntu-latest
 
     steps:
@@ -29,8 +29,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Regenerate token artifacts
-        run: node build
-
-      - name: Check generated artifacts are committed
-        run: git diff --exit-code -- src/tokens.css
+      # The build validates tokens.json (both modes, aliases) and typechecks the app.
+      - name: Build the app
+        run: pnpm --dir north-star build

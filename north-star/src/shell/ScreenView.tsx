@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { Screen } from "../registry";
-import tokensCss from "../../../src/tokens.css?inline";
+import tokensCss from "virtual:kilo-tokens";
 
 export type Mode = "dark" | "light";
 
@@ -30,7 +30,7 @@ function HtmlScreen({ screen, mode }: { screen: Extract<Screen, { kind: "html" }
       ref={ref}
       className="dropin"
       title={screen.title}
-      // Drop-ins get the same generated tokens as the React screens.
+      // Drop-ins get the same tokens as the React screens.
       srcDoc={screen.html.replace(/<head[^>]*>/i, (head) => `${head}<style>${tokensCss}</style>`)}
       onLoad={onLoad}
       style={{ inset: 0, width: "100%", height: "100%" }}

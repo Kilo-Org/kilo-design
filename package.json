@@ -3,9 +3,8 @@
   "private": true,
   "packageManager": "pnpm@10.12.1",
   "scripts": {
-    "build:tokens": "node build",
     "dev": "pnpm --dir north-star dev",
-    "build": "node build && pnpm --dir north-star build",
+    "build": "pnpm --dir north-star build",
     "skill-arena": "node skill-arena/server.mjs"
   }
 }

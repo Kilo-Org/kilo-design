@@ -1,6 +1,6 @@
 /* ==========================================================================
-   North-star shell. Every design value comes from ../../../src/tokens.css,
-   generated from the repo's tokens.json. Do not define token values here.
+   North-star shell. Every design value comes from the repo's tokens.json
+   (see ../../vite.config.ts). Do not define token values here.
    ========================================================================== */
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-font-smoothing:antialiased}
