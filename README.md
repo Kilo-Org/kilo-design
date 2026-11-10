@@ -4,7 +4,7 @@ Kilo's canonical design source for product UI and agent guidance.
 
 This repo keeps Kilo's UI decisions in one place so Desktop, Cloud, Mobile, VS Code and the other Kilo surfaces do not each invent their own design system.
 
-It is intentionally small: one token source, one generated stylesheet, one app that shows the language, and a draft product skill.
+It is intentionally small: one token source, one generated stylesheet, and one app that shows the language.
 
 > 🚧 This project is still in progress. The language is being defined from Kilo Desktop first; no product consumes these tokens yet.
 
@@ -18,7 +18,7 @@ It is intentionally small: one token source, one generated stylesheet, one app t
 | VS Code surface | Next | Not in the app yet. The host editor owns its colours, so it needs its own study. |
 | Desktop adoption | Next | Desktop is the first product to take its theme from this repo. |
 | Cloud, Mobile | Later | Follow Desktop. |
-| Cloud skill | Paused | `skills/kilo-design/` predates the current tokens. Its file references are current; its guidance is not reviewed. |
+| Agent skills | Later | Written from the tokens and the Components page once the language is settled. The earlier Cloud pilot skill was removed. |
 
 ## Repository Model
 
@@ -27,9 +27,7 @@ It is intentionally small: one token source, one generated stylesheet, one app t
 | `tokens.json` | Hand-authored design token source, dark and light | Canonical values |
 | `src/tokens.css` | Generated CSS variables | Committed output from `node build` |
 | `north-star/` | Local Vite + React app: Foundations, Components, and target screens for Desktop, Cloud and Mobile | Reference for people and agents; reads only the tokens |
-| `skills/` | Draft product skill source | Agent guidance, paused |
-| `skill-comparison/` | Static skill behavior comparison | First-pass specimens |
-| `skill-arena/` | Repeatable prompt-pass workflow | Skill evaluation harness |
+| `skill-arena/` | Repeatable prompt-pass workflow | Skill evaluation harness; its Kilo condition is off until a new skill exists |
 
 Product code does not live here. Product repos consume this repo's artifacts and skills from their own codebases.
 
@@ -74,7 +72,7 @@ How to add a screen or a surface: `north-star/README.md`.
 
 ## 🏟️ Skill Arena
 
-The skill arena is a local mini app for regenerating one prompt across the three skill conditions.
+The skill arena is a local mini app for regenerating one prompt across several skill conditions. It will be used to test the agent skills once they are written.
 
 ```bash
 node skill-arena/server.mjs
@@ -86,11 +84,7 @@ Then open:
 http://127.0.0.1:8791
 ```
 
-It shows stacked rounds of no-skill, frontend-design, and Kilo Cloud outputs, with a fixed prompt composer at the bottom. Each round writes HTML outputs and logs under `skill-arena/runs/`. There is also a `pnpm run skill-arena` script, but this machine currently needs `pnpm approve-builds` before `pnpm` will run workspace scripts because of the existing `sharp` approval guard.
-
-## ☁️ Cloud Skill
-
-`skills/kilo-design/` is a draft skill for Kilo Cloud's web app, written before the current tokens. It is paused until the language is settled. It will be rewritten from the tokens and the Components page, not patched.
+It shows stacked rounds of no-skill and frontend-design outputs, with a fixed prompt composer at the bottom. The Kilo condition is switched off until a new skill exists. Each round writes HTML outputs and logs under `skill-arena/runs/`. `pnpm run skill-arena` starts it too.
 
 ## ⚖️ Authority Model
 
@@ -129,5 +123,5 @@ When editing this repo:
 
 1. If token values change, edit `tokens.json`, then run `node build` and commit `src/tokens.css`.
 2. Never write a colour, radius or shadow value into `north-star/`. Add a role to `tokens.json` instead.
-3. If the artifact name or location changes, update `build/`, CI, this README, `north-star/src/main.tsx`, and the skill references.
+3. If the artifact name or location changes, update `build/`, CI, this README, `north-star/src/main.tsx` and `skill-arena/server.mjs`.
 4. If the change is planning or status only, update Linear instead of adding a repo plan.
