@@ -68,7 +68,7 @@ Then open `http://localhost:8732`. Press **L** to switch dark and light.
 | --- | --- |
 | Foundations | Every colour role in both modes, contrast ratios, type, radius and spacing |
 | Components | One target per component, next to what Desktop, Cloud and Mobile ship today |
-| Kilo Desktop, Kilo Cloud, Kilo Mobile | Target screens per product |
+| Screens | Target screens for Kilo Desktop, Kilo Cloud and Kilo Mobile |
 
 How to add a screen or a surface: `north-star/README.md`.
 
