@@ -26,12 +26,34 @@
   </div>
 </div>
 
-<form class="composer" id="composer">
-  <textarea id="promptInput" spellcheck="false" placeholder="Design a Kilo Cloud login page."></textarea>
-  <button id="stopGeneration" class="secondary" type="button" disabled>Stop</button>
-  <button id="regenerate" type="submit">Regenerate</button>
-  <span id="composerStatus" aria-live="polite"></span>
-</form>
+<div class="composer-dock">
+  <form class="composer" id="composer">
+    <div class="composer-head">
+      <div class="composer-title">
+        <span class="composer-mark" aria-hidden="true"></span>
+        <div>
+          <strong>New battle</strong>
+          <span>Run one prompt across all three skill conditions</span>
+        </div>
+      </div>
+      <span class="composer-status" id="composerStatus" aria-live="polite">ready</span>
+    </div>
+    <label class="prompt-field" for="promptInput">
+      <span class="sr-only">Battle prompt</span>
+      <textarea id="promptInput" spellcheck="false" placeholder="Describe the interface you want the agents to design..."></textarea>
+    </label>
+    <div class="composer-footer">
+      <span class="composer-hint"><kbd>⌘</kbd><kbd>Enter</kbd> to run</span>
+      <div class="composer-actions">
+        <button id="stopGeneration" class="secondary" type="button" disabled>Stop run</button>
+        <button id="regenerate" type="submit">
+          <span>Run battle</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.25 8h9.5M9 4.25 12.75 8 9 11.75"/></svg>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
 
 <script src="/app.js"></script>
 </body>
